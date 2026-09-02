@@ -1,0 +1,85 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700&family=Roboto:wght@400;500&family=Source+Code+Pro:wght@400;500&display=swap");
+
+:root {
+  --r-main-color: #222;
+  --r-heading-color: #222;
+  --r-link-color: #222;
+  --r-link-color-hover: #000;
+  --r-block-margin: 10px;
+}
+
+.reveal {
+  font-family: "Roboto", sans-serif;
+  font-size: 24px;
+  line-height: 1.16;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4 {
+  color: inherit;
+  font-family: "Raleway", sans-serif;
+  letter-spacing: -0.02em;
+  text-transform: none;
+}
+
+.reveal h1 {
+  font-size: 2em;
+}
+
+
+.reveal .slides section > h2:first-child {
+  margin-bottom: 0.5em;
+  padding-bottom: 0.16em;
+  border-bottom: 3px solid currentColor;
+  font-size: 1.55em;
+  line-height: 1.08;
+}
+
+.reveal img {
+  max-height: 30rem;
+  object-fit: contain;
+}
+
+.reveal blockquote {
+  padding: 0.6em 0.9em;
+}
+
+.reveal .slides table {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+
+/* Compact link placed directly below runnable code examples. */
+.reveal p:has(> a > img.godbolt-link-image) {
+  margin: 0.12em 0 0.4em;
+  line-height: 1;
+  text-align: left;
+}
+
+.reveal img.godbolt-link-image {
+  display: block;
+  width: 32px;
+  max-height: none;
+  margin: 0;
+  opacity: 0.78;
+  transition: opacity 120ms ease;
+}
+
+.reveal a:hover img.godbolt-link-image,
+.reveal a:focus img.godbolt-link-image {
+  opacity: 1;
+}
+
+.reveal .slide-number {
+  right: 22px;
+  bottom: 16px;
+  padding: 0;
+  color: #222;
+  background: transparent;
+  font-family: "Raleway", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  opacity: 0.8;
+}

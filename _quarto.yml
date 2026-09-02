@@ -1,0 +1,61 @@
+project:
+  type: website
+  output-dir: _site
+  pre-render:
+    - node scripts/update-godbolt-links.mjs
+  render:
+    - "*.md"
+    - "!README.md"
+    - "!AGENTS.md"
+    - "!template.md"
+  resources:
+    - assets/
+
+lang: ru
+
+website:
+  title: "Основы программирования на C++"
+  description: "Конспекты курса по языкам C и C++"
+  site-url: "https://is-itmo-c-26.github.io/lectures/"
+  repo-url: "https://github.com/is-itmo-c-26/lectures"
+  repo-actions: [edit, source, issue]
+  page-navigation: true
+  reader-mode: true
+  open-graph: true
+  sidebar:
+    style: docked
+    search: true
+    collapse-level: 1
+    tools:
+      - icon: github
+        href: "https://github.com/is-itmo-c-26/lectures"
+        text: GitHub
+    contents:
+      - href: index.md
+        text: Главная
+      - section: "Начало курса"
+        contents:
+          - href: 00-introduction.md
+            text: "Вводная лекция"
+  page-footer:
+    left: "Материалы курса по C и C++"
+    right: "Сайт собран с помощью [Quarto](https://quarto.org/)"
+
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: darkly
+    css: styles.css
+    toc: true
+    toc-title: "На этой странице"
+    toc-depth: 3
+    code-copy: true
+    code-overflow: wrap
+    anchor-sections: true
+    smooth-scroll: true
+    link-external-newwindow: true
+    grid:
+      sidebar-width: 310px
+      body-width: 900px
+      margin-width: 280px
