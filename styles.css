@@ -1,0 +1,82 @@
+:root {
+  --course-accent: #0b7285;
+  --course-accent-strong: #075d6c;
+  --course-warm: #f59f00;
+}
+
+body {
+  line-height: 1.65;
+}
+
+h1,
+h2,
+h3 {
+  letter-spacing: -0.015em;
+}
+
+h1 {
+  color: var(--course-accent-strong);
+}
+
+.quarto-dark h1 {
+  color: #66d9e8;
+}
+
+#quarto-sidebar {
+  border-right-color: color-mix(in srgb, var(--course-accent) 22%, transparent);
+}
+
+.sidebar-title {
+  font-weight: 750;
+  line-height: 1.25;
+}
+
+.sidebar-item-container .active {
+  color: var(--course-accent-strong);
+  font-weight: 650;
+}
+
+.quarto-dark .sidebar-item-container .active {
+  color: #66d9e8;
+}
+
+blockquote {
+  border-left: 0.3rem solid var(--course-warm);
+  padding: 0.75rem 1rem;
+  background: color-mix(in srgb, var(--course-warm) 8%, transparent);
+}
+
+pre.sourceCode {
+  border-left: 0.25rem solid var(--course-accent);
+}
+
+main img {
+  display: block;
+  max-height: 44rem;
+  margin: 1.5rem auto;
+  object-fit: contain;
+}
+
+main img.godbolt-link-image {
+  width: 32px;
+  max-height: none;
+  margin: 0.25rem 0 0.75rem;
+}
+
+main p:has(> a > img.godbolt-link-image) {
+  text-align: left;
+}
+
+.page-navigation {
+  margin-top: 3rem;
+}
+
+@media (max-width: 767.98px) {
+  body {
+    line-height: 1.55;
+  }
+
+  main img {
+    margin-block: 1rem;
+  }
+}

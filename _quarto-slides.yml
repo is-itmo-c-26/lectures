@@ -1,0 +1,29 @@
+project:
+  type: default
+  output-dir: _site/slides
+  render:
+    - "*.md"
+    - "!index.md"
+    - "!README.md"
+    - "!AGENTS.md"
+    - "!template.md"
+
+format:
+  revealjs:
+    theme: simple
+    css: slides.css
+    slide-level: 2
+    slide-number: c/t
+    transition: none
+    incremental: false
+    progress: true
+    controls: true
+    hash: true
+    smaller: false
+    scrollable: true
+    auto-stretch: false
+    width: 1280
+    height: 720
+    margin: 0.06
+    highlight-style: github
+    code-overflow: wrap

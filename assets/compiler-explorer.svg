@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-labelledby="title">
+  <title id="title">Compiler Explorer</title>
+  <rect x="1" y="1" width="46" height="46" rx="9" fill="#67c52a"/>
+  <path d="m13 14 10 10-10 10m14 0h9" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
