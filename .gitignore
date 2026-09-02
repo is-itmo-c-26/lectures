@@ -2,6 +2,7 @@
 /_site/
 /slides/
 .DS_Store
+/.vscode/
 
 
 **/*.quarto_ipynb
