@@ -95,16 +95,6 @@ title: "Вводная лекция. Язык C и C++"
 - 1983: комитет ANSI X3J11 начал стандартизацию C
 - 1979–1985: «C with Classes» превратился в C++; название появилось в 1983 году, первый коммерческий выпуск — в 1985-м
 
-::: {.notes}
-[Sources]
-
-- Dennis M. Ritchie, *The Development of the C Language*: <https://www.bell-labs.com/usr/dmr/www/chist.pdf>
-- Dennis M. Ritchie, Ken Thompson, *The UNIX Time-Sharing System*: <https://www.bell-labs.com/usr/dmr/www/cacm.pdf>
-- Bjarne Stroustrup, *A History of C++: 1979–1991*: <https://stroustrup.com/hopl2.pdf>
-- NIST, FIPS 160 / ANSI X3.159-1989: <https://www.govinfo.gov/content/pkg/GOVPUB-C13-175eb571b06fe7faf62ff6b06be3a8ec/pdf/GOVPUB-C13-175eb571b06fe7faf62ff6b06be3a8ec.pdf>
-
-:::
-
 ## Стандартизация С
 
 
@@ -115,14 +105,6 @@ title: "Вводная лекция. Язык C и C++"
 - 2018: ISO/IEC 9899:2018 — **C17**, в основном исправления стандарта
 - 2024: ISO/IEC 9899:2024 — **C23**, текущая опубликованная версия
 
-::: {.notes}
-[Sources]
-
-- ISO/IEC JTC 1/SC 22/WG14, *Project status and milestones*: <https://www9.open-std.org/JTC1/SC22/WG14/www/projects.html>
-- ISO, *ISO/IEC 9899:2024 — Programming languages — C*: <https://www.iso.org/standard/82075.html>
-
-:::
-
 ## Стандартизация C++
 
 
@@ -132,16 +114,6 @@ title: "Вводная лекция. Язык C и C++"
 - 2014, 2017, 2020: **C++14**, **C++17**, **C++20**
 - 2024: ISO/IEC 14882:2024 — опубликованная редакция, известная как **C++23**
 - 2026: **C++26** достиг стадии Draft International Standard (DIS)
-
-::: {.notes}
-[Sources]
-
-- ISO, *ISO/IEC 14882:1998 — Programming languages — C++*: <https://www.iso.org/standard/25845.html>
-- ISO, *ISO/IEC 14882:2024 — Programming languages — C++*: <https://www.iso.org/standard/83626.html>
-- WG21 N5051, *Editors’ Report: Programming Languages — C++*: <https://www9.open-std.org/JTC1/SC22/WG21/docs/papers/2026/n5051.html>
-- ISO, *ISO/IEC DIS 14882 — Programming languages — C++*: <https://committee.iso.org/standard/91179.html?browse=tc>
-
-:::
 
 ## Язык C
 
@@ -154,14 +126,6 @@ title: "Вводная лекция. Язык C и C++"
 - Позволяет создавать эффективные и переносимые программы
 - Стандартизирован ISO
 
-::: {.notes}
-[Sources]
-
-- ISO, *ISO/IEC 9899:2024 — Programming languages — C*: <https://www.iso.org/standard/82075.html>
-- Dennis M. Ritchie, *The Development of the C Language*: <https://www.bell-labs.com/usr/dmr/www/chist.pdf>
-
-:::
-
 ## Язык C++
 
 
@@ -172,14 +136,6 @@ title: "Вводная лекция. Язык C и C++"
 - Позволяет создавать абстракции без обязательных накладных расходов
 - Большой язык с богатой стандартной библиотекой
 - Стандартизирован ISO
-
-::: {.notes}
-[Sources]
-
-- ISO, *ISO/IEC 14882:2024 — Programming languages — C++*: <https://www.iso.org/standard/83626.html>
-- Bjarne Stroustrup, *FAQ: What is C++? Is C++ low-level?*: <https://stroustrup.com/bs_faq.html>
-
-:::
 
 ## C и C++: общая основа, но разные языки
 
@@ -192,14 +148,6 @@ title: "Вводная лекция. Язык C и C++"
 - Код на C можно переиспользовать в C++ (при соблюдении общего синтаксиса)
 - C и C++ сильно отличаются как по сложности, так и по принятым архитектурным решениям, которые используются в обоих языках
 
-::: {.notes}
-[Sources]
-
-- Bjarne Stroustrup, *FAQ: Is C a subset of C++?*: <https://stroustrup.com/bs_faq.html>
-- ISO/IEC JTC 1/SC 22/WG14, *The C Standard charter*: <https://open-std.org/jtc1/sc22/wg14/www/docs/n3280.htm>
-
-:::
-
 ## Где применяют C и C++
 
 
@@ -211,16 +159,6 @@ title: "Вводная лекция. Язык C и C++"
 - **Инфраструктура:** браузеры, СУБД и сетевые сервисы
 - **Машинное обучение:** вычислительные ядра, фреймворки и инференс
 
-::: {.notes}
-[Sources]
-
-- Linux Kernel documentation, *Programming Language*: <https://docs.kernel.org/process/programming-language.html>
-- LLVM, *Coding Standards*: <https://llvm.org/docs/CodingStandards.html>
-- Epic Games, *Programming with C++ in Unreal Engine*: <https://dev.epicgames.com/documentation/en-us/unreal-engine/programming-with-cplusplus-in-unreal-engine>
-- PyTorch, *The C++ Frontend*: <https://docs.pytorch.org/cppdocs/frontend>
-
-:::
-
 ## Средства разработки
 
 
@@ -230,17 +168,6 @@ title: "Вводная лекция. Язык C и C++"
 - Тестирование: **GoogleTest**; также Catch2
 - Контроль версий: **Git**
 - Отладка и качество кода: LLDB/GDB, санитайзеры, clang-format и clang-tidy
-
-::: {.notes}
-[Sources]
-
-- Clang documentation: <https://clang.llvm.org/docs/>
-- CMake documentation: <https://cmake.org/documentation/>
-- Visual Studio Code documentation: <https://code.visualstudio.com/docs>
-- GoogleTest documentation: <https://google.github.io/googletest/>
-- Git documentation: <https://git-scm.com/doc>
-
-:::
 
 ## Фундаментальные книги и классика
 
@@ -269,21 +196,6 @@ title: "Вводная лекция. Язык C и C++"
 
 ::::
 
-::: {.notes}
-[Sources]
-
-- Brian W. Kernighan, Dennis M. Ritchie, *The C Programming Language*, 2nd ed.: <https://www.informit.com/content/images/9780131103627/samplepages/0131103628.pdf>
-- Bjarne Stroustrup, *The C++ Programming Language*, 4th ed.: <https://stroustrup.com/>
-- Stanley B. Lippman, Josée Lajoie, Barbara E. Moo, *C++ Primer*, 5th ed.: <https://www.informit.com/store/c-plus-plus-primer-9780133053043>
-- Nicolai M. Josuttis, *The C++ Standard Library*, 2nd ed.: <https://www.informit.com/store/c-plus-plus-standard-library-a-tutorial-and-reference-9780132978286>
-- Scott Meyers, *Effective Modern C++*: <https://www.oreilly.com/library/view/effective-modern-c/9781491908419/>
-- Herb Sutter, *Exceptional C++*: <https://www.informit.com/store/exceptional-c-plus-plus-47-engineering-puzzles-programming-9780201615623>
-- Andrei Alexandrescu, *Modern C++ Design*: <https://www.informit.com/store/modern-c-plus-plus-design-generic-programming-and-design-9780133387629>
-- Erich Gamma et al., *Design Patterns*: <https://www.informit.com/store/design-patterns-elements-of-reusable-object-oriented-software-9780201633610>
-- Grady Booch et al., *Object-Oriented Analysis and Design with Applications*, 3rd ed.: <https://www.informit.com/store/object-oriented-analysis-and-design-with-applications-9780132800044>
-
-:::
-
 ## Hello, world! (Та самая программа)
 
 
@@ -292,14 +204,6 @@ title: "Вводная лекция. Язык C и C++"
 ```
 
 [![](assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-hello-world]{aria-label="Open in Compiler Explorer"}
-
-::: {.notes}
-[Sources]
-
-- [Интерактивный пример в Compiler Explorer][godbolt-hello-world]
-- Compiler Explorer, *URL serialization*: <https://github.com/compiler-explorer/compiler-explorer/blob/main/shared/url-serialization.ts>
-
-:::
 
 [godbolt-hello-world]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Aint+main()+%7B%0A++++std::cout+%3C%3C+%22Hello+world!!%5Cn%22%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="examples/00-introduction/hello-world.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
@@ -340,3 +244,15 @@ title: "Вводная лекция. Язык C и C++"
 :::
 :::
 ::::
+
+## YouTube-канал
+
+::: {style="text-align: center;"}
+
+[![](assets/00-introduction/youtube-channel-qr.png){fig-alt="QR-код YouTube-канала Александра Хвастунова" width="300px"}](https://www.youtube.com/@hvastunovalexandr)
+
+**YouTube-канал Александра Хвастунова**
+
+<https://www.youtube.com/@hvastunovalexandr>
+
+:::
