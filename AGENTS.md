@@ -1,5 +1,15 @@
 # Project instructions
 
+## Lectures and articles
+
+- A lecture lives in the repository root as `NN-name.md` and is rendered twice: as a website page and as a Reveal.js deck. Keep writing lectures as sequences of `##` slides.
+- An article lives in `articles/NN-name.md` and is rendered only as a website page. Use articles for practical notes — environment setup, tooling, recipes — that nobody presents from a stage. The slides profile excludes `articles/*.md`; keep it that way.
+- Give every article a `title`, a one-sentence `description` and an `author` list in the front matter. Each author entry carries `name` and, when there is one, a `url` to reach them.
+- Store article images under `assets/articles/<article-name>/` and article code under `examples/articles/<article-name>/`, where `<article-name>` matches the article filename without the `.md` extension. Reference them from the article with `../assets/...` and `../examples/...`, because Quarto resolves these paths relative to the document.
+- Register a new article in two places: the `Статьи` section of the sidebar in `_quarto.yml` and the list on `index.md`.
+- When an article is ported from an external source, keep the original wording and the author's voice; fix only outright typos, and close the article with a link to the original.
+- Write article headings with `##` and `###`. `toc-depth` is 3, so a deeper heading disappears from the table of contents.
+
 ## Code examples in lecture slides
 
 - Treat external source files as the source of truth for code shown on slides. Do not duplicate the same example inline in a lecture Markdown file.

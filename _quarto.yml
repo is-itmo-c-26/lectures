@@ -5,6 +5,7 @@ project:
     - node scripts/update-godbolt-links.mjs
   render:
     - "*.md"
+    - "articles/*.md"
     - "!README.md"
     - "!AGENTS.md"
     - "!template.md"
@@ -37,6 +38,10 @@ website:
         contents:
           - href: 00-introduction.md
             text: "Вводная лекция"
+      - section: "Статьи"
+        contents:
+          - href: articles/01-wsl-setup.md
+            text: "Установка WSL на Windows"
   page-footer:
     left: "Материалы курса по C и C++"
     right: "Сайт собран с помощью [Quarto](https://quarto.org/)"

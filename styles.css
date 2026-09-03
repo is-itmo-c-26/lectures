@@ -67,6 +67,19 @@ main p:has(> a > img.godbolt-link-image) {
   text-align: left;
 }
 
+.quarto-title-meta-heading,
+.quarto-title-meta-contents {
+  font-size: 0.9rem;
+}
+
+.article-source {
+  margin-top: 2.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid color-mix(in srgb, var(--course-accent) 25%, transparent);
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
 .page-navigation {
   margin-top: 3rem;
 }
