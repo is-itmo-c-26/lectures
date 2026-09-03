@@ -3,6 +3,7 @@ title: Основы программирования на C++
 description: Конспекты курса по языкам C и C++
 toc: false
 page-navigation: false
+sidebar: false
 ---
 
 Материалы курса доступны в двух форматах: как связный конспект и как презентация Reveal.js.
