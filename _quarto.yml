@@ -23,25 +23,43 @@ website:
   page-navigation: true
   reader-mode: true
   open-graph: true
+  # Лекции и статьи живут в разных боковых панелях: стрелки «предыдущая /
+  # следующая» ходят только внутри своей панели, поэтому с лекции нельзя
+  # перелистнуть на статью и наоборот.
   sidebar:
-    style: docked
-    search: true
-    collapse-level: 1
-    tools:
-      - icon: github
-        href: "https://github.com/is-itmo-c-26/lectures"
-        text: GitHub
-    contents:
-      - href: index.md
-        text: Главная
-      - section: "Начало курса"
-        contents:
-          - href: 00-introduction.md
-            text: "Вводная лекция"
-      - section: "Статьи"
-        contents:
-          - href: articles/01-wsl-setup.md
-            text: "Установка WSL на Windows"
+    - id: lectures
+      title: "Основы программирования на C++"
+      style: docked
+      search: true
+      collapse-level: 1
+      tools:
+        - icon: github
+          href: "https://github.com/is-itmo-c-26/lectures"
+          text: GitHub
+      contents:
+        - href: index.md
+          text: Главная
+        - section: "Лекции"
+          contents:
+            - href: 00-introduction.md
+              text: "Вводная лекция"
+
+    - id: articles
+      title: "Основы программирования на C++"
+      style: docked
+      search: true
+      collapse-level: 1
+      tools:
+        - icon: github
+          href: "https://github.com/is-itmo-c-26/lectures"
+          text: GitHub
+      contents:
+        - href: index.md
+          text: Главная
+        - section: "Статьи"
+          contents:
+            - href: articles/01-wsl-setup.md
+              text: "Установка WSL на Windows"
   page-footer:
     left: "Материалы курса по C и C++"
     right: "Сайт собран с помощью [Quarto](https://quarto.org/)"

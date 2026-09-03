@@ -6,8 +6,10 @@
 - An article lives in `articles/NN-name.md` and is rendered only as a website page. Use articles for practical notes — environment setup, tooling, recipes — that nobody presents from a stage. The slides profile excludes `articles/*.md`; keep it that way.
 - Give every article a `title`, a one-sentence `description` and an `author` list in the front matter. Each author entry carries `name` and, when there is one, a `url` to reach them.
 - Store article images under `assets/articles/<article-name>/` and article code under `examples/articles/<article-name>/`, where `<article-name>` matches the article filename without the `.md` extension. Reference them from the article with `../assets/...` and `../examples/...`, because Quarto resolves these paths relative to the document.
-- Register a new article in two places: the `Статьи` section of the sidebar in `_quarto.yml` and the list on `index.md`.
-- When an article is ported from an external source, keep the original wording and the author's voice; fix only outright typos, and close the article with a link to the original.
+- Lectures and articles have separate sidebars in `_quarto.yml`, `lectures` and `articles`. Previous/next arrows only walk within one sidebar, so keeping the lists apart is what stops a reader from paging from a lecture into an article. Never list an article in the `lectures` sidebar.
+- Set `page-navigation: false` in an article's front matter: arrows belong to lectures.
+- Register a new article in two places: the `Статьи` section of the `articles` sidebar in `_quarto.yml` and the list on `index.md`.
+- When an article is ported from an external source, keep the original wording and the author's voice, and fix only outright typos. The front matter `author` list is the credit; do not repeat the authors in the body.
 - Write article headings with `##` and `###`. `toc-depth` is 3, so a deeper heading disappears from the table of contents.
 
 ## Code examples in lecture slides

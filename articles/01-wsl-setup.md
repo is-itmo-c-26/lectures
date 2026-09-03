@@ -6,6 +6,7 @@ author:
     url: https://t.me/Rorikss
   - name: "AbubiB0ba"
     url: https://t.me/AbubiB0ba
+page-navigation: false
 ---
 
 Вообще для разработки, сборки и запуска своих проектов вы можете просто накатить себе любой дистрибутив Linux, или же установить себе виртуальную ОС, используя WSL или же VirtualBox. В данном туториале мы рассмотрим, как установить WSL, как подключить его к Visual Studio Code и как собирать и запускать свои проекты в нём. Поехали!
@@ -132,9 +133,3 @@ cmake --build <dir_name> --target <target>
 В целом, это и есть необходимый стартовый минимум для того, чтобы вы могли комфортно писать, запускать и тестировать свои лабораторные. В дальнейшем для удобства советую установить расширения VS Code для C++ и CMake.
 
 ![Расширения C/C++ Extension Pack, CMake и CMake Tools в VS Code](../assets/articles/01-wsl-setup/recommended-extensions.png){fig-alt="Список установленных расширений VS Code: C/C++ Extension Pack, CMake и CMake Tools"}
-
-> Создано [@Rorikss](https://t.me/Rorikss) при поддержке [@AbubiB0ba](https://t.me/AbubiB0ba), с вопросами и предложениями писать туда же. Надеюсь, помогло 🙂
-
-::: {.article-source}
-Оригинал статьи: <https://rorikss.yonote.ru/share/afc6d692-f756-423a-a255-ef51dc17d9a8>
-:::

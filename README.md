@@ -58,14 +58,13 @@ quarto render 00-introduction.md --profile slides --to revealjs
    author:
      - name: "Имя автора"
        url: https://t.me/nickname
+   page-navigation: false
    ---
    ```
 
 2. Картинки положите в `assets/articles/<номер>-<имя>/`, примеры кода — в `examples/articles/<номер>-<имя>/`. Из статьи на них ссылаются через `../assets/...` и `../examples/...`.
-3. Добавьте статью в `_quarto.yml` в раздел `Статьи` боковой панели и в список на `index.md`.
+3. Добавьте статью в `_quarto.yml` в панель `articles` (раздел `Статьи`) и в список на `index.md`. В панель `lectures` статьи не добавляются: тогда стрелки «предыдущая / следующая» не будут перекидывать читателя с лекции на статью.
 
 ## Публикация
 
 В настройках репозитория выберите **Settings → Pages → Build and deployment → Source: GitHub Actions**. После этого каждый push в ветку `main` будет пересобирать и публиковать конспекты и презентации.
-
-Для pull request'ов работает отдельный workflow `Preview Quarto site`: он собирает сайт и прикладывает его к запуску как артефакт `site-preview`, чтобы изменения можно было посмотреть до мержа.
