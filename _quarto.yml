@@ -58,8 +58,15 @@ website:
           text: Главная
         - section: "Статьи"
           contents:
-            - href: articles/01-wsl-setup.md
-              text: "Установка WSL на Windows"
+            - section: "Установка окружения"
+              href: articles/01-setup.md
+              contents:
+                - href: articles/01-setup-macos.md
+                  text: "macOS"
+                - href: articles/01-setup-windows.md
+                  text: "Windows"
+                - href: articles/01-setup-linux.md
+                  text: "Linux"
   page-footer:
     left: "Материалы курса по C и C++"
     right: "Сайт собран с помощью [Quarto](https://quarto.org/)"

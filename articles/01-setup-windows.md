@@ -1,5 +1,5 @@
 ---
-title: "Туториал по установке WSL на Windows"
+title: "Установка окружения: Windows"
 description: "Как поставить WSL, подключить его к VS Code и собрать первый проект на C++"
 author:
   - name: "Rorikss"
@@ -9,6 +9,8 @@ author:
 page-navigation: false
 ---
 
+Гайд предполагает, что VS Code вы уже поставили — если нет, вернитесь на [основную страницу](01-setup.md).
+
 Вообще для разработки, сборки и запуска своих проектов вы можете просто накатить себе любой дистрибутив Linux, или же установить себе виртуальную ОС, используя WSL или же VirtualBox. В данном туториале мы рассмотрим, как установить WSL, как подключить его к Visual Studio Code и как собирать и запускать свои проекты в нём. Поехали!
 
 > Туториал будет максимально простым, без лишних подробностей, рассчитанным на «чайников». Просто инструкция по установке и пробный запуск, ничего лишнего и пугающего в данном туториале не будет. Так что не обижайтесь, если вам было недостаточно интересно.
@@ -17,17 +19,11 @@ page-navigation: false
 
 Заходим в Microsoft Store, ищем WSL, устанавливаем. Проще выбирать дистрибутив Ubuntu (дальнейшие шаги в туториале полагаются на это), но в целом всё на ваш вкус.
 
-## 2. Установите VS Code и расширения
+## 2. Установите расширение WSL
 
-Тут всё просто. Устанавливать [вот тут](https://code.visualstudio.com/download).
+В VS Code нам нужно вот расширение для WSL, как на скрине. Ставится оно так же, как и остальные: кубики слева на экране, поиск по названию.
 
-Чтобы установить расширение, тыкаем на кубики слева на экране, в поиске ищем нужное расширение.
-
-![Панель расширений в VS Code: кнопка Extensions на левой панели и поиск по расширениям](../assets/articles/01-wsl-setup/vscode-extensions-panel.png){fig-alt="Окно VS Code с открытой панелью Extensions и строкой поиска"}
-
-Нам нужно вот расширение для WSL, как на скрине.
-
-![Страница расширения WSL от Microsoft (`ms-vscode-remote.remote-wsl`) в VS Code](../assets/articles/01-wsl-setup/vscode-wsl-extension.png){fig-alt="Страница расширения Visual Studio Code WSL от Microsoft с кнопками Disable и Uninstall"}
+![Страница расширения WSL от Microsoft (`ms-vscode-remote.remote-wsl`) в VS Code](../assets/articles/01-setup-windows/vscode-wsl-extension.png){fig-alt="Страница расширения Visual Studio Code WSL от Microsoft с кнопками Disable и Uninstall"}
 
 > Примечание: 1) к WSL можно подключаться и по SSH; 2) в целом в описании расширения есть и руководство по дальнейшей установке, если вам будет понятнее.
 
@@ -47,11 +43,11 @@ code
 
 Открываем VS Code и тыкаем сюда:
 
-![Кнопка удалённого подключения в левом нижнем углу окна VS Code](../assets/articles/01-wsl-setup/vscode-remote-button.png){fig-alt="Стартовый экран VS Code, стрелка указывает на кнопку удалённого подключения в левом нижнем углу"}
+![Кнопка удалённого подключения в левом нижнем углу окна VS Code](../assets/articles/01-setup-windows/vscode-remote-button.png){fig-alt="Стартовый экран VS Code, стрелка указывает на кнопку удалённого подключения в левом нижнем углу"}
 
 И выбираем «Connect to WSL»:
 
-![Меню выбора удалённого подключения с пунктом «Connect to WSL»](../assets/articles/01-wsl-setup/vscode-connect-to-wsl.png){fig-alt="Выпадающее меню Select an option to open a Remote Window с выбранным пунктом Connect to WSL"}
+![Меню выбора удалённого подключения с пунктом «Connect to WSL»](../assets/articles/01-setup-windows/vscode-connect-to-wsl.png){fig-alt="Выпадающее меню Select an option to open a Remote Window с выбранным пунктом Connect to WSL"}
 
 Та-да, у нас есть терминал Linux, который примаунтен к файловой системе Windows, что в целом супер удобно для дальнейшей разработки. ✨
 
@@ -59,7 +55,7 @@ code
 
 Выглядит это примерно вот так (смотри скрин ниже). Заметим, что слева снизу теперь отображается «WSL: Ubuntu» в оранжевом прямоугольничке.
 
-![Окно VS Code, подключённое к WSL: в левом нижнем углу индикатор «WSL: Ubuntu»](../assets/articles/01-wsl-setup/vscode-wsl-terminal.png){fig-alt="Окно VS Code с открытым терминалом Ubuntu и индикатором WSL: Ubuntu в строке состояния"}
+![Окно VS Code, подключённое к WSL: в левом нижнем углу индикатор «WSL: Ubuntu»](../assets/articles/01-setup-windows/vscode-wsl-terminal.png){fig-alt="Окно VS Code с открытым терминалом Ubuntu и индикатором WSL: Ubuntu в строке состояния"}
 
 Теперь тут можно создавать папки и файлы или же открывать готовые.
 
@@ -88,16 +84,16 @@ sudo apt install clang
 
 Описывать создание проектика тут не буду, ведь туториал не про это. Если интересно, я тестирую на таком проекте:
 
-![Проект из двух файлов: main.cpp и CMakeLists.txt, открытый в VS Code через WSL](../assets/articles/01-wsl-setup/sample-project-tree.png){fig-alt="Окно VS Code с деревом проекта из main.cpp и CMakeLists.txt и их содержимым"}
+![Проект из двух файлов: main.cpp и CMakeLists.txt, открытый в VS Code через WSL](../assets/articles/01-setup-windows/sample-project-tree.png){fig-alt="Окно VS Code с деревом проекта из main.cpp и CMakeLists.txt и их содержимым"}
 
 Можете скопипастить и потыкать, если со своим пока сложно.
 
 ```{.cpp filename="main.cpp"}
-{{< include ../examples/articles/01-wsl-setup/main.cpp >}}
+{{< include ../examples/articles/01-setup/main.cpp >}}
 ```
 
 ```{.cmake filename="CMakeLists.txt"}
-{{< include ../examples/articles/01-wsl-setup/CMakeLists.txt >}}
+{{< include ../examples/articles/01-setup/CMakeLists.txt >}}
 ```
 
 Для индексации проекта и скачивания зависимостей исполняем команду:
@@ -126,10 +122,10 @@ cmake --build <dir_name> --target <target>
 
 Выведет вот такое (в моём случае `dir_name` = «cmake-build», `target` = «HelloWorld»):
 
-![Вывод программы в терминале: команда ./cmake-build/HelloWorld печатает «hello»](../assets/articles/01-wsl-setup/program-output.png){fig-alt="Терминал WSL: запуск ./cmake-build/HelloWorld выводит hello"}
+![Вывод программы в терминале: команда ./cmake-build/HelloWorld печатает «hello»](../assets/articles/01-setup-windows/program-output.png){fig-alt="Терминал WSL: запуск ./cmake-build/HelloWorld выводит hello"}
 
 > Примечание: выполнять команды нужно из корня проекта.
 
-В целом, это и есть необходимый стартовый минимум для того, чтобы вы могли комфортно писать, запускать и тестировать свои лабораторные. В дальнейшем для удобства советую установить расширения VS Code для C++ и CMake.
+В целом, это и есть необходимый стартовый минимум для того, чтобы вы могли комфортно писать, запускать и тестировать свои лабораторные. В дальнейшем для удобства советую установить расширения VS Code для C++ и CMake — они перечислены на [основной странице](01-setup.md).
 
-![Расширения C/C++ Extension Pack, CMake и CMake Tools в VS Code](../assets/articles/01-wsl-setup/recommended-extensions.png){fig-alt="Список установленных расширений VS Code: C/C++ Extension Pack, CMake и CMake Tools"}
+> Расширения для C++ ставьте уже в подключённом окне WSL: VS Code держит отдельные наборы расширений для Windows и для WSL.

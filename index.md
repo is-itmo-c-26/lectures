@@ -15,4 +15,4 @@ page-navigation: false
 
 Короткие практические заметки: настройка окружения, инструменты, рецепты. В отличие от лекций, статьи не собираются в слайды.
 
-1. [Туториал по установке WSL на Windows](articles/01-wsl-setup.md) — Rorikss, AbubiB0ba
+1. [Установка окружения](articles/01-setup.md) — инструменты курса и установка VS Code, а дальше гайды по системам: [macOS](articles/01-setup-macos.md), [Windows](articles/01-setup-windows.md), [Linux](articles/01-setup-linux.md)
