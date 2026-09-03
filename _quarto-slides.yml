@@ -4,6 +4,7 @@ project:
   render:
     - "*.md"
     - "!index.md"
+    - "!articles/*.md"
     - "!README.md"
     - "!AGENTS.md"
     - "!template.md"

@@ -5,6 +5,7 @@ project:
     - node scripts/update-godbolt-links.mjs
   render:
     - "*.md"
+    - "articles/*.md"
     - "!README.md"
     - "!AGENTS.md"
     - "!template.md"
@@ -22,24 +23,57 @@ website:
   page-navigation: true
   reader-mode: true
   open-graph: true
-  sidebar:
-    style: docked
-    search: true
-    collapse-level: 1
+  navbar:
+    title: "Основы программирования на C++"
+    left:
+      - href: index.md
+        text: Главная
+      - href: 00-introduction.md
+        text: Лекции
+      - href: articles/01-setup.md
+        text: Статьи
     tools:
       - icon: github
         href: "https://github.com/is-itmo-c-26/lectures"
         text: GitHub
-    contents:
-      - href: index.md
-        text: Главная
-      - section: "Начало курса"
-        contents:
-          - href: 00-introduction.md
-            text: "Вводная лекция"
-          - href: 01-types-operators-functions.md
-            text: "1. Типы, операторы и функции"
-  page-footer:
+  # Лекции и статьи живут в разных боковых панелях: стрелки «предыдущая /
+  # следующая» ходят только внутри своей панели, поэтому с лекции нельзя
+  # перелистнуть на статью и наоборот.
+  sidebar:
+    - id: lectures
+      title: "Лекции"
+      style: docked
+      search: true
+      collapse-level: 1
+      contents:
+        - href: index.md
+          text: Главная
+        - section: "Лекции"
+          contents:
+            - href: 00-introduction.md
+              text: "Вводная лекция"
+            - href: 01-types-operators-functions.md
+              text: "1. Типы, операторы и функции"
+
+    - id: articles
+      title: "Статьи"
+      style: docked
+      search: true
+      collapse-level: 1
+      contents:
+        - href: index.md
+          text: Главная
+        - section: "Статьи"
+          contents:
+            - section: "Установка окружения"
+              href: articles/01-setup.md
+              contents:
+                - href: articles/01-setup-macos.md
+                  text: "macOS"
+                - href: articles/01-setup-windows.md
+                  text: "Windows"
+                - href: articles/01-setup-linux.md
+                  text: "Linux"
     left: "Материалы курса по C и C++"
     right: "Сайт собран с помощью [Quarto](https://quarto.org/)"
 

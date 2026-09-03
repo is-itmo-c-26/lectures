@@ -67,6 +67,11 @@ main p:has(> a > img.godbolt-link-image) {
   text-align: left;
 }
 
+.quarto-title-meta-heading,
+.quarto-title-meta-contents {
+  font-size: 0.9rem;
+}
+
 .page-navigation {
   margin-top: 3rem;
 }
