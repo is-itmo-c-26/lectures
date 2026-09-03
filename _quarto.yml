@@ -5,7 +5,6 @@ project:
     - node scripts/update-godbolt-links.mjs
   render:
     - "*.md"
-    - "articles/*.md"
     - "!README.md"
     - "!AGENTS.md"
     - "!template.md"
@@ -74,6 +73,7 @@ website:
                   text: "Windows"
                 - href: articles/01-setup-linux.md
                   text: "Linux"
+  page-footer:
     left: "Материалы курса по C и C++"
     right: "Сайт собран с помощью [Quarto](https://quarto.org/)"
 
