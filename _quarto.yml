@@ -52,6 +52,8 @@ website:
           contents:
             - href: 00-introduction.md
               text: "Вводная лекция"
+            - href: 01-types-operators-functions.md
+              text: "1. Типы, операторы и функции"
 
     - id: articles
       title: "Статьи"
@@ -72,7 +74,6 @@ website:
                   text: "Windows"
                 - href: articles/01-setup-linux.md
                   text: "Linux"
-  page-footer:
     left: "Материалы курса по C и C++"
     right: "Сайт собран с помощью [Quarto](https://quarto.org/)"
 
