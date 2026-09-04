@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
 import {readdir, readFile, writeFile} from 'node:fs/promises';
-import {resolve} from 'node:path';
+import {dirname, join, resolve} from 'node:path';
 
 const requestedFiles = process.argv.slice(2);
 const markdownFiles = requestedFiles.length > 0
     ? requestedFiles
-    : (await readdir('.')).filter(file => file.endsWith('.md'));
+    : (await readdir('lectures'))
+        .filter(file => file.endsWith('.md'))
+        .map(file => join('lectures', file));
 
 const minifiedKeys = [
     'settings',
@@ -149,7 +151,7 @@ for (const markdownFile of markdownFiles) {
     let replacements = 0;
 
     const linksUpdated = await replaceAsync(markdown, definitionPattern, async (match, label, sourcePath, compiler, options) => {
-        const source = await readFile(resolve(sourcePath), 'utf8');
+        const source = await readFile(resolve(dirname(markdownPath), sourcePath), 'utf8');
         const url = makeGodboltUrl(source, compiler, options);
         definitions.push({reference: label.slice(1, -2), sourcePath});
         replacements += 1;
@@ -169,7 +171,7 @@ for (const markdownFile of markdownFiles) {
 }
 
 function placeGodboltButtonsAfterCode(markdown, definitions, markdownFile) {
-    const buttonPattern = /^\[!\[\]\(assets\/compiler-explorer\.svg\)\{\.godbolt-link-image width="32"\}\]\[(godbolt-[^\]]+)\]\{aria-label="Open in Compiler Explorer"\}[ \t]*$/gm;
+    const buttonPattern = /^\[!\[\]\(\.\.\/assets\/compiler-explorer\.svg\)\{\.godbolt-link-image width="32"\}\]\[(godbolt-[^\]]+)\]\{aria-label="Open in Compiler Explorer"\}[ \t]*$/gm;
     const buttons = new Map();
 
     let result = markdown.replace(buttonPattern, (button, reference) => {

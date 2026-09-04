@@ -10,11 +10,15 @@ sidebar: false
 
 ## Лекции
 
-1. [Вводная лекция: язык C и C++](00-introduction.md)
-2. [Типы, операторы и функции](01-types-operators-functions.md)
+1. [Вводная лекция: язык C и C++](lectures/00-introduction.md)
+2. [Типы, операторы и функции](lectures/01-types-operators-functions.md)
 
 ## Статьи
 
 Короткие практические заметки: настройка окружения, инструменты, рецепты. В отличие от лекций, статьи не собираются в слайды.
 
 1. [Установка окружения](articles/01-setup.md) — инструменты курса и установка VS Code, а дальше гайды по системам: [macOS](articles/01-setup-macos.md), [Windows](articles/01-setup-windows.md), [Linux](articles/01-setup-linux.md)
+
+## Видео
+
+[Видеоматериалы курса](videos/index.md)

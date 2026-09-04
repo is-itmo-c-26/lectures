@@ -4,7 +4,7 @@ title: "Лекция 1. Типы, операторы и функции"
 
 ::: {.content-visible unless-format="revealjs"}
 
-[Открыть слайды](slides/01-types-operators-functions.html){.btn .btn-outline-primary target="_blank"}
+[Открыть слайды](../slides/lectures/01-types-operators-functions.html){.btn .btn-outline-primary target="_blank"}
 
 :::
 
@@ -20,10 +20,10 @@ title: "Лекция 1. Типы, операторы и функции"
 
 
 ```{.cpp filename="hello-world.cpp"}
-{{< include examples/01-types-operators-functions/hello-world.cpp >}}
+{{< include ../examples/01-types-operators-functions/hello-world.cpp >}}
 ```
 
-[![](assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-hello-world]{aria-label="Open in Compiler Explorer"}
+[![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-hello-world]{aria-label="Open in Compiler Explorer"}
 
 ## Идентификаторы
 
@@ -41,7 +41,7 @@ title: "Лекция 1. Типы, операторы и функции"
 Что вы скажете про такой код?
 
 ```{.cpp filename="bad-code-style.cpp"}
-{{< include examples/01-types-operators-functions/bad-code-style.cpp >}}
+{{< include ../examples/01-types-operators-functions/bad-code-style.cpp >}}
 ```
 
 ## Code Style
@@ -86,7 +86,7 @@ unsigned long file_size = 4'000'000UL;
 ## Арифметика `unsigned`
 
 ```{.cpp filename="unsigned-arithmetic.cpp" code-line-numbers="|4|5-6|8-10"}
-{{< include examples/01-types-operators-functions/unsigned-arithmetic.cpp >}}
+{{< include ../examples/01-types-operators-functions/unsigned-arithmetic.cpp >}}
 ```
 
 - `0U - 1U` даёт максимум типа: арифметика `unsigned` выполняется по модулю $2^N$
@@ -115,10 +115,10 @@ unsigned long file_size = 4'000'000UL;
 
 
 ```{.cpp filename="type-sizes.cpp"}
-{{< include examples/01-types-operators-functions/type-sizes.cpp >}}
+{{< include ../examples/01-types-operators-functions/type-sizes.cpp >}}
 ```
 
-[![](assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-type-sizes]{aria-label="Open in Compiler Explorer"}
+[![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-type-sizes]{aria-label="Open in Compiler Explorer"}
 
 `sizeof` возвращает размер в байтах платформы и имеет тип `std::size_t`.
 
@@ -128,10 +128,10 @@ unsigned long file_size = 4'000'000UL;
 
 
 ```{.cpp filename="numeric-limits.cpp"}
-{{< include examples/01-types-operators-functions/numeric-limits.cpp >}}
+{{< include ../examples/01-types-operators-functions/numeric-limits.cpp >}}
 ```
 
-[![](assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-numeric-limits]{aria-label="Open in Compiler Explorer"}
+[![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-numeric-limits]{aria-label="Open in Compiler Explorer"}
 
 - `lowest()` — наименьшее конечное значение
 - `max()` — наибольшее конечное значение
@@ -159,10 +159,10 @@ std::int64_t  std::uint64_t
 
 
 ```{.cpp filename="integer-literals.cpp"}
-{{< include examples/01-types-operators-functions/integer-literals.cpp >}}
+{{< include ../examples/01-types-operators-functions/integer-literals.cpp >}}
 ```
 
-[![](assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-integer-literals]{aria-label="Open in Compiler Explorer"}
+[![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-integer-literals]{aria-label="Open in Compiler Explorer"}
 
 - Литерал с ведущим `0` записывается в восьмеричной системе: `0242`
 - Префиксы `0x` и `0b` задают шестнадцатеричную и двоичную системы
@@ -175,10 +175,10 @@ std::int64_t  std::uint64_t
 
 
 ```{.cpp filename="floating-point-literals.cpp"}
-{{< include examples/01-types-operators-functions/floating-point-literals.cpp >}}
+{{< include ../examples/01-types-operators-functions/floating-point-literals.cpp >}}
 ```
 
-[![](assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-floating-literals]{aria-label="Open in Compiler Explorer"}
+[![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-floating-literals]{aria-label="Open in Compiler Explorer"}
 
 - Без суффикса литерал имеет тип `double`
 - `F` задаёт `float`, `L` — `long double`
@@ -327,7 +327,7 @@ bool is_positive = value > 0;
 ## `enum` & `enum class`
 
 ```{.cpp filename="enum-kinds.cpp" code-line-numbers="|1|2|5-6"}
-{{< include examples/01-types-operators-functions/enum-kinds.cpp >}}
+{{< include ../examples/01-types-operators-functions/enum-kinds.cpp >}}
 ```
 
 | | `enum Color` | `enum class Direction` |
@@ -355,7 +355,7 @@ char grade = 'A';         // определение
 ## Определение без инициализатора
 
 ```{.cpp filename="uninitialized-local.cpp" code-line-numbers="|4|6"}
-{{< include examples/01-types-operators-functions/uninitialized-local.cpp >}}
+{{< include ../examples/01-types-operators-functions/uninitialized-local.cpp >}}
 ```
 
 - `int value;` определяет локальную переменную, но не задаёт ей значение
@@ -384,7 +384,7 @@ char grade = 'A';         // определение
 - Явное преобразование пока записываем в C-style форме: `(тип)выражение`
 
 ```{.cpp filename="type-conversions.cpp" code-line-numbers="|4-5|7-8"}
-{{< include examples/01-types-operators-functions/type-conversions.cpp >}}
+{{< include ../examples/01-types-operators-functions/type-conversions.cpp >}}
 ```
 
 ## `sizeof`
@@ -493,10 +493,10 @@ if (condition) {
 `outer_condition == false`. Что напечатает программа: `result = 0` или `result = 2`?
 
 ```{.cpp filename="dangling-else.cpp" code-line-numbers="|8-12|14"}
-{{< include examples/01-types-operators-functions/dangling-else.cpp >}}
+{{< include ../examples/01-types-operators-functions/dangling-else.cpp >}}
 ```
 
-[![](assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-dangling-else]{aria-label="Open in Compiler Explorer"}
+[![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-dangling-else]{aria-label="Open in Compiler Explorer"}
 
 В примере фигурные скобки намеренно опущены.
 
@@ -505,10 +505,10 @@ if (condition) {
 Покажем компилятору, что `else` относится к внешнему `if`:
 
 ```{.cpp filename="dangling-else-fixed.cpp" code-line-numbers="|8-14|16"}
-{{< include examples/01-types-operators-functions/dangling-else-fixed.cpp >}}
+{{< include ../examples/01-types-operators-functions/dangling-else-fixed.cpp >}}
 ```
 
-[![](assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-dangling-else-fixed]{aria-label="Open in Compiler Explorer"}
+[![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-dangling-else-fixed]{aria-label="Open in Compiler Explorer"}
 
 Теперь программа печатает `result = 2`, а структура не зависит от отступов.
 
@@ -574,7 +574,7 @@ for (initialization; condition; step) {
 ## `continue` в цикле `for`
 
 ```{.cpp filename="for-continue.cpp" code-line-numbers="|4|5-7|8"}
-{{< include examples/01-types-operators-functions/for-continue.cpp >}}
+{{< include ../examples/01-types-operators-functions/for-continue.cpp >}}
 ```
 
 Цикл печатает `0 2`: после `continue` выполняется шаг `++i`.
@@ -723,19 +723,19 @@ return_type function_name(parameter_type parameter) {
 
 
 ```{.cpp filename="addition-function.cpp"}
-{{< include examples/01-types-operators-functions/addition-function.cpp >}}
+{{< include ../examples/01-types-operators-functions/addition-function.cpp >}}
 ```
 
-[![](assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-addition-function]{aria-label="Open in Compiler Explorer"}
+[![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-addition-function]{aria-label="Open in Compiler Explorer"}
 
 ## Объявление и определение функции
 
 
 ```{.cpp filename="function-declaration-definition.cpp"}
-{{< include examples/01-types-operators-functions/function-declaration-definition.cpp >}}
+{{< include ../examples/01-types-operators-functions/function-declaration-definition.cpp >}}
 ```
 
-[![](assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-function-declaration]{aria-label="Open in Compiler Explorer"}
+[![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-function-declaration]{aria-label="Open in Compiler Explorer"}
 
 - Объявление сообщает сигнатуру функции
 - Определение содержит тело функции
@@ -746,10 +746,10 @@ return_type function_name(parameter_type parameter) {
 
 
 ```{.cpp filename="void-function.cpp"}
-{{< include examples/01-types-operators-functions/void-function.cpp >}}
+{{< include ../examples/01-types-operators-functions/void-function.cpp >}}
 ```
 
-[![](assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-void-function]{aria-label="Open in Compiler Explorer"}
+[![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-void-function]{aria-label="Open in Compiler Explorer"}
 
 Тип `void` означает, что функция не возвращает значение.
 
@@ -778,10 +778,10 @@ int main(int argc, char* argv[]) {
 
 
 ```{.cpp filename="command-line-arguments.cpp"}
-{{< include examples/01-types-operators-functions/command-line-arguments.cpp >}}
+{{< include ../examples/01-types-operators-functions/command-line-arguments.cpp >}}
 ```
 
-[![](assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-command-line-arguments]{aria-label="Open in Compiler Explorer"}
+[![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-command-line-arguments]{aria-label="Open in Compiler Explorer"}
 
 - `argc` — количество строк с аргументами в `argv`
 - `argv` — массив указателей на строки с аргументами
@@ -794,10 +794,10 @@ int main(int argc, char* argv[]) {
 
 
 ```{.cpp filename="factorial-recursive.cpp"}
-{{< include examples/01-types-operators-functions/factorial-recursive.cpp >}}
+{{< include ../examples/01-types-operators-functions/factorial-recursive.cpp >}}
 ```
 
-[![](assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-factorial-recursive]{aria-label="Open in Compiler Explorer"}
+[![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-factorial-recursive]{aria-label="Open in Compiler Explorer"}
 
 Функция вызывает сама себя с меньшим аргументом. Условие `number == 0` останавливает рекурсию.
 
@@ -807,10 +807,10 @@ int main(int argc, char* argv[]) {
 
 
 ```{.cpp filename="factorial-iterative.cpp"}
-{{< include examples/01-types-operators-functions/factorial-iterative.cpp >}}
+{{< include ../examples/01-types-operators-functions/factorial-iterative.cpp >}}
 ```
 
-[![](assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-factorial-iterative]{aria-label="Open in Compiler Explorer"}
+[![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-factorial-iterative]{aria-label="Open in Compiler Explorer"}
 
 Обе версии вычисляют одно значение, но цикл не создаёт цепочку рекурсивных вызовов.
 
@@ -822,53 +822,53 @@ int main(int argc, char* argv[]) {
 
 
 ```{.cpp filename="name-shadowing.cpp" code-line-numbers="|3-4|6-9|15-18|21"}
-{{< include examples/01-types-operators-functions/name-shadowing.cpp >}}
+{{< include ../examples/01-types-operators-functions/name-shadowing.cpp >}}
 ```
 
-[![](assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-name-shadowing]{aria-label="Open in Compiler Explorer"}
+[![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-01-name-shadowing]{aria-label="Open in Compiler Explorer"}
 
 Внутреннее объявление временно скрывает одноимённую переменную из внешней области видимости.
 
 
 
 [godbolt-01-hello-world]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Aint+main()+%7B%0A++++std::cout+%3C%3C+%22Hello,+world!!%5Cn%22%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
-<!-- godbolt source="examples/01-types-operators-functions/hello-world.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
+<!-- godbolt source="../examples/01-types-operators-functions/hello-world.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
 [godbolt-01-type-sizes]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ccstdint%3E%0A%23include+%3Ciostream%3E%0A%0Aint+main()+%7B%0A++++std::cout+%3C%3C+%22sizeof(char)+%3D+%22+%3C%3C+sizeof(char)+%3C%3C+!'%5Cn!'%3B%0A++++std::cout+%3C%3C+%22sizeof(short)+%3D+%22+%3C%3C+sizeof(short)+%3C%3C+!'%5Cn!'%3B%0A++++std::cout+%3C%3C+%22sizeof(int)+%3D+%22+%3C%3C+sizeof(int)+%3C%3C+!'%5Cn!'%3B%0A++++std::cout+%3C%3C+%22sizeof(long)+%3D+%22+%3C%3C+sizeof(long)+%3C%3C+!'%5Cn!'%3B%0A++++std::cout+%3C%3C+%22sizeof(long+long)+%3D+%22+%3C%3C+sizeof(long+long)+%3C%3C+!'%5Cn!'%3B%0A++++std::cout+%3C%3C+%22sizeof(std::int32_t)+%3D+%22+%3C%3C+sizeof(std::int32_t)+%3C%3C+!'%5Cn!'%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
-<!-- godbolt source="examples/01-types-operators-functions/type-sizes.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
+<!-- godbolt source="../examples/01-types-operators-functions/type-sizes.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
 [godbolt-01-numeric-limits]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%23include+%3Climits%3E%0A%0Aint+main()+%7B%0A++++std::cout+%3C%3C+%22long:+%5B%22+%3C%3C+std::numeric_limits%3Clong%3E::lowest()+%3C%3C+%22,+%22%0A++++++++++++++%3C%3C+std::numeric_limits%3Clong%3E::max()+%3C%3C+%22%5D%5Cn%22%3B%0A++++std::cout+%3C%3C+%22double:+%5B%22+%3C%3C+std::numeric_limits%3Cdouble%3E::lowest()+%3C%3C+%22,+%22%0A++++++++++++++%3C%3C+std::numeric_limits%3Cdouble%3E::max()+%3C%3C+%22%5D%5Cn%22%3B%0A++++std::cout+%3C%3C+%22smallest+positive+normalized+double:+%22+%3C%3C+std::numeric_limits%3Cdouble%3E::min()%0A++++++++++++++%3C%3C+!'%5Cn!'%3B%0A++++std::cout+%3C%3C+%22char+is+signed:+%22+%3C%3C+std::numeric_limits%3Cchar%3E::is_signed+%3C%3C+!'%5Cn!'%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
-<!-- godbolt source="examples/01-types-operators-functions/numeric-limits.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
+<!-- godbolt source="../examples/01-types-operators-functions/numeric-limits.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
 [godbolt-01-integer-literals]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Aint+main()+%7B%0A++++int+decimal+%3D+162%3B%0A++++int+octal+%3D+0242%3B%0A++++int+hexadecimal+%3D+0xA2%3B%0A++++int+binary+%3D+0b1010!'0010%3B%0A++++unsigned+long+population+%3D+1!'000!'000UL%3B%0A%0A++++std::cout+%3C%3C+decimal+%3C%3C+!'+!'+%3C%3C+octal+%3C%3C+!'+!'+%3C%3C+hexadecimal+%3C%3C+!'+!'+%3C%3C+binary+%3C%3C+!'%5Cn!'%3B%0A++++std::cout+%3C%3C+population+%3C%3C+!'%5Cn!'%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
-<!-- godbolt source="examples/01-types-operators-functions/integer-literals.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
+<!-- godbolt source="../examples/01-types-operators-functions/integer-literals.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
 [godbolt-01-floating-literals]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Aint+main()+%7B%0A++++double+fraction+%3D+0.15%3B%0A++++float+single_precision+%3D+0.15F%3B%0A++++long+double+scientific+%3D+15E-2L%3B%0A++++double+large_value+%3D+1.5E6%3B%0A%0A++++std::cout+%3C%3C+fraction+%3C%3C+!'%5Cn!'%3B%0A++++std::cout+%3C%3C+single_precision+%3C%3C+!'%5Cn!'%3B%0A++++std::cout+%3C%3C+scientific+%3C%3C+!'%5Cn!'%3B%0A++++std::cout+%3C%3C+large_value+%3C%3C+!'%5Cn!'%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
-<!-- godbolt source="examples/01-types-operators-functions/floating-point-literals.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
+<!-- godbolt source="../examples/01-types-operators-functions/floating-point-literals.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
 [godbolt-01-addition-function]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Aint+addition(int+left,+int+right)+%7B%0A++++return+left+%2B+right%3B%0A%7D%0A%0Aint+main()+%7B%0A++++int+result+%3D+addition(5,+3)%3B%0A++++std::cout+%3C%3C+result+%3C%3C+!'%5Cn!'%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
-<!-- godbolt source="examples/01-types-operators-functions/addition-function.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
+<!-- godbolt source="../examples/01-types-operators-functions/addition-function.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
 [godbolt-01-function-declaration]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Aint+maximum(int+left,+int+right)%3B%0A%0Aint+main()+%7B%0A++++int+result+%3D+maximum(10,+2)%3B%0A++++std::cout+%3C%3C+result+%3C%3C+!'%5Cn!'%3B%0A%0A++++return+0%3B%0A%7D%0A%0Aint+maximum(int+left,+int+right)+%7B%0A++++return+left+%3E+right+%3F+left+:+right%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
-<!-- godbolt source="examples/01-types-operators-functions/function-declaration-definition.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
+<!-- godbolt source="../examples/01-types-operators-functions/function-declaration-definition.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
 [godbolt-01-void-function]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Avoid+print_message()+%7B%0A++++std::cout+%3C%3C+%22I!'m+a+function!!%5Cn%22%3B%0A%7D%0A%0Aint+main()+%7B%0A++++print_message()%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
-<!-- godbolt source="examples/01-types-operators-functions/void-function.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
+<!-- godbolt source="../examples/01-types-operators-functions/void-function.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
 [godbolt-01-command-line-arguments]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Aint+main(int+argc,+char*+argv%5B%5D)+%7B%0A++++for+(int+index+%3D+0%3B+index+%3C+argc%3B+%2B%2Bindex)+%7B%0A++++++++std::cout+%3C%3C+argv%5Bindex%5D+%3C%3C+!'%5Cn!'%3B%0A++++%7D%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
-<!-- godbolt source="examples/01-types-operators-functions/command-line-arguments.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
+<!-- godbolt source="../examples/01-types-operators-functions/command-line-arguments.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
 [godbolt-01-factorial-recursive]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Aunsigned+long+long+factorial(unsigned+int+number)+%7B%0A++++if+(number+%3D%3D+0)+%7B%0A++++++++return+1%3B%0A++++%7D%0A%0A++++return+number+*+factorial(number+-+1)%3B%0A%7D%0A%0Aint+main()+%7B%0A++++std::cout+%3C%3C+factorial(5)+%3C%3C+!'%5Cn!'%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
-<!-- godbolt source="examples/01-types-operators-functions/factorial-recursive.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
+<!-- godbolt source="../examples/01-types-operators-functions/factorial-recursive.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
 [godbolt-01-factorial-iterative]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Aunsigned+long+long+factorial(unsigned+int+number)+%7B%0A++++unsigned+long+long+result+%3D+1%3B%0A%0A++++for+(unsigned+int+factor+%3D+2%3B+factor+%3C%3D+number%3B+%2B%2Bfactor)+%7B%0A++++++++result+*%3D+factor%3B%0A++++%7D%0A%0A++++return+result%3B%0A%7D%0A%0Aint+main()+%7B%0A++++std::cout+%3C%3C+factorial(5)+%3C%3C+!'%5Cn!'%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
-<!-- godbolt source="examples/01-types-operators-functions/factorial-iterative.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
+<!-- godbolt source="../examples/01-types-operators-functions/factorial-iterative.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
 [godbolt-01-name-shadowing]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Aint+x+%3D+0%3B%0Aint+y+%3D+0%3B%0A%0Avoid+print_local_values(double+x)+%7B%0A++++double+y+%3D+3.14%3B%0A++++std::cout+%3C%3C+%22local:+x+%3D+%22+%3C%3C+x+%3C%3C+%22,+y+%3D+%22+%3C%3C+y+%3C%3C+!'%5Cn!'%3B%0A%7D%0A%0Aint+main()+%7B%0A++++x+%3D+21%3B%0A++++y+%3D+239%3B%0A%0A++++%7B%0A++++++++int+x+%3D+10%3B%0A++++++++std::cout+%3C%3C+%22block:+x+%3D+%22+%3C%3C+x+%3C%3C+%22,+y+%3D+%22+%3C%3C+y+%3C%3C+!'%5Cn!'%3B%0A++++++++print_local_values(y)%3B%0A++++%7D%0A%0A++++std::cout+%3C%3C+%22global:+x+%3D+%22+%3C%3C+x+%3C%3C+%22,+y+%3D+%22+%3C%3C+y+%3C%3C+!'%5Cn!'%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
-<!-- godbolt source="examples/01-types-operators-functions/name-shadowing.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
+<!-- godbolt source="../examples/01-types-operators-functions/name-shadowing.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
 [godbolt-01-dangling-else]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Aint+main()+%7B%0A++++bool+outer_condition+%3D+false%3B%0A++++bool+inner_condition+%3D+false%3B%0A++++int+result+%3D+0%3B%0A%0A++++if+(outer_condition)%0A++++++++if+(inner_condition)%0A++++++++++++result+%3D+1%3B%0A++++else%0A++++++++result+%3D+2%3B%0A%0A++++std::cout+%3C%3C+%22result+%3D+%22+%3C%3C+result+%3C%3C+!'%5Cn!'%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
-<!-- godbolt source="examples/01-types-operators-functions/dangling-else.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
+<!-- godbolt source="../examples/01-types-operators-functions/dangling-else.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
 [godbolt-01-dangling-else-fixed]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Aint+main()+%7B%0A++++bool+outer_condition+%3D+false%3B%0A++++bool+inner_condition+%3D+false%3B%0A++++int+result+%3D+0%3B%0A%0A++++if+(outer_condition)+%7B%0A++++++++if+(inner_condition)+%7B%0A++++++++++++result+%3D+1%3B%0A++++++++%7D%0A++++%7D+else+%7B%0A++++++++result+%3D+2%3B%0A++++%7D%0A%0A++++std::cout+%3C%3C+%22result+%3D+%22+%3C%3C+result+%3C%3C+!'%5Cn!'%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
-<!-- godbolt source="examples/01-types-operators-functions/dangling-else-fixed.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
+<!-- godbolt source="../examples/01-types-operators-functions/dangling-else-fixed.cpp" compiler="clang2310" options="-std=c++20 -O0" -->

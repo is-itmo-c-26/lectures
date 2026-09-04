@@ -2,7 +2,7 @@
 
 ## Lectures and articles
 
-- A lecture lives in the repository root as `NN-name.md` and is rendered twice: as a website page and as a Reveal.js deck. Keep writing lectures as sequences of `##` slides.
+- A lecture lives in `lectures/NN-name.md` and is rendered twice: as a website page and as a Reveal.js deck. Keep writing lectures as sequences of `##` slides.
 - An article lives in `articles/NN-name.md` and is rendered only as a website page. Use articles for practical notes — environment setup, tooling, recipes — that nobody presents from a stage. The slides profile excludes `articles/*.md`; keep it that way.
 - Give every article a `title`, a one-sentence `description` and an `author` list in the front matter. Each author entry carries `name` and, when there is one, a `url` to reach them.
 - Store article images under `assets/articles/<article-name>/` and article code under `examples/articles/<article-name>/`, where `<article-name>` matches the article filename without the `.md` extension. Reference them from the article with `../assets/...` and `../examples/...`, because Quarto resolves these paths relative to the document.
@@ -11,19 +11,20 @@
 - Set `page-navigation: false` in an article's front matter: arrows belong to lectures.
 - An article that splits into several pages keeps one prefix: `articles/01-setup.md` is the entry point and `articles/01-setup-macos.md` and its siblings are the branches. Give the entry point a `section` with an `href` in the sidebar and nest the branches under it. Shared images and code go under the entry point's name, `assets/articles/01-setup/` and `examples/articles/01-setup/`; images that belong to one branch live under that branch's name.
 - Register a new article in two places: the `Статьи` section of the `articles` sidebar in `_quarto.yml` and the list on `index.md`.
+- Video pages live in `videos/`, are rendered only as website pages, and belong only to the `videos` sidebar. Register new video pages in that sidebar and in the video list on `videos/index.md`; never include them in the slides profile.
 - When an article is ported from an external source, keep the original wording and the author's voice, and fix only outright typos. The front matter `author` list is the credit; do not repeat the authors in the body.
 - Write article headings with `##` and `###`. `toc-depth` is 3, so a deeper heading disappears from the table of contents.
 
 ## Code examples in lecture slides
 
 - Treat external source files as the source of truth for code shown on slides. Do not duplicate the same example inline in a lecture Markdown file.
-- Store examples under `examples/<lecture-name>/`, where `<lecture-name>` matches the lecture filename without the `.md` extension. For example: `examples/00-introduction/hello-world.cpp`.
+- Store examples under `examples/<lecture-name>/`, where `<lecture-name>` matches the lecture filename without the `.md` extension. For example: `examples/00-introduction/hello-world.cpp`. Reference examples and images from a lecture with `../examples/...` and `../assets/...`, because Quarto resolves these paths relative to the document.
 - Use lowercase kebab-case filenames that describe the example.
 - Include a complete `.cpp` file in a Quarto slide with this form:
 
   ````markdown
   ```{.cpp filename="hello-world.cpp"}
-  {{< include examples/00-introduction/hello-world.cpp >}}
+  {{< include ../examples/00-introduction/hello-world.cpp >}}
   ```
   ````
 
@@ -52,15 +53,15 @@
 
   ```markdown
   [godbolt-example-name]: <generated-url>
-  <!-- godbolt source="examples/lecture/example.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
+  <!-- godbolt source="../examples/lecture/example.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
   ```
 
-- `scripts/update-godbolt-links.mjs` scans the root lecture Markdown files, generates a self-contained Godbolt URL from each complete backing `.cpp` file, and moves its image button immediately after that example's closing code fence. Quarto runs it through `project.pre-render`, so rendering refreshes every registered URL and preserves the order code → button → explanation automatically.
+- `scripts/update-godbolt-links.mjs` scans the Markdown files in `lectures/`, generates a self-contained Godbolt URL from each complete backing `.cpp` file, and moves its image button immediately after that example's closing code fence. Quarto runs it through `project.pre-render`, so rendering refreshes every registered URL and preserves the order code → button → explanation automatically.
 - Treat a change to a `.cpp` file referenced by Godbolt as incomplete until the generator has run and the affected lecture has been rendered. Do not hand-edit the generated URL.
 - Prefer self-contained `https://godbolt.org/#...` URLs over `/z/...` short links: the source travels in the URL and is not coupled to Godbolt's short-link storage or routing.
 - Do not use `#include <https://...>` as the default way to load a course example from GitHub: it depends on publication, network access, and CORS, and leaves the primary editor showing an include directive instead of the directly editable example. It is acceptable for an intentionally external header-only dependency.
 - Place the Compiler Explorer link immediately after the corresponding code block and render it as the compact image link below; do not expose a long encoded client-state URL on a slide.
 
   ```markdown
-  [![](assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-example-name]{aria-label="Open in Compiler Explorer"}
+  [![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-example-name]{aria-label="Open in Compiler Explorer"}
   ```
