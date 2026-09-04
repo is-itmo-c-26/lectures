@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>C++</title>
+  <rect width="64" height="64" rx="12" fill="#00599c"/>
+  <text x="6" y="47" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="44" font-weight="700">C</text>
+  <g fill="none" stroke="#fff" stroke-linecap="round" stroke-width="3.5">
+    <path d="M38 24h10M43 19v10"/>
+    <path d="M50 24h10M55 19v10"/>
+  </g>
+</svg>

@@ -19,6 +19,7 @@ lang: ru
 website:
   title: "Основы программирования на C++"
   description: "Конспекты курса по языкам C и C++"
+  favicon: assets/favicon.svg
   site-url: "https://is-itmo-c-26.github.io/lectures/"
   repo-url: "https://github.com/is-itmo-c-26/lectures"
   repo-actions: [edit, source, issue]

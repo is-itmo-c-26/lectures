@@ -256,3 +256,52 @@ title: "Вводная лекция. Язык C и C++"
 <https://www.youtube.com/@hvastunovalexandr>
 
 :::
+
+## Формы курса
+
+:::: {.columns}
+::: {.column width="25%"}
+::: {style="text-align: center;"}
+
+[![](../assets/00-introduction/code-review-form-qr.png){fig-alt="QR-код формы заявки на Code Review" width="190px"}](https://forms.gle/tY6c57sx6D3QYksc9)
+
+**Заявка на Code Review**
+
+[Открыть форму](https://forms.gle/tY6c57sx6D3QYksc9)
+
+:::
+:::
+::: {.column width="25%"}
+::: {style="text-align: center;"}
+
+[![](../assets/00-introduction/github-link-form-qr.png){fig-alt="QR-код формы привязки GitHub" width="190px"}](https://forms.gle/FyCJrUG8osRhVTj7A)
+
+**Привязать свой GitHub**
+
+[Открыть форму](https://forms.gle/FyCJrUG8osRhVTj7A)
+
+:::
+:::
+::: {.column width="25%"}
+::: {style="text-align: center;"}
+
+[![](../assets/00-introduction/course-feedback-form-qr.png){fig-alt="QR-код формы обратной связи по курсу" width="190px"}](https://forms.gle/1orSnnzC1SQ2NWVRA)
+
+**Обратная связь по курсу**
+
+[Открыть форму](https://forms.gle/1orSnnzC1SQ2NWVRA)
+
+:::
+:::
+::: {.column width="25%"}
+::: {style="text-align: center;"}
+
+[![](../assets/00-introduction/consultation-form-qr.png){fig-alt="QR-код формы заявки на консультацию" width="190px"}](https://forms.gle/m3qovxRWC8vu7RJU9)
+
+**Заявки на консультации**
+
+[Открыть форму](https://forms.gle/m3qovxRWC8vu7RJU9)
+
+:::
+:::
+::::
