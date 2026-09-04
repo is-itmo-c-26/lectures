@@ -5,6 +5,9 @@ project:
     - node scripts/update-godbolt-links.mjs
   render:
     - "*.md"
+    - "lectures/*.md"
+    - "articles/*.md"
+    - "videos/*.md"
     - "!README.md"
     - "!AGENTS.md"
     - "!template.md"
@@ -27,17 +30,18 @@ website:
     left:
       - href: index.md
         text: Главная
-      - href: 00-introduction.md
+      - href: lectures/00-introduction.md
         text: Лекции
       - href: articles/01-setup.md
         text: Статьи
+      - href: videos/index.md
+        text: Видео
     tools:
       - icon: github
         href: "https://github.com/is-itmo-c-26/lectures"
         text: GitHub
-  # Лекции и статьи живут в разных боковых панелях: стрелки «предыдущая /
-  # следующая» ходят только внутри своей панели, поэтому с лекции нельзя
-  # перелистнуть на статью и наоборот.
+  # Лекции, статьи и видео живут в разных боковых панелях: стрелки
+  # «предыдущая / следующая» ходят только внутри своей панели.
   sidebar:
     - id: lectures
       title: "Лекции"
@@ -49,9 +53,9 @@ website:
           text: Главная
         - section: "Лекции"
           contents:
-            - href: 00-introduction.md
+            - href: lectures/00-introduction.md
               text: "Вводная лекция"
-            - href: 01-types-operators-functions.md
+            - href: lectures/01-types-operators-functions.md
               text: "1. Типы, операторы и функции"
 
     - id: articles
@@ -73,6 +77,19 @@ website:
                   text: "Windows"
                 - href: articles/01-setup-linux.md
                   text: "Linux"
+
+    - id: videos
+      title: "Видео"
+      style: docked
+      search: true
+      collapse-level: 1
+      contents:
+        - href: index.md
+          text: Главная
+        - section: "Видео"
+          contents:
+            - href: videos/index.md
+              text: "Все видео"
   page-footer:
     left: "Материалы курса по C и C++"
     right: "Сайт собран с помощью [Quarto](https://quarto.org/)"

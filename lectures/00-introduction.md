@@ -4,7 +4,7 @@ title: "Вводная лекция. Язык C и C++"
 
 ::: {.content-visible unless-format="revealjs"}
 
-[Открыть слайды](slides/00-introduction.html){.btn .btn-outline-primary target="_blank"}
+[Открыть слайды](../slides/lectures/00-introduction.html){.btn .btn-outline-primary target="_blank"}
 
 :::
 
@@ -39,7 +39,7 @@ title: "Вводная лекция. Язык C и C++"
 ::: {.column width="45%"}
 ::: {style="text-align: center;"}
 
-[![](assets/00-introduction/telegram-channel-qr.svg){fig-alt="QR-код приглашения в Telegram-канал курса" width="360px"}](https://t.me/+KC_tNYHlmLBhNWFi)
+[![](../assets/00-introduction/telegram-channel-qr.svg){fig-alt="QR-код приглашения в Telegram-канал курса" width="360px"}](https://t.me/+KC_tNYHlmLBhNWFi)
 
 <https://t.me/+KC_tNYHlmLBhNWFi>
 
@@ -200,13 +200,13 @@ title: "Вводная лекция. Язык C и C++"
 
 
 ```{.cpp filename="hello-world.cpp"}
-{{< include examples/00-introduction/hello-world.cpp >}}
+{{< include ../examples/00-introduction/hello-world.cpp >}}
 ```
 
-[![](assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-hello-world]{aria-label="Open in Compiler Explorer"}
+[![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-hello-world]{aria-label="Open in Compiler Explorer"}
 
 [godbolt-hello-world]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Aint+main()+%7B%0A++++std::cout+%3C%3C+%22Hello+world!!%5Cn%22%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
-<!-- godbolt source="examples/00-introduction/hello-world.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
+<!-- godbolt source="../examples/00-introduction/hello-world.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
 ## Cmake
 
@@ -224,7 +224,7 @@ title: "Вводная лекция. Язык C и C++"
 ::: {.column width="50%"}
 ::: {style="text-align: center;"}
 
-[![](assets/00-introduction/telegram-channel-qr.svg){fig-alt="QR-код приглашения в Telegram курса" width="260px"}](https://t.me/+KC_tNYHlmLBhNWFi)
+[![](../assets/00-introduction/telegram-channel-qr.svg){fig-alt="QR-код приглашения в Telegram курса" width="260px"}](https://t.me/+KC_tNYHlmLBhNWFi)
 
 **Telegram ITMO C++ 26/27 — чат**
 
@@ -235,7 +235,7 @@ title: "Вводная лекция. Язык C и C++"
 ::: {.column width="50%"}
 ::: {style="text-align: center;"}
 
-[![](assets/00-introduction/telegram-news-qr.svg){fig-alt="QR-код приглашения в новостной Telegram-канал курса" width="260px"}](https://t.me/+FbV6Q3VFRZYxNDky)
+[![](../assets/00-introduction/telegram-news-qr.svg){fig-alt="QR-код приглашения в новостной Telegram-канал курса" width="260px"}](https://t.me/+FbV6Q3VFRZYxNDky)
 
 **Telegram ITMO C++ 26/27 — News**
 
@@ -249,7 +249,7 @@ title: "Вводная лекция. Язык C и C++"
 
 ::: {style="text-align: center;"}
 
-[![](assets/00-introduction/youtube-channel-qr.png){fig-alt="QR-код YouTube-канала Александра Хвастунова" width="300px"}](https://www.youtube.com/@hvastunovalexandr)
+[![](../assets/00-introduction/youtube-channel-qr.png){fig-alt="QR-код YouTube-канала Александра Хвастунова" width="300px"}](https://www.youtube.com/@hvastunovalexandr)
 
 **YouTube-канал Александра Хвастунова**
 
