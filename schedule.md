@@ -1,13 +1,25 @@
 ---
 title: Расписание
 description: Расписание занятий по C++ на осенний семестр 2026/27 учебного года.
-toc: true
-toc-depth: 3
+toc: false
 sidebar: false
 page-navigation: false
+# Таблицы ниже — источник данных. Скрипт assets/schedule/schedule.js
+# читает их со страницы и рисует календарь на две недели с фильтрами
+# в пустой div #schedule, а таблицы прячет.
+format:
+  html:
+    css:
+      - styles.css
+      - assets/schedule/schedule.css
+    include-after-body:
+      - text: '<script src="assets/schedule/schedule.js"></script>'
 ---
 
 Расписание на осенний семестр 2026/27 учебного года. Время — московское (МСК).
+
+::: {#schedule .column-page}
+:::
 
 ## Нечётная неделя
 
