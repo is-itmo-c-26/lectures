@@ -64,7 +64,7 @@
 - `scripts/update-godbolt-links.mjs` scans the Markdown files in `lectures/`, generates a self-contained Godbolt URL from each complete backing `.cpp` file, and moves its image button immediately after that example's closing code fence. Quarto runs it through `project.pre-render`, so rendering refreshes every registered URL and preserves the order code → button → explanation automatically.
 - Treat a change to a `.cpp` file referenced by Godbolt as incomplete until the generator has run and the affected lecture has been rendered. Do not hand-edit the generated URL.
 - Prefer self-contained `https://godbolt.org/#...` URLs over `/z/...` short links: the source travels in the URL and is not coupled to Godbolt's short-link storage or routing.
-- Do not use `#include <https://...>` as the default way to load a course example from GitHub: it depends on publication, network access, and CORS, and leaves the primary editor showing an include directive instead of the directly editable example. It is acceptable for an intentionally external header-only dependency.
+- Do not use `#include <https://...>` as the dfault way to load a course example from GitHub: it depends on publication, network access, and CORS, and leaves the primary editor showing an include directive instead of the directly editable example. It is acceptable for an intentionally external header-only dependency.
 - Place the Compiler Explorer link immediately after the corresponding code block and render it as the compact image link below; do not expose a long encoded client-state URL on a slide.
 
   ```markdown
