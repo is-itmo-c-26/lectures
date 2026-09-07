@@ -15,6 +15,11 @@
 - When an article is ported from an external source, keep the original wording and the author's voice, and fix only outright typos. The front matter `author` list is the credit; do not repeat the authors in the body.
 - Write article headings with `##` and `###`. `toc-depth` is 3, so a deeper heading disappears from the table of contents.
 
+## Schedule page
+
+- `schedule.md` stores the timetable as plain Markdown tables and is the only place to edit it. Each `##` heading is a week, each `###` heading is a day, and every table row is `Время | Тип. Преподаватель. Группа`, for example `13:30-15:00 | Практика. Курилов. М3112`. Keep this shape: `assets/schedule/schedule.js` reads the rendered tables from the page, draws the two-week calendar with the type and teacher filters into the empty `::: {#schedule .column-page}` div, and hides the tables. Without JavaScript the tables stay visible.
+- The page keeps its own `format.html.css` list in the front matter because a document-level `css` replaces the project list; keep `styles.css` first in it.
+
 ## Code examples in lecture slides
 
 - Treat external source files as the source of truth for code shown on slides. Do not duplicate the same example inline in a lecture Markdown file.
