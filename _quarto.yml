@@ -37,6 +37,8 @@ website:
         text: Статьи
       - href: videos/index.md
         text: Видео
+      - href: schedule.md
+        text: Расписание
     tools:
       - icon: github
         href: "https://github.com/is-itmo-c-26/lectures"

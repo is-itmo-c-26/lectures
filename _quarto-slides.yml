@@ -4,6 +4,7 @@ project:
   render:
     - "lectures/*.md"
     - "!index.md"
+    - "!schedule.md"
     - "!articles/*.md"
     - "!videos/*.md"
     - "!README.md"
