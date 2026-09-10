@@ -18,6 +18,7 @@ sidebar: false
 Короткие практические заметки: настройка окружения, инструменты, рецепты. В отличие от лекций, статьи не собираются в слайды.
 
 1. [Установка окружения](articles/01-setup.md) — инструменты курса и установка VS Code, а дальше гайды по системам: [macOS](articles/01-setup-macos.md), [Windows](articles/01-setup-windows.md), [Linux](articles/01-setup-linux.md)
+2. [Шрифт Fira Code](articles/02-fira-code.md) — моноширинный шрифт с лигатурами: установка на macOS и Linux и включение в VS Code
 
 ## Видео
 
