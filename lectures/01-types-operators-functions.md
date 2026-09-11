@@ -40,9 +40,25 @@ title: "Лекция 1. Типы, операторы и функции"
 
 Что вы скажете про такой код?
 
+::: {.code-swap}
+
+::: {.fragment .fade-out}
+
 ```{.cpp filename="bad-code-style.cpp"}
 {{< include ../examples/01-types-operators-functions/bad-code-style.cpp >}}
 ```
+
+:::
+
+::: {.fragment .fade-in}
+
+```{.cpp filename="good-code-style.cpp"}
+{{< include ../examples/01-types-operators-functions/good-code-style.cpp >}}
+```
+
+:::
+
+:::
 
 ## Code Style
 
@@ -119,6 +135,22 @@ unsigned long file_size = 4'000'000UL;
 - `0U - 1U` даёт максимум типа: арифметика [`unsigned`][cppref-types-standard-integer-types] выполняется по модулю $2^N$
 - В сравнении [`int`][cppref-types-standard-integer-types] с [`unsigned int`][cppref-types-standard-integer-types] значение типа [`int`][cppref-types-standard-integer-types] преобразуется в [`unsigned int`][cppref-types-standard-integer-types]
 - Поэтому `-1 < 10U` ложно: [`unsigned`][cppref-types-standard-integer-types] не защищает от ошибок со знаком
+
+## <span class="fragment fade-out" data-fragment-index="0">••••••••••••••••••••••••••••••••</span><span class="fragment fade-in" data-fragment-index="0">Переполнение <code>int</code> в бинарном поиске</span> {.mystery-heading}
+
+```cpp
+int middle = (left + right) / 2;
+```
+
+::: {.fragment data-fragment-index="1"}
+
+```cpp
+int middle = left + (right - left) / 2;
+```
+
+`left + right` может переполнить `int` (UB для знаковых типов) при больших индексах — именно такой баг почти 10 лет жил в `java.util.Arrays.binarySearch` из Java SDK.
+
+:::
 
 ## Размеры типов зависят от платформы
 
@@ -579,6 +611,35 @@ do {
 
 Условие проверяется **после** итерации. Тело выполнится хотя бы один раз.
 
+::: {.fragment}
+
+Зачем может быть нужен такой код?
+
+```cpp
+do {
+    // code
+} while (false);
+```
+
+:::
+
+::: {.fragment}
+
+Чтобы можно было использовать `break` для выхода из блока кода в любом месте.
+
+```cpp
+do {
+    if (!open_file()) break; // Выход из блока
+    if (!alloc_memory()) break; // Выход из блока
+
+    // Основная логика, если всё хорошо
+    process_data();
+
+} while (false);
+```
+
+:::
+
 ## Цикл [`for`][cppref-for]
 
 
@@ -613,6 +674,23 @@ for (initialization; condition; step) {
 Цикл печатает `0 2`: после [`continue`][cppref-continue] выполняется шаг `++i`.
 
 Наивный [`while`][cppref-while] с `++i` в конце тела зациклится: при `i == 1` оператор [`continue`][cppref-continue] пропустит `++i`.
+
+## Великая мудрость синтаксиса C++
+
+```cpp
+int i = 10;
+for (; i --> 0;) {
+    std::cout << i << ' ';
+}
+```
+
+::: {.fragment}
+
+`i --> 0` на самом деле читается как `i-- > 0`: постфиксный декремент и оператор `>`, а вместе они складываются в псевдо-оператор «идёт к» (`goes to`).
+
+Вывод: `9 8 7 6 5 4 3 2 1 0`.
+
+:::
 
 ## Примеры [`for`][cppref-for]
 

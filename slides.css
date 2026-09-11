@@ -37,6 +37,26 @@
   line-height: 1.08;
 }
 
+/* Two spans (masked placeholder + real title) stacked in the same cell so
+   the fade-out/fade-in fragment pair crossfades in place of the heading. */
+.reveal .slides section.mystery-heading > h2 {
+  display: grid;
+}
+
+.reveal .slides section.mystery-heading > h2 > span {
+  grid-area: 1 / 1;
+}
+
+/* Two blocks (e.g. bad/good code) stacked in the same cell so the
+   fade-out/fade-in fragment pair crossfades one into the other in place. */
+.reveal .code-swap {
+  display: grid;
+}
+
+.reveal .code-swap > div {
+  grid-area: 1 / 1;
+}
+
 .reveal img {
   max-height: 30rem;
   object-fit: contain;
