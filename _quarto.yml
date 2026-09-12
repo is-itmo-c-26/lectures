@@ -80,6 +80,8 @@ website:
                   text: "Windows"
                 - href: articles/01-setup-linux.md
                   text: "Linux"
+            - href: articles/02-fira-code.md
+              text: "Шрифт Fira Code"
 
     - id: videos
       title: "Видео"
