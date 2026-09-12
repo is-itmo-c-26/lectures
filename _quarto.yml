@@ -80,6 +80,8 @@ website:
                   text: "Windows"
                 - href: articles/01-setup-linux.md
                   text: "Linux"
+            - href: articles/03-clang-format-clang-tidy.md
+              text: "clang-format и clang-tidy"
 
     - id: videos
       title: "Видео"
