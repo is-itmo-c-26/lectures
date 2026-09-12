@@ -50,6 +50,13 @@ pre.sourceCode {
   border-left: 0.25rem solid var(--course-accent);
 }
 
+/* Тема darkly красит все <code> в светлый фон, а Quarto переопределяет
+   это только внутри p, li и td. В заголовках, подписях и списках
+   определений тёмной темы оставалась светлая плашка со светлым текстом. */
+.quarto-dark :is(h1, h2, h3, h4, h5, h6, figcaption, dt, dd, caption) code:not(.sourceCode) {
+  background-color: rgba(67, 67, 67, 0.65);
+}
+
 main img {
   display: block;
   max-height: 44rem;
