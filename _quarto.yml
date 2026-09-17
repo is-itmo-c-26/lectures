@@ -58,8 +58,12 @@ website:
           contents:
             - href: lectures/00-introduction.md
               text: "Вводная лекция"
-            - href: lectures/01-types-operators-functions.md
-              text: "1. Типы, операторы и функции"
+            - href: lectures/01-types-operators.md
+              text: "1. Типы и операторы"
+            - href: lectures/02-expressions-control-flow-functions.md
+              text: "2. Выражения, управление потоком и функции"
+            - href: lectures/03-pointers-arrays.md
+              text: "3. Указатели, массивы и строки"
 
     - id: articles
       title: "Статьи"
