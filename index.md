@@ -11,7 +11,9 @@ sidebar: false
 ## Лекции
 
 1. [Вводная лекция: язык C и C++](lectures/00-introduction.md)
-2. [Типы, операторы и функции](lectures/01-types-operators-functions.md)
+2. [Типы и операторы](lectures/01-types-operators.md)
+3. [Выражения, управление потоком и функции](lectures/02-expressions-control-flow-functions.md)
+4. [Указатели, массивы и строки](lectures/03-pointers-arrays.md)
 
 ## Статьи
 
