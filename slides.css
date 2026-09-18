@@ -57,6 +57,20 @@
   grid-area: 1 / 1;
 }
 
+.reveal pre {
+  font-size: 0.85em;
+  line-height: 1.3;
+}
+
+.reveal pre code {
+  max-height: 480px;
+}
+
+/* Slides that need one code block to fit alongside prose without scrolling. */
+.reveal .slides section.compact-code pre {
+  font-size: 0.7em;
+}
+
 .reveal img {
   max-height: 30rem;
   object-fit: contain;
