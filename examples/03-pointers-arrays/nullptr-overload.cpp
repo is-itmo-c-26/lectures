@@ -1,18 +1,16 @@
+#include <cstddef>
 #include <iostream>
 
-void print(int*) {
-    std::cout << "print(int*)\n";
+void func(int*) {
+    std::cout << "func(int*)\n";
 }
 
-void print(int) {
-    std::cout << "print(int)\n";
+void func(int) {
+    std::cout << "func(int)\n";
 }
 
 int main() {
-    print(nullptr);
-    print(0);
-
-    // print(NULL); // Может быть неоднозначно: NULL обычно является макросом.
-
-    return 0;
+    func(nullptr);  // Выбирает func(int*).
+    func(0);        // Выбирает func(int).
+    func(NULL);     // Намеренная ошибка в Clang: неоднозначный вызов.
 }
