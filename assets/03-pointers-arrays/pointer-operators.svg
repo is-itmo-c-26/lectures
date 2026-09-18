@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="650" height="510" viewBox="0 0 650 510" role="img" aria-labelledby="title description">
+  <title id="title">Взятие адреса, чтение и запись через указатель</title>
+  <desc id="description">После pointer = &amp;x указатель хранит адрес x, x равен 1, y равен 2. После y = *pointer значение x копируется в y: оба равны 1. После *pointer = 0 меняется x, а y остаётся равным 1.</desc>
+  <defs>
+    <marker id="address-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#275dad"/>
+    </marker>
+    <marker id="copy-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#22805d"/>
+    </marker>
+    <style>
+      text { font-family: Arial, sans-serif; fill: #222; }
+      .code { font-family: monospace; font-size: 25px; font-weight: 600; }
+      .label { font-family: monospace; font-size: 23px; }
+      .value { font-family: monospace; font-size: 30px; font-weight: 600; text-anchor: middle; }
+      .panel { fill: #f7f8fa; stroke: #d8dde5; stroke-width: 2; }
+      .pointer { fill: #eaf1fd; stroke: #275dad; stroke-width: 2; }
+      .object { fill: #fff; stroke: #606b79; stroke-width: 2; }
+      .changed { fill: #e8f6ee; stroke: #22805d; stroke-width: 2; }
+      .address { fill: none; stroke: #275dad; stroke-width: 3; marker-end: url(#address-arrow); }
+    </style>
+  </defs>
+
+  <rect class="panel" x="2" y="2" width="646" height="152" rx="14"/>
+  <text class="code" x="22" y="36">1. pointer = &amp;x</text>
+  <text class="label" x="35" y="77">pointer</text>
+  <text class="label" x="341" y="77">x</text>
+  <text class="label" x="541" y="77">y</text>
+  <rect class="pointer" x="22" y="87" width="155" height="52" rx="8"/>
+  <text class="value" x="99" y="123">&amp;x</text>
+  <path class="address" d="M 177 113 H 298"/>
+  <rect class="object" x="308" y="87" width="90" height="52" rx="8"/>
+  <text class="value" x="353" y="123">1</text>
+  <rect class="object" x="508" y="87" width="90" height="52" rx="8"/>
+  <text class="value" x="553" y="123">2</text>
+
+  <rect class="panel" x="2" y="173" width="646" height="152" rx="14"/>
+  <text class="code" x="22" y="207">2. y = *pointer</text>
+  <text class="label" x="35" y="248">pointer</text>
+  <text class="label" x="341" y="248">x</text>
+  <text class="label" x="541" y="248">y</text>
+  <rect class="pointer" x="22" y="258" width="155" height="52" rx="8"/>
+  <text class="value" x="99" y="294">&amp;x</text>
+  <path class="address" d="M 177 284 H 298"/>
+  <rect class="object" x="308" y="258" width="90" height="52" rx="8"/>
+  <text class="value" x="353" y="294">1</text>
+  <path d="M 403 284 H 499" fill="none" stroke="#22805d" stroke-width="3" marker-end="url(#copy-arrow)"/>
+  <text x="408" y="268" font-size="18" style="fill:#22805d">копия</text>
+  <rect class="changed" x="508" y="258" width="90" height="52" rx="8"/>
+  <text class="value" x="553" y="294">1</text>
+
+  <rect class="panel" x="2" y="344" width="646" height="164" rx="14"/>
+  <text class="code" x="22" y="378">3. *pointer = 0</text>
+  <text class="label" x="35" y="419">pointer</text>
+  <text class="label" x="341" y="419">x</text>
+  <text class="label" x="541" y="419">y</text>
+  <rect class="pointer" x="22" y="429" width="155" height="52" rx="8"/>
+  <text class="value" x="99" y="465">&amp;x</text>
+  <path class="address" d="M 177 455 H 298"/>
+  <rect class="changed" x="308" y="429" width="90" height="52" rx="8"/>
+  <text class="value" x="353" y="465">0</text>
+  <rect class="object" x="508" y="429" width="90" height="52" rx="8"/>
+  <text class="value" x="553" y="465">1</text>
+</svg>
