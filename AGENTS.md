@@ -46,6 +46,7 @@
 - If an example intentionally does not compile or intentionally demonstrates undefined or dangerous behavior, label that fact clearly on the slide or in speaker notes and do not present it as a runnable example.
 - Run `scripts/check-examples.sh` after touching any example: it compiles every example with the course flags, runs clang-tidy with the root `.clang-tidy` and rejects lines over 80 characters. An example that must fail one of these checks on purpose goes into `scripts/intentional-examples.txt` with a reason, in addition to the HTML comment in the lecture.
 - Run `node scripts/check-markdown-refs.mjs` after editing lecture or article text: it fails on a reference link that is used but not defined, or defined but never used. `quarto` renders such a link as literal text without any error.
+- The PR workflow `.github/workflows/check.yml` runs the two scripts above, `node scripts/update-godbolt-links.mjs --check` and both render profiles. Keep it green before asking for review.
 - After changing an external example:
   1. compile it with Clang using the course flags;
   2. run it when it has meaningful runtime behavior;

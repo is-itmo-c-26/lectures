@@ -51,6 +51,8 @@ quarto render lectures/00-introduction.md --profile slides --to revealjs
 
 ## Проверка перед pull request
 
+Те же проверки запускает workflow `.github/workflows/check.yml` на каждый pull request.
+
 Примеры кода: компиляция флагами курса, clang-tidy с конфигом `.clang-tidy` из корня и длина строк до 80 символов. Примеры, которые нарушают правила намеренно, перечислены в `scripts/intentional-examples.txt`:
 
 ```sh
