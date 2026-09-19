@@ -497,6 +497,16 @@ a + b * c << d || 25 != 32 && !c++
 
 :::
 
+::: {.content-visible unless-format="revealjs"}
+
+::: {.callout-note title="Видео по теме"}
+- [Семинар 2025-09-22: Code Style](https://www.youtube.com/watch?v=oaWQKYG-S8o)
+
+Все записи собраны на странице [Видео](../videos/index.md).
+:::
+
+:::
+
 [godbolt-01-hello-world]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Aint+main()+%7B%0A++++std::cout+%3C%3C+%22Hello,+world!!%5Cn%22%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/01-types-operators/hello-world.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 

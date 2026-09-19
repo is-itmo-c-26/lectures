@@ -12,6 +12,7 @@
 - An article that splits into several pages keeps one prefix: `articles/01-setup.md` is the entry point and `articles/01-setup-macos.md` and its siblings are the branches. Give the entry point a `section` with an `href` in the sidebar and nest the branches under it. Shared images and code go under the entry point's name, `assets/articles/01-setup/` and `examples/articles/01-setup/`; images that belong to one branch live under that branch's name.
 - Register a new article in two places: the `Статьи` section of the `articles` sidebar in `_quarto.yml` and the list on `index.md`.
 - Video pages live in `videos/`, are rendered only as website pages, and belong only to the `videos` sidebar. Register new video pages in that sidebar and in the video list on `videos/index.md`; never include them in the slides profile.
+- `videos/index.md` groups the recordings by topic under `###` headings. When a recording matches an existing lecture, link the lecture from the list entry and add the recording to that lecture's `Видео по теме` callout, which sits at the end of the lecture inside `::: {.content-visible unless-format="revealjs"}` so it never becomes a slide.
 - When an article is ported from an external source, keep the original wording and the author's voice, and fix only outright typos. The front matter `author` list is the credit; do not repeat the authors in the body.
 - Write article headings with `##` and `###`. `toc-depth` is 3, so a deeper heading disappears from the table of contents.
 
