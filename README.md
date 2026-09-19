@@ -57,6 +57,18 @@ quarto render lectures/00-introduction.md --profile slides --to revealjs
 scripts/check-examples.sh
 ```
 
+Ссылки-сноски в Markdown: каждая `[текст][id]` определена, каждое определение используется:
+
+```sh
+node scripts/check-markdown-refs.mjs
+```
+
+Ссылки на Compiler Explorer соответствуют исходникам примеров (без `--check` скрипт обновляет их на месте, это же делает `quarto render`):
+
+```sh
+node scripts/update-godbolt-links.mjs --check
+```
+
 Файлы `.clang-tidy` и `.clang-format` в корне скопированы из шаблона лабораторных, поэтому редактор показывает те же замечания, что CI курса показывает студентам.
 
 ## Новая статья
