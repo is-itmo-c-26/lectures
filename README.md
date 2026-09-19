@@ -49,6 +49,16 @@ quarto render lectures/00-introduction.md --profile slides --to revealjs
 
 Результат появится в `_site/slides/lectures/`. Статьи в этот профиль не попадают.
 
+## Проверка перед pull request
+
+Примеры кода: компиляция флагами курса, clang-tidy с конфигом `.clang-tidy` из корня и длина строк до 80 символов. Примеры, которые нарушают правила намеренно, перечислены в `scripts/intentional-examples.txt`:
+
+```sh
+scripts/check-examples.sh
+```
+
+Файлы `.clang-tidy` и `.clang-format` в корне скопированы из шаблона лабораторных, поэтому редактор показывает те же замечания, что CI курса показывает студентам.
+
 ## Новая статья
 
 1. Создайте `articles/<номер>-<имя>.md` и укажите в заголовке `title`, `description` и авторов:
