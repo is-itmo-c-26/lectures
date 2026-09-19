@@ -50,6 +50,7 @@ title: "Лекция 3. Указатели, массивы и строки"
 
 ## Адреса объектов разных типов
 
+<!-- Тип long и однобуквенные имена здесь предмет демонстрации адресов, а не рекомендация. -->
 ```{.cpp filename="object-addresses.cpp"}
 {{< include ../examples/03-pointers-arrays/object-addresses.cpp >}}
 ```
@@ -64,6 +65,7 @@ title: "Лекция 3. Указатели, массивы и строки"
 - Тип указателя определяет доступ к объекту и шаг адресной арифметики.
 - Размер указателя определяется реализацией и ABI. На большинстве распространённых 64-битных платформ указатели на объекты занимают 8 байт, но стандарт C++ этого не гарантирует; размер указателей на функции также не обязан совпадать с размером указателей на объекты.
 
+<!-- Тип long здесь предмет демонстрации размеров, а не рекомендация. -->
 ```{.cpp filename="pointer-sizes.cpp"}
 {{< include ../examples/03-pointers-arrays/pointer-sizes.cpp >}}
 ```
@@ -203,7 +205,7 @@ title: "Лекция 3. Указатели, массивы и строки"
 :::
 ::: {.column width="45%"}
 
-![](../assets/03-pointers-arrays/swap-through-pointers-diagram.png){height=370 style="max-height:370px" fig-align="center" fig-alt="В main переменная first хранит 1, а second — 2. Параметры left и right функции swap_values хранят адреса этих переменных; обмен через *left и *right меняет исходные значения. Адреса на схеме условные."}
+![](../assets/03-pointers-arrays/swap-through-pointers-diagram.png){height=370 style="max-height:370px" fig-align="center" fig-alt="В main переменная first хранит 1, а second — 2. Параметры left и right функции SwapValues хранят адреса этих переменных; обмен через *left и *right меняет исходные значения. Адреса на схеме условные."}
 
 :::
 ::::
@@ -440,6 +442,7 @@ title: "Лекция 3. Указатели, массивы и строки"
 
 ## Просмотр объекта как последовательности байтов
 
+<!-- Лекции про касты ещё нет: C-style приведение оставлено намеренно, не менять на static_cast. -->
 ```{.cpp filename="print-bytes.cpp" code-line-numbers="6"}
 {{< include ../examples/03-pointers-arrays/print-bytes.cpp >}}
 ```
@@ -470,7 +473,7 @@ title: "Лекция 3. Указатели, массивы и строки"
 
 [![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-03-function-pointers]{aria-label="Open in Compiler Explorer"}
 
-Оператор взятия адреса необязателен: `same` и `&same` дают подходящий указатель.
+Оператор взятия адреса необязателен: `Same` и `&Same` дают подходящий указатель.
 
 ## Функция как параметр алгоритма
 
@@ -512,6 +515,7 @@ title: "Лекция 3. Указатели, массивы и строки"
 
 Функция может принимать указатель на функцию и возвращать указатель на функцию. Две эквивалентные записи:
 
+<!-- Имя signal в нижнем регистре намеренно: это объявление функции из <csignal>, clang-tidy ругается по замыслу. -->
 ```{.cpp filename="signal-declaration.cpp" code-line-numbers="2,4-5"}
 {{< include ../examples/03-pointers-arrays/signal-declaration.cpp >}}
 ```
@@ -538,7 +542,7 @@ title: "Лекция 3. Указатели, массивы и строки"
 [godbolt-03-c-string-boundaries]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ccstring%3E%0A%23include+%3Ciostream%3E%0A%0Aint+main()+%7B%0A++++const+char+raw%5B3%5D+%3D+%7B!'C!',+!'%2B!',+!'%2B!'%7D%3B++//+%D0%9D%D0%B5%D1%82+%D0%B7%D0%B0%D0%B2%D0%B5%D1%80%D1%88%D0%B0%D1%8E%D1%89%D0%B5%D0%B3%D0%BE+!'%5C0!'.%0A++++const+char+text%5B4%5D+%3D+%22C%2B%2B%22%3B++++++++++//+%D0%95%D1%81%D1%82%D1%8C+%D0%BC%D0%B5%D1%81%D1%82%D0%BE+%D0%B4%D0%BB%D1%8F+!'%5C0!'.%0A%0A++++std::cout+%3C%3C+sizeof(raw)+%3C%3C+!'%5Cn!'%3B++++++++//+3%0A++++std::cout+%3C%3C+sizeof(text)+%3C%3C+!'%5Cn!'%3B+++++++//+4%0A++++std::cout+%3C%3C+std::strlen(text)+%3C%3C+!'%5Cn!'%3B++//+3%0A++++//+std::cout+%3C%3C+std::strlen(raw)%3B++//+%D0%9D%D0%B5%D0%BE%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D1%91%D0%BD%D0%BD%D0%BE%D0%B5+%D0%BF%D0%BE%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5.%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/03-pointers-arrays/c-string-boundaries.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
-[godbolt-03-signal-declaration]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'namespace+example+%7B%0A++++void+(*signal(int+number,+void+(*handler)(int)))(int)%3B%0A%0A++++using+Handler+%3D+void+(*)(int)%3B%0A++++Handler+signal(int+number,+Handler+handler)%3B++//+%D0%A2%D0%BE+%D0%B6%D0%B5+%D0%BE%D0%B1%D1%8A%D1%8F%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5.%0A%7D%0A%0Aint+main()+%7B%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
+[godbolt-03-signal-declaration]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'namespace+example+%7B%0Avoid+(*signal(int+number,+void+(*handler)(int)))(int)%3B%0A%0Ausing+Handler+%3D+void+(*)(int)%3B%0AHandler+signal(int+number,+Handler+handler)%3B++//+%D0%A2%D0%BE+%D0%B6%D0%B5+%D0%BE%D0%B1%D1%8A%D1%8F%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5.%0A%7D++//+namespace+example%0A%0Aint+main()+%7B%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/03-pointers-arrays/signal-declaration.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
 [godbolt-03-pointer-operators]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Aint+main()+%7B%0A++++int+x+%3D+1%3B%0A++++int+y+%3D+2%3B%0A++++int*+pointer+%3D+%26x%3B++//+%D0%91%D0%B5%D1%80%D1%91%D0%BC+%D0%B0%D0%B4%D1%80%D0%B5%D1%81+x.%0A++++y+%3D+*pointer%3B++++++//+%D0%A7%D0%B8%D1%82%D0%B0%D0%B5%D0%BC+x:+%D1%82%D0%B5%D0%BF%D0%B5%D1%80%D1%8C+y+%3D%3D+1.%0A++++*pointer+%3D+0%3B++++++//+%D0%98%D0%B7%D0%BC%D0%B5%D0%BD%D1%8F%D0%B5%D0%BC+x:+%D1%82%D0%B5%D0%BF%D0%B5%D1%80%D1%8C+x+%3D%3D+0.%0A%0A++++std::cout+%3C%3C+x+%3C%3C+!'+!'+%3C%3C+y+%3C%3C+!'%5Cn!'%3B++//+0+1%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
@@ -553,13 +557,13 @@ title: "Лекция 3. Указатели, массивы и строки"
 [godbolt-03-multi-level-pointers]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Aint+main()+%7B%0A++++int+value+%3D+0%3B%0A++++int*+pointer+%3D+%26value%3B%0A++++int**+pointer_to_pointer+%3D+%26pointer%3B%0A++++int***+third_level+%3D+%26pointer_to_pointer%3B%0A%0A++++std::cout+%3C%3C+value+%3C%3C+!'%5Cn!'%3B%0A++++std::cout+%3C%3C+*pointer+%3C%3C+!'%5Cn!'%3B%0A++++std::cout+%3C%3C+**pointer_to_pointer+%3C%3C+!'%5Cn!'%3B%0A++++std::cout+%3C%3C+***third_level+%3C%3C+!'%5Cn!'%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/03-pointers-arrays/multi-level-pointers.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
-[godbolt-03-nullptr-overload]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ccstddef%3E%0A%23include+%3Ciostream%3E%0A%0Avoid+func(int*)+%7B%0A++++std::cout+%3C%3C+%22func(int*)%5Cn%22%3B%0A%7D%0A%0Avoid+func(int)+%7B%0A++++std::cout+%3C%3C+%22func(int)%5Cn%22%3B%0A%7D%0A%0Aint+main()+%7B%0A++++func(nullptr)%3B++//+%D0%92%D1%8B%D0%B1%D0%B8%D1%80%D0%B0%D0%B5%D1%82+func(int*).%0A++++func(0)%3B++++++++//+%D0%92%D1%8B%D0%B1%D0%B8%D1%80%D0%B0%D0%B5%D1%82+func(int).%0A++++func(NULL)%3B+++++//+%D0%9D%D0%B0%D0%BC%D0%B5%D1%80%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F+%D0%BE%D1%88%D0%B8%D0%B1%D0%BA%D0%B0+%D0%B2+Clang:+%D0%BD%D0%B5%D0%BE%D0%B4%D0%BD%D0%BE%D0%B7%D0%BD%D0%B0%D1%87%D0%BD%D1%8B%D0%B9+%D0%B2%D1%8B%D0%B7%D0%BE%D0%B2.%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
+[godbolt-03-nullptr-overload]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ccstddef%3E%0A%23include+%3Ciostream%3E%0A%0Avoid+Func(int*)+%7B%0A++++std::cout+%3C%3C+%22Func(int*)%5Cn%22%3B%0A%7D%0A%0Avoid+Func(int)+%7B%0A++++std::cout+%3C%3C+%22Func(int)%5Cn%22%3B%0A%7D%0A%0Aint+main()+%7B%0A++++Func(nullptr)%3B++//+%D0%92%D1%8B%D0%B1%D0%B8%D1%80%D0%B0%D0%B5%D1%82+Func(int*).%0A++++Func(0)%3B++++++++//+%D0%92%D1%8B%D0%B1%D0%B8%D1%80%D0%B0%D0%B5%D1%82+Func(int).%0A++++Func(NULL)%3B+++++//+%D0%9D%D0%B0%D0%BC%D0%B5%D1%80%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F+%D0%BE%D1%88%D0%B8%D0%B1%D0%BA%D0%B0+%D0%B2+Clang:+%D0%BD%D0%B5%D0%BE%D0%B4%D0%BD%D0%BE%D0%B7%D0%BD%D0%B0%D1%87%D0%BD%D1%8B%D0%B9+%D0%B2%D1%8B%D0%B7%D0%BE%D0%B2.%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/03-pointers-arrays/nullptr-overload.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
 [godbolt-03-swap-by-value]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Avoid+SwapValues(int+left,+int+right)+%7B%0A++++int+temporary+%3D+left%3B%0A++++left+%3D+right%3B%0A++++right+%3D+temporary%3B%0A++++std::cout+%3C%3C+left+%3C%3C+!'+!'+%3C%3C+right+%3C%3C+!'%5Cn!'%3B++//+2+1%0A%7D%0A%0Aint+main()+%7B%0A++++int+first+%3D+1%3B%0A++++int+second+%3D+2%3B%0A++++SwapValues(first,+second)%3B%0A++++std::cout+%3C%3C+first+%3C%3C+!'+!'+%3C%3C+second+%3C%3C+!'%5Cn!'%3B++//+1+2%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/03-pointers-arrays/swap-by-value.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
-[godbolt-03-swap-pointers]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Avoid+swap_values(int*+left,+int*+right)+%7B%0A++++int+temporary+%3D+*left%3B%0A++++*left+%3D+*right%3B%0A++++*right+%3D+temporary%3B%0A%7D%0A%0Aint+main()+%7B%0A++++int+first+%3D+1%3B%0A++++int+second+%3D+2%3B%0A%0A++++swap_values(%26first,+%26second)%3B%0A++++std::cout+%3C%3C+first+%3C%3C+!'+!'+%3C%3C+second+%3C%3C+!'%5Cn!'%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
+[godbolt-03-swap-pointers]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Avoid+SwapValues(int*+left,+int*+right)+%7B%0A++++int+temporary+%3D+*left%3B%0A++++*left+%3D+*right%3B%0A++++*right+%3D+temporary%3B%0A%7D%0A%0Aint+main()+%7B%0A++++int+first+%3D+1%3B%0A++++int+second+%3D+2%3B%0A%0A++++SwapValues(%26first,+%26second)%3B%0A++++std::cout+%3C%3C+first+%3C%3C+!'+!'+%3C%3C+second+%3C%3C+!'%5Cn!'%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/03-pointers-arrays/swap-through-pointers.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
 [godbolt-03-array-declarations]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Aint+main()+%7B%0A++++int+uninitialized%5B10%5D%3B++//+%D0%97%D0%BD%D0%B0%D1%87%D0%B5%D0%BD%D0%B8%D1%8F+%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2+%D0%BD%D0%B5+%D0%BE%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D1%8B.%0A++++int+inferred%5B%5D+%3D+%7B1,+2,+3,+4,+5%7D%3B%0A++++int+fixed%5B3%5D+%3D+%7B1,+2,+3%7D%3B%0A++++int+matrix%5B2%5D%5B3%5D+%3D+%7B%0A++++++++%7B1,+2,+3%7D,%0A++++++++%7B4,+5,+6%7D,%0A++++%7D%3B%0A%0A++++std::cout+%3C%3C+sizeof(uninitialized)+%3C%3C+!'%5Cn!'%3B++//+%D0%9D%D0%B5+%D1%87%D0%B8%D1%82%D0%B0%D0%B5%D0%BC+%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D1%8B.%0A++++std::cout+%3C%3C+inferred%5B0%5D+%3C%3C+!'+!'+%3C%3C+fixed%5B2%5D+%3C%3C+!'%5Cn!'%3B%0A++++std::cout+%3C%3C+matrix%5B1%5D%5B2%5D+%3C%3C+!'%5Cn!'%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
@@ -598,7 +602,7 @@ title: "Лекция 3. Указатели, массивы и строки"
 [godbolt-03-print-bytes]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ccstddef%3E%0A%23include+%3Cformat%3E%0A%23include+%3Ciostream%3E%0A%0Avoid+PrintBytes(const+void*+object,+std::size_t+size)+%7B%0A++++const+auto*+bytes+%3D+(const+unsigned+char*)object%3B%0A++++for+(std::size_t+index+%3D+0%3B+index+%3C+size%3B+%2B%2Bindex)+%7B%0A++++++++std::cout+%3C%3C+std::format(%22%7B:08b%7D+%22,+bytes%5Bindex%5D)%3B%0A++++%7D%0A++++std::cout+%3C%3C+!'%5Cn!'%3B%0A%7D%0A%0Aint+main()+%7B%0A++++int+value+%3D+2+%3C%3C+10%3B%0A++++PrintBytes(%26value,+sizeof(value))%3B%0A++++value+%3D+239%3B%0A++++PrintBytes(%26value,+sizeof(value))%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/03-pointers-arrays/print-bytes.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
-[godbolt-03-function-pointers]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'int+same(int+value)+%7B%0A++++return+value%3B%0A%7D%0A%0Aint+main()+%7B%0A++++int+(*function)(int)+%3D+same%3B%0A++++int+(*same_function)(int)+%3D+%26same%3B%0A%0A++++return+function(2)+%2B+same_function(2)+%3D%3D+4+%3F+0+:+1%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
+[godbolt-03-function-pointers]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'int+Same(int+value)+%7B%0A++++return+value%3B%0A%7D%0A%0Aint+main()+%7B%0A++++int+(*function)(int)+%3D+Same%3B%0A++++int+(*same_function)(int)+%3D+%26Same%3B%0A%0A++++return+function(2)+%2B+same_function(2)+%3D%3D+4+%3F+0+:+1%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/03-pointers-arrays/function-pointers.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
 [godbolt-03-find-by-order]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ccstddef%3E%0A%23include+%3Ciostream%3E%0A%0Aint*+FindByOrder(int*+array,+std::size_t+size,+bool+(*comes_before)(int,+int))+%7B%0A++++if+(size+%3D%3D+0)+return+nullptr%3B%0A++++int*+result+%3D+array%3B%0A++++for+(std::size_t+index+%3D+1%3B+index+%3C+size%3B+%2B%2Bindex)+%7B%0A++++++++if+(comes_before(*result,+array%5Bindex%5D))+%7B%0A++++++++++++result+%3D+%26array%5Bindex%5D%3B%0A++++++++%7D%0A++++%7D%0A++++return+result%3B%0A%7D%0A%0Abool+Less(int+left,+int+right)+%7B%0A++++return+left+%3C+right%3B%0A%7D%0A%0Aint+main()+%7B%0A++++int+values%5B%5D+%3D+%7B3,+1,+4%7D%3B%0A++++std::cout+%3C%3C+*FindByOrder(values,+3,+Less)+%3C%3C+!'%5Cn!'%3B++//+4%0A++++std::cout+%3C%3C+(FindByOrder(values,+0,+Less)+%3D%3D+nullptr)+%3C%3C+!'%5Cn!'%3B++//+1%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
