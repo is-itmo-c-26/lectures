@@ -142,6 +142,17 @@ function makeGodboltUrl(source, compiler, options) {
     return `https://godbolt.org/#${hash}`;
 }
 
+// Inline local headers so shared slide definitions remain runnable on Godbolt.
+async function readExample(sourcePath, stack = new Set()) {
+    if (stack.has(sourcePath)) throw new Error(`Circular include: ${sourcePath}`);
+    const nextStack = new Set(stack).add(sourcePath);
+    const source = await readFile(sourcePath, 'utf8');
+    return replaceAsync(source, /^#include "([^"\n]+)"[ \t]*$/gm, async (_, header) => {
+        const included = await readExample(resolve(dirname(sourcePath), header), nextStack);
+        return included.replace(/^#pragma once[ \t]*\r?\n/gm, '').trimEnd();
+    });
+}
+
 const definitionPattern = /^(\[godbolt-[^\]]+\]:)\s+<[^>]*>[ \t]*(?:\r?\n)?<!--\s+godbolt\s+source="([^"]+)"\s+compiler="([^"]+)"\s+options="([^"]*)"\s+-->$/gm;
 
 for (const markdownFile of markdownFiles) {
@@ -151,7 +162,7 @@ for (const markdownFile of markdownFiles) {
     let replacements = 0;
 
     const linksUpdated = await replaceAsync(markdown, definitionPattern, async (match, label, sourcePath, compiler, options) => {
-        const source = await readFile(resolve(dirname(markdownPath), sourcePath), 'utf8');
+        const source = await readExample(resolve(dirname(markdownPath), sourcePath));
         const url = makeGodboltUrl(source, compiler, options);
         definitions.push({reference: label.slice(1, -2), sourcePath});
         replacements += 1;

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="530" viewBox="0 0 440 530" role="img" aria-labelledby="title desc">
+<title id="title">Расположение полей и padding</title>
+<desc id="desc">Каждая клетка — один байт. PoorLayout: a занимает байт 0, b — байты 8–15, c — байт 16, остальные байты padding. CompactLayout: b занимает байты 0–7, a — байт 8, c — байт 9, остальные байты padding. Размеры 24 и 16 байт, выравнивание 8.</desc>
+<rect width="440" height="530" rx="16" fill="#ffffff"/>
+<g font-family="Arial, sans-serif" fill="#172b4d">
+<text x="24" y="38" font-size="23" font-weight="bold" text-anchor="start" fill="#172b4d">Каждая клетка — 1 байт</text>
+<text x="24" y="83" font-size="26" font-weight="bold" text-anchor="start" fill="#172b4d">PoorLayout · 24 байта</text>
+<text x="50" y="132" font-size="20" font-weight="normal" text-anchor="end" fill="#5c677a">0</text>
+<rect x="64" y="103" width="43" height="43" fill="#ffd166" stroke="#ffffff" stroke-width="2"/>
+<text x="85.5" y="132" font-size="24" font-weight="bold" text-anchor="middle" fill="#172b4d">a</text>
+<rect x="107" y="103" width="301" height="43" fill="#e5e7eb" stroke="#ffffff" stroke-width="2"/>
+<path d="M 150 103 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 193 103 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 236 103 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 279 103 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 322 103 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 365 103 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<text x="50" y="179" font-size="20" font-weight="normal" text-anchor="end" fill="#5c677a">8</text>
+<rect x="64" y="150" width="344" height="43" fill="#79c9ed" stroke="#ffffff" stroke-width="2"/>
+<path d="M 107 150 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 150 150 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 193 150 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 236 150 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 279 150 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 322 150 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 365 150 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<text x="236.0" y="179" font-size="24" font-weight="bold" text-anchor="middle" fill="#172b4d">b</text>
+<text x="50" y="226" font-size="20" font-weight="normal" text-anchor="end" fill="#5c677a">16</text>
+<rect x="64" y="197" width="43" height="43" fill="#8dd5af" stroke="#ffffff" stroke-width="2"/>
+<text x="85.5" y="226" font-size="24" font-weight="bold" text-anchor="middle" fill="#172b4d">c</text>
+<rect x="107" y="197" width="301" height="43" fill="#e5e7eb" stroke="#ffffff" stroke-width="2"/>
+<path d="M 150 197 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 193 197 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 236 197 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 279 197 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 322 197 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 365 197 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<text x="64" y="267" font-size="20" font-weight="normal" text-anchor="start" fill="#172b4d">10 байт полей + 14 байт padding</text>
+<text x="24" y="320" font-size="26" font-weight="bold" text-anchor="start" fill="#172b4d">CompactLayout · 16 байт</text>
+<text x="50" y="369" font-size="20" font-weight="normal" text-anchor="end" fill="#5c677a">0</text>
+<rect x="64" y="340" width="344" height="43" fill="#79c9ed" stroke="#ffffff" stroke-width="2"/>
+<path d="M 107 340 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 150 340 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 193 340 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 236 340 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 279 340 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 322 340 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 365 340 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<text x="236.0" y="369" font-size="24" font-weight="bold" text-anchor="middle" fill="#172b4d">b</text>
+<text x="50" y="416" font-size="20" font-weight="normal" text-anchor="end" fill="#5c677a">8</text>
+<rect x="64" y="387" width="43" height="43" fill="#ffd166" stroke="#ffffff" stroke-width="2"/>
+<text x="85.5" y="416" font-size="24" font-weight="bold" text-anchor="middle" fill="#172b4d">a</text>
+<rect x="107" y="387" width="43" height="43" fill="#8dd5af" stroke="#ffffff" stroke-width="2"/>
+<text x="128.5" y="416" font-size="24" font-weight="bold" text-anchor="middle" fill="#172b4d">c</text>
+<rect x="150" y="387" width="258" height="43" fill="#e5e7eb" stroke="#ffffff" stroke-width="2"/>
+<path d="M 193 387 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 236 387 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 279 387 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 322 387 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M 365 387 v 43" stroke="#ffffff" stroke-width="1.5"/>
+<text x="64" y="457" font-size="20" font-weight="normal" text-anchor="start" fill="#172b4d">10 байт полей + 6 байт padding</text>
+<rect x="24" y="485" width="22" height="22" fill="#e5e7eb"/>
+<text x="55" y="503" font-size="18" font-weight="normal" text-anchor="start" fill="#172b4d">padding · выравнивание обоих типов: 8</text>
+</g>
+</svg>
