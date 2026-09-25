@@ -50,6 +50,10 @@ pre.sourceCode {
   border-left: 0.25rem solid var(--course-accent);
 }
 
+.quarto-dark :is(h1, h2, h3, h4, h5, h6, figcaption, dt, dd, caption) code:not(.sourceCode) {
+  background-color: rgba(67, 67, 67, 0.65);
+}
+
 main img {
   display: block;
   max-height: 44rem;
