@@ -50,6 +50,17 @@ pre.sourceCode {
   border-left: 0.25rem solid var(--course-accent);
 }
 
+/* Keep lecture columns separated while respecting their relative widths. */
+main .columns {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-block: 1rem;
+}
+
+main .columns > .column {
+  flex: 0 1 auto;
+  min-width: 0;
 .quarto-dark :is(h1, h2, h3, h4, h5, h6, figcaption, dt, dd, caption) code:not(.sourceCode) {
   background-color: rgba(67, 67, 67, 0.65);
 }
@@ -81,6 +92,15 @@ main p:has(> a > img.godbolt-link-image) {
 }
 
 @media (max-width: 767.98px) {
+  main .columns {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  main .columns > .column {
+    width: 100% !important;
+  }
+
   body {
     line-height: 1.55;
   }
