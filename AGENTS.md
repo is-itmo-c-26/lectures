@@ -41,6 +41,11 @@
 
 - Use C++20 unless a lecture explicitly demonstrates another language version.
 - Format examples consistently: four-space indentation, opening braces on the same line, and no unused declarations or parameters.
+- Follow the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) in every example, inline snippet and slide: `CamelCase` functions, `lower_case` variables, `kCamelCase` constants, no indentation inside a namespace, a `}  // namespace name` closing comment, lines within 80 columns. The lab repositories check the same naming with clang-tidy, so an example that breaks it teaches students to fail CI.
+- Integer types follow the same guide: `int` by default, `std::size_t` for sizes and indices, and `std::int64_t` or `std::uint64_t` from `<cstdint>` when 64 bits are required. Do not write `long`, `long long`, `unsigned long long` or `unsigned` parameters in examples; unsigned types are for modular arithmetic and bit patterns only.
+- There is no lecture on casts yet, and lecture 1 introduces explicit conversion in the C-style form. Keep existing C-style casts as they are and do not explain or mention the difference from `static_cast` anywhere a student can see it.
+- When an example breaks one of these rules on purpose (bad style to critique, a dangling `else`, a standard library name such as `signal`, a demonstration of the built-in `long` types), record that in an HTML comment in the lecture Markdown directly above the code fence that includes the example. Never put such a note into the example file: the file is shown verbatim on the slide and in Compiler Explorer, and the student is supposed to understand the point from the lecture, not from a maintainer's note.
+- Keep short functions on several lines even though clang-format with the Google style would collapse them: slides highlight lines, and a one-line body hides the structure.
 - Prefer `int main()` unless command-line arguments are actually used.
 - Examples intended to compile must pass Clang with `-std=c++20 -Wall -Wextra -pedantic` without warnings.
 - If an example intentionally does not compile or intentionally demonstrates undefined or dangerous behavior, label that fact clearly on the slide or in speaker notes and do not present it as a runnable example.

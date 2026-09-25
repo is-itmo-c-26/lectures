@@ -3,7 +3,7 @@
 int x = 0;
 int y = 0;
 
-void print_local_values(double x) {
+void PrintLocalValues(double x) {
     double y = 3.14;
     std::cout << "local: x = " << x << ", y = " << y << '\n';
 }
@@ -15,7 +15,7 @@ int main() {
     {
         int x = 10;
         std::cout << "block: x = " << x << ", y = " << y << '\n';
-        print_local_values(y);
+        PrintLocalValues(y);
     }
 
     std::cout << "global: x = " << x << ", y = " << y << '\n';
