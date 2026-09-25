@@ -71,6 +71,11 @@
   font-size: 0.7em;
 }
 
+/* Slides whose single code block is taller than the default 480px cap. */
+.reveal .slides section.tall-code pre code {
+  max-height: 600px;
+}
+
 .reveal img {
   max-height: 30rem;
   object-fit: contain;
