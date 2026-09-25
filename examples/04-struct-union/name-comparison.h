@@ -1,0 +1,28 @@
+#pragma once
+#include <cstdint>
+#include <cstring>
+
+union Name {
+    struct {
+        char name[13];
+        char code[3];
+    } text;
+    struct {
+        std::int32_t i1, i2, i3, i4;
+    } words;
+};
+
+static_assert(sizeof(Name) == 16);
+
+inline bool NameCompare(const Name& a, const Name& b) {
+    return std::strcmp(a.text.name, b.text.name) == 0
+        && std::strcmp(a.text.code, b.text.code) == 0;
+}
+
+// Чтение неактивного члена union: расширение компилятора, UB в ISO C++.
+inline bool IntCompare(const Name& a, const Name& b) {
+    return a.words.i1 == b.words.i1
+        && a.words.i2 == b.words.i2
+        && a.words.i3 == b.words.i3
+        && a.words.i4 == b.words.i4;
+}

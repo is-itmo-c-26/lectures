@@ -3,6 +3,8 @@ project:
   output-dir: _site
   pre-render:
     - node scripts/update-godbolt-links.mjs
+    - node scripts/update-name-benchmark.mjs
+    - node scripts/update-quick-bench-links.mjs
   render:
     - "*.md"
     - "lectures/*.md"
@@ -64,6 +66,8 @@ website:
               text: "2. Выражения, управление потоком и функции"
             - href: lectures/03-pointers-arrays.md
               text: "3. Указатели, массивы и строки"
+            - href: lectures/04-struct-union.md
+              text: "4. Структуры и объединения"
 
     - id: articles
       title: "Статьи"

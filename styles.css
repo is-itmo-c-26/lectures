@@ -85,3 +85,50 @@ main p:has(> a > img.godbolt-link-image) {
     margin-block: 1rem;
   }
 }
+
+/* Quick Bench: chart/play icon and a distinct teal action button. */
+main a.quick-bench-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 14px;
+  border: 1px solid #0f766e;
+  border-radius: 9px;
+  background: #0f766e;
+  color: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+  text-decoration: none;
+  vertical-align: middle;
+  box-shadow: 0 2px 5px rgb(15 118 110 / 18%);
+  transition: background-color 120ms ease, box-shadow 120ms ease;
+}
+
+main a.quick-bench-button:hover {
+  color: #fff;
+  background: #115e59;
+  border-color: #115e59;
+  box-shadow: 0 3px 8px rgb(15 118 110 / 25%);
+}
+
+main a.quick-bench-button:focus-visible {
+  outline: 3px solid #2dd4bf;
+  outline-offset: 3px;
+}
+
+main a.quick-bench-button img {
+  display: inline-block;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  max-height: none;
+  margin: 0;
+}
+
+main p:has(> a.quick-bench-button) {
+  margin-top: 0.25em;
+  margin-bottom: 0.5em;
+  text-align: left;
+}
