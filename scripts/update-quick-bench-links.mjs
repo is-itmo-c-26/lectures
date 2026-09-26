@@ -30,7 +30,11 @@ for (const [id, source] of [
     }
     // HashParser uses atob, so keep JSON ASCII and escape Unicode comments.
     const settings = {text, cppVersion: '20', optim: '2'};
-    if (id === 'quick-bench-packing') settings.compiler = 'gcc-13.2';
+    if (id === 'quick-bench-packing') {
+        settings.compiler = 'gcc-13.2';
+        settings.cppVersion = '23';
+        settings.optim = '3';
+    }
     const json = JSON.stringify(settings)
         .replace(/[^\x00-\x7f]/g, char => '\\u' + char.charCodeAt(0).toString(16).padStart(4, '0'));
     const url = 'https://quick-bench.com/#' + Buffer.from(json, 'ascii').toString('base64');
