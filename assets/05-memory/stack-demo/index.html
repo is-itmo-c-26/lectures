@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Вызов функции: регистры и стек</title>
+<link rel="stylesheet" href="style.css">
+<script src="trace.js" defer></script>
+<script src="player.js" defer></script>
+</head>
+<body>
+<main>
+  <header>
+    <div><span class="eyebrow">x86-64 · System V · Clang · без оптимизации</span><h1>Как add(40, 2) возвращает 42</h1></div>
+    <span id="counter" class="counter"></span>
+  </header>
+  <nav aria-label="Шаги выполнения">
+    <button id="reset" title="В начало">↺</button>
+    <button id="previous">← Назад</button>
+    <button id="next" class="primary">Вперёд →</button>
+    <label class="slider">Шаг <input id="position" type="range" min="0" value="0" aria-label="Шаг выполнения"></label>
+  </nav>
+  <div class="milestones" aria-label="Этапы вызова">
+    <button data-step="0">Вход в main</button><button data-step="8">Аргументы</button><button data-step="9">call</button><button data-step="16">Сумма</button><button data-step="21">ret из add</button><button data-step="26">Завершение</button>
+  </div>
+  <section class="status" aria-live="polite" aria-atomic="true">
+    <strong id="instruction"></strong><span id="explanation"></span>
+  </section>
+  <div class="panels">
+    <section class="panel code-panel">
+      <div class="panel-title"><h2 id="code-title">Инструкции main</h2><button id="code-toggle" aria-pressed="false">Показать C++</button></div>
+      <div id="assembly" class="code" aria-label="Ассемблер текущей функции"></div>
+      <pre id="source" class="code" hidden></pre>
+      <p class="legend"><span class="key executed"></span> Выполнено <span class="key upcoming"></span> Следующая инструкция</p>
+    </section>
+    <section class="panel registers-panel">
+      <h2>Регистры</h2>
+      <dl id="registers"></dl>
+      <p class="hint">EDI, ESI, EAX — младшие 32 бита RDI, RSI, RAX. Запись в них обнуляет старшие 32 бита.</p>
+      <p id="control" class="control"></p>
+    </section>
+    <section class="panel stack-panel">
+      <div class="panel-title"><h2>Стек</h2><span class="hint">Адреса уменьшаются ↓</span></div>
+      <div class="stack-scroll"><table><thead><tr><th>Адрес</th><th>Ячейка</th><th>Значение</th></tr></thead><tbody id="stack"></tbody></table></div>
+      <p class="legend"><span class="key executed"></span> Изменилось <span class="key inactive"></span> Вне активного стека</p>
+    </section>
+  </div>
+  <footer>Адреса условные. Числа — в десятичной записи, адреса — в шестнадцатеричной. «?» означает неизвестное значение. <a href="../../../examples/05-memory/function-call.s" id="assembly-link">Ассемблер</a></footer>
+  <noscript>Для пошагового показа нужен JavaScript. Исходный код и объяснение доступны в лекции.</noscript>
+</main>
+</body>
+</html>

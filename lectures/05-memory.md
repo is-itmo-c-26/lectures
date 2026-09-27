@@ -114,93 +114,50 @@ title: "Лекция 5. Работа с памятью"
 ![Изображение 1 со слайда 12](../assets/05-memory/slide-12-image-01.png)
 <!-- embedded-images:end -->
 
-## Стек вызова
+## Регистры и стек: x86-64 System V
 
-- Кадр стека (stack frame)
-  - Аргументы
-  - Локальные переменные
-  - Адрес возврата
-- Соглашения о вызовах: cdecl, stdcall, fastcall
-- Регистры процессора на схемах x86
-  - `esp` — вершина стека
-  - `ebp` — начало кадра
-  - `eax` — возвращаемое целое значение
+- `EDI`, `ESI` — первые два аргумента типа `int`.
+- `EAX` — возвращаемое значение типа `int`.
+- `RSP` — вершина стека; `RBP` — основание кадра в нашем примере.
+- `call` кладёт адрес возврата в стек; `ret` извлекает его и передаёт управление обратно.
 
-## Устройство кадра стека
+Это соглашение для выбранной платформы, а не универсальное правило C++. Схема ниже соответствует Clang без оптимизации, с указателем кадра и отключённой red zone.
 
-[Источник: Journey to the Stack](https://manybutfinite.com/post/journey-to-the-stack/)
+## Вызов функции по шагам
 
-Схемы показывают 32-битный x86 с указателем кадра. На другой архитектуре и при оптимизации размещение аргументов и работа со стеком могут отличаться.
+```{=html}
+<iframe src="../assets/05-memory/stack-demo/index.html" title="Пошаговое выполнение add: инструкции, регистры и стек" style="width:100%;height:560px;border:0;border-radius:8px" loading="lazy"></iframe>
+```
 
-<!-- embedded-images:start -->
-![Изображение 1 со слайда 14](../assets/05-memory/slide-14-image-01.png)
-<!-- embedded-images:end -->
+::: {.content-visible unless-format="revealjs"}
+[Открыть схему отдельно](../assets/05-memory/stack-demo/index.html){target="_blank"}
+:::
 
-## Вызов main: адрес возврата
+## Что произошло при вызове add
 
-<!-- embedded-images:start -->
-![Вызов main: адрес возврата](../assets/05-memory/slide-15-image-01.png)
-<!-- embedded-images:end -->
+1. `main` записала `40` и `2` в `EDI` и `ESI`.
+2. `call` сохранила адрес возврата, затем `add` создала свой кадр.
+3. `add` вычислила сумму и оставила `42` в `EAX`.
+4. Локальная область `add` освобождена, прежний `RBP` восстановлен.
+5. `ret` вернула управление; `main` записала результат в `answer`.
 
-## Пролог main: сохранение ebp
+В конце `main` возвращает `answer`: у этого примера код завершения **42**, вывода в терминал нет.
 
-<!-- embedded-images:start -->
-![Пролог main: сохранение ebp](../assets/05-memory/slide-16-image-01.png)
-<!-- embedded-images:end -->
+## Как воспроизвести схему
 
-## Пролог main: установка указателя кадра
+Ассемблер получен из того же `function-call.cpp`. Адреса в схеме условные; инструкции и размеры ячеек взяты из конкретной сборки.
 
-<!-- embedded-images:start -->
-![Пролог main: установка указателя кадра](../assets/05-memory/slide-17-image-01.png)
-<!-- embedded-images:end -->
+```bash
+python3 scripts/generate-memory-trace.py
+```
 
-## Выделение места для локальных данных main
+Генератор вызывает Clang для `x86_64-unknown-linux-gnu` с `-O0`, `-fno-omit-frame-pointer`, `-mno-red-zone` и сохраняет `function-call.s` рядом с исходником. Если компилятор изменит раскладку, генератор попросит проверить подписи.
 
-<!-- embedded-images:start -->
-![Выделение места для локальных данных main](../assets/05-memory/slide-18-image-01.png)
-<!-- embedded-images:end -->
+::: {.notes}
 
-## Подготовка аргументов: 40 и 2
+[Описание ABI x86-64 System V](https://gitlab.com/x86-psABIs/x86-64-ABI). Исходный разбор 32-битного стека в предыдущей версии лекции: [Journey to the Stack](https://manybutfinite.com/post/journey-to-the-stack/).
 
-<!-- embedded-images:start -->
-![Подготовка аргументов: 40 и 2](../assets/05-memory/slide-19-image-01.png)
-<!-- embedded-images:end -->
-
-## Вызов add: адрес возврата в main
-
-<!-- embedded-images:start -->
-![Вызов add: адрес возврата в main](../assets/05-memory/slide-20-image-01.png)
-<!-- embedded-images:end -->
-
-## Пролог add: сохранение кадра main
-
-<!-- embedded-images:start -->
-![Пролог add: сохранение кадра main](../assets/05-memory/slide-21-image-01.png)
-<!-- embedded-images:end -->
-
-## Пролог add: установка нового кадра
-
-<!-- embedded-images:start -->
-![Пролог add: установка нового кадра](../assets/05-memory/slide-22-image-01.png)
-<!-- embedded-images:end -->
-
-## Место для локальной переменной result
-
-<!-- embedded-images:start -->
-![Место для локальной переменной result](../assets/05-memory/slide-23-image-01.png)
-<!-- embedded-images:end -->
-
-## Вычисление суммы в eax
-
-<!-- embedded-images:start -->
-![Вычисление суммы в eax](../assets/05-memory/slide-24-image-01.png)
-<!-- embedded-images:end -->
-
-## Сохранение результата в локальную переменную
-
-<!-- embedded-images:start -->
-![Сохранение результата в локальную переменную](../assets/05-memory/slide-25-image-01.png)
-<!-- embedded-images:end -->
+:::
 
 ## Длительность хранения — storage duration
 
@@ -448,8 +405,8 @@ clang++ -std=c++20 -Wall -Wextra -pedantic -O0 -g \
 [godbolt-05-new-delete]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'int+main()+%7B%0A++++int*+value+%3D+new+int%3B%0A++++delete+value%3B%0A%0A++++int*+array+%3D+new+int%5B10%5D%3B%0A++++delete%5B%5D+array%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/05-memory/new-delete.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
 
-[godbolt-05-function-call]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Aint+add(int+a,+int+b)+%7B%0A++++int+result+%3D+a+%2B+b%3B%0A++++return+result%3B%0A%7D%0A%0Aint+main()+%7B%0A++++int+a+%3D+40%3B%0A++++int+b+%3D+2%3B%0A++++int+answer+%3D+add(a,+b)%3B%0A++++std::cout+%3C%3C+answer+%3C%3C+!'%5Cn!'%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
-<!-- godbolt source="../examples/05-memory/function-call.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
+[godbolt-05-function-call]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'int+add(int+a,+int+b)+%7B%0A++++int+result+%3D+a+%2B+b%3B%0A++++return+result%3B%0A%7D%0A%0Aint+main()+%7B%0A++++int+a+%3D+40%3B%0A++++int+b+%3D+2%3B%0A++++int+answer+%3D+add(a,+b)%3B%0A++++return+answer%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0+-m64+-fno-omit-frame-pointer+-fno-stack-protector+-fno-asynchronous-unwind-tables+-mno-red-zone',source:1,tree:0),l:'5')),l:'2')),version:4>
+<!-- godbolt source="../examples/05-memory/function-call.cpp" compiler="clang2310" options="-std=c++20 -O0 -m64 -fno-omit-frame-pointer -fno-stack-protector -fno-asynchronous-unwind-tables -mno-red-zone" -->
 
 [godbolt-05-malloc-array]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ccstdio%3E%0A%23include+%3Ccstdlib%3E%0A%0Aint+main()+%7B%0A++++int*+values+%3D+static_cast%3Cint*%3E(std::malloc(4+*+sizeof(int)))%3B%0A++++if+(values+%3D%3D+nullptr)+%7B%0A++++++++return+1%3B%0A++++%7D%0A%0A++++for+(int+index+%3D+0%3B+index+%3C+4%3B+%2B%2Bindex)+%7B%0A++++++++values%5Bindex%5D+%3D+index+*+index%3B%0A++++++++std::printf(%22values%5B%25d%5D+%3D+%25d%5Cn%22,+index,+values%5Bindex%5D)%3B%0A++++%7D%0A++++std::free(values)%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/05-memory/malloc-array.cpp" compiler="clang2310" options="-std=c++20 -O0" -->
