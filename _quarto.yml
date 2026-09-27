@@ -68,6 +68,8 @@ website:
               text: "3. Указатели, массивы и строки"
             - href: lectures/04-struct-union.md
               text: "4. Структуры и объединения"
+            - href: lectures/06-references-initialization-functions-namespaces.md
+              text: "6. Ссылки, инициализация, функции и пространства имён"
 
     - id: articles
       title: "Статьи"

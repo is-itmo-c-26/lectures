@@ -15,6 +15,7 @@ sidebar: false
 3. [Выражения, управление потоком и функции](lectures/02-expressions-control-flow-functions.md)
 4. [Указатели, массивы и строки](lectures/03-pointers-arrays.md)
 5. [Структуры и объединения](lectures/04-struct-union.md)
+7. [Ссылки, инициализация, функции и пространства имён](lectures/06-references-initialization-functions-namespaces.md)
 
 ## Статьи
 
