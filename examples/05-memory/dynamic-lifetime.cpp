@@ -1,4 +1,4 @@
-#include <cstdio>
+#include <print>
 
 int* make_value() {
     int* value = new int{42};
@@ -7,6 +7,6 @@ int* make_value() {
 
 int main() {
     int* value = make_value();
-    std::printf("%d\n", *value);
+    std::println("{}", *value);
     delete value;
 }

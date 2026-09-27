@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / 'examples/05-memory/function-call.cpp'
 ASSEMBLY = SOURCE.with_suffix('.s')
 OUT = ROOT / 'assets/05-memory/stack-demo/trace.js'
-FLAGS = ['--target=x86_64-unknown-linux-gnu', '-std=c++20', '-Wall', '-Wextra',
+FLAGS = ['--target=x86_64-unknown-linux-gnu', '-std=c++23', '-Wall', '-Wextra',
          '-pedantic', '-O0', '-fno-omit-frame-pointer', '-fno-stack-protector',
          '-fno-asynchronous-unwind-tables', '-mno-red-zone', '-masm=intel']
 compiler = os.environ.get('CXX', 'clang++')

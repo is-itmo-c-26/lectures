@@ -2273,7 +2273,7 @@ window.STACK_TRACE = {
   "compiler": "Homebrew clang version 21.1.1",
   "flags": [
     "--target=x86_64-unknown-linux-gnu",
-    "-std=c++20",
+    "-std=c++23",
     "-Wall",
     "-Wextra",
     "-pedantic",

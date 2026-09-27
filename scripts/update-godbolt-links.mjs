@@ -103,7 +103,7 @@ function quoteRison(value) {
         .replaceAll('%20', '+');
 }
 
-function makeGodboltUrl(source, compiler, options) {
+function makeGodboltUrl(source, compiler, options, mode = "executor") {
     const content = [
         {
             type: 'row',
@@ -120,7 +120,7 @@ function makeGodboltUrl(source, compiler, options) {
                 },
                 {
                     type: 'component',
-                    componentName: 'executor',
+                    componentName: mode,
                     componentState: {
                         source: 1,
                         tree: 0,
@@ -153,7 +153,7 @@ async function readExample(sourcePath, stack = new Set()) {
     });
 }
 
-const definitionPattern = /^(\[godbolt-[^\]]+\]:)\s+<[^>]*>[ \t]*(?:\r?\n)?<!--\s+godbolt\s+source="([^"]+)"\s+compiler="([^"]+)"\s+options="([^"]*)"\s+-->$/gm;
+const definitionPattern = /^(\[godbolt-[^\]]+\]:)\s+<[^>]*>[ \t]*(?:\r?\n)?<!--\s+godbolt\s+source="([^"]+)"\s+compiler="([^"]+)"\s+options="([^"]*)"(?:\s+mode="(compiler|executor)")?\s+-->$/gm;
 
 for (const markdownFile of markdownFiles) {
     const markdownPath = resolve(markdownFile);
@@ -161,12 +161,12 @@ for (const markdownFile of markdownFiles) {
     const definitions = [];
     let replacements = 0;
 
-    const linksUpdated = await replaceAsync(markdown, definitionPattern, async (match, label, sourcePath, compiler, options) => {
+    const linksUpdated = await replaceAsync(markdown, definitionPattern, async (match, label, sourcePath, compiler, options, mode) => {
         const source = await readExample(resolve(dirname(markdownPath), sourcePath));
-        const url = makeGodboltUrl(source, compiler, options);
+        const url = makeGodboltUrl(source, compiler, options, mode);
         definitions.push({reference: label.slice(1, -2), sourcePath});
         replacements += 1;
-        return `${label} <${url}>\n<!-- godbolt source="${sourcePath}" compiler="${compiler}" options="${options}" -->`;
+        return `${label} <${url}>\n<!-- godbolt source="${sourcePath}" compiler="${compiler}" options="${options}"${mode ? ` mode="${mode}"` : ''} -->`;
     });
 
     if (replacements === 0) continue;

@@ -1,4 +1,4 @@
-#include <cstdio>
+#include <print>
 
 // Intentional undefined behavior. Run only with a sanitizer.
 int main() {
@@ -6,5 +6,5 @@ int main() {
     int* alias = value;
     delete value;
     value = nullptr;
-    std::printf("%d\n", *alias); // The object no longer exists.
+    std::println("{}", *alias); // The object no longer exists.
 }

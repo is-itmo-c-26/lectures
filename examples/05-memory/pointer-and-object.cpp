@@ -1,4 +1,4 @@
-#include <cstdio>
+#include <print>
 #include <cstdlib>
 
 int main() {
@@ -9,9 +9,9 @@ int main() {
     }
     *pointer = 42;
 
-    std::printf("local: size=%zu, address=%p\n", sizeof(local), static_cast<void*>(&local));
-    std::printf("pointer: size=%zu, address=%p\n", sizeof(pointer), static_cast<void*>(&pointer));
-    std::printf("*pointer: size=%zu, address=%p\n", sizeof(*pointer), static_cast<void*>(pointer));
-    std::printf("value=%d\n", *pointer);
+    std::println("local: size={}, address={}", sizeof(local), static_cast<void*>(&local));
+    std::println("pointer: size={}, address={}", sizeof(pointer), static_cast<void*>(&pointer));
+    std::println("*pointer: size={}, address={}", sizeof(*pointer), static_cast<void*>(pointer));
+    std::println("value={}", *pointer);
     std::free(pointer);
 }

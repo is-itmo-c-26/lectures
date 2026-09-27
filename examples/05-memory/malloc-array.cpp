@@ -1,4 +1,4 @@
-#include <cstdio>
+#include <print>
 #include <cstdlib>
 
 int main() {
@@ -9,7 +9,7 @@ int main() {
 
     for (int index = 0; index < 4; ++index) {
         values[index] = index * index;
-        std::printf("values[%d] = %d\n", index, values[index]);
+        std::println("values[{}] = {}", index, values[index]);
     }
     std::free(values);
 }
