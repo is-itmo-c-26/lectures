@@ -10,43 +10,40 @@
 </head>
 <body>
 <main>
-  <header>
-    <div><span class="eyebrow">x86-64 · System V · Clang · без оптимизации</span><h1>Как add(40, 2) возвращает 42</h1></div>
-    <span id="counter" class="counter"></span>
-  </header>
-  <nav aria-label="Шаги выполнения">
-    <button id="reset" title="В начало">↺</button>
+  <header><span class="eyebrow">x86-64 · System V · add(40, 2)</span><span id="counter"></span></header>
+  <div class="instruction-bar"><strong id="instruction"></strong><span id="next-instruction"></span></div>
+  <svg id="scene" viewBox="0 0 1280 360" role="img" aria-labelledby="scene-title scene-description">
+    <title id="scene-title">Регистры процессора и ячейки стека</title>
+    <desc id="scene-description">Регистры сверху, стек снизу. Адреса растут вправо, стек растёт влево. Красным отмечены изменения текущего шага.</desc>
+    <defs>
+      <linearGradient id="register-fill" x2="0" y2="1"><stop stop-color="#536168"/><stop offset="1" stop-color="#29363b"/></linearGradient>
+      <linearGradient id="local-fill" x2="1" y2="1"><stop stop-color="#f1e9d8"/><stop offset="1" stop-color="#d7ba87"/></linearGradient>
+      <linearGradient id="saved-fill" x2="1" y2="1"><stop stop-color="#e6f3f6"/><stop offset="1" stop-color="#a6ccd7"/></linearGradient>
+      <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#34464d"/></marker>
+      <marker id="red-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#e91c57"/></marker>
+    </defs>
+    <g id="cells"></g><g id="registers"></g>
+    <path id="rsp-arrow" class="pointer-line" marker-end="url(#arrow)"/>
+    <path id="rbp-arrow" class="pointer-line" marker-end="url(#arrow)"/>
+    <path id="saved-arrow" class="saved-line" marker-end="url(#red-arrow)"/>
+    <path id="transfer" class="transfer-line" marker-end="url(#red-arrow)"/>
+    <circle id="transfer-dot" r="6" fill="#e91c57" visibility="hidden"/>
+    <text x="36" y="321" class="direction">← Рост стека</text>
+    <text x="1254" y="321" class="direction" text-anchor="end">Адреса растут →</text>
+    <text id="frame-caption" x="640" y="346" text-anchor="middle" class="caption"></text>
+  </svg>
+  <p id="explanation" class="explanation" aria-live="polite" aria-atomic="true"></p>
+  <nav aria-label="Управление анимацией">
+    <button id="reset" aria-label="В начало">↺</button>
     <button id="previous">← Назад</button>
-    <button id="next" class="primary">Вперёд →</button>
-    <label class="slider">Шаг <input id="position" type="range" min="0" value="0" aria-label="Шаг выполнения"></label>
+    <button id="play" aria-pressed="false">▶ Воспроизвести</button>
+    <button id="next">Вперёд →</button>
+    <input id="position" type="range" min="0" value="0" aria-label="Шаг выполнения">
+    <button id="source-toggle" aria-expanded="false">C++</button>
   </nav>
-  <div class="milestones" aria-label="Этапы вызова">
-    <button data-step="0">Вход в main</button><button data-step="8">Аргументы</button><button data-step="9">call</button><button data-step="16">Сумма</button><button data-step="21">ret из add</button><button data-step="26">Завершение</button>
-  </div>
-  <section class="status" aria-live="polite" aria-atomic="true">
-    <strong id="instruction"></strong><span id="explanation"></span>
-  </section>
-  <div class="panels">
-    <section class="panel code-panel">
-      <div class="panel-title"><h2 id="code-title">Инструкции main</h2><button id="code-toggle" aria-pressed="false">Показать C++</button></div>
-      <div id="assembly" class="code" aria-label="Ассемблер текущей функции"></div>
-      <pre id="source" class="code" hidden></pre>
-      <p class="legend"><span class="key executed"></span> Выполнено <span class="key upcoming"></span> Следующая инструкция</p>
-    </section>
-    <section class="panel registers-panel">
-      <h2>Регистры</h2>
-      <dl id="registers"></dl>
-      <p class="hint">EDI, ESI, EAX — младшие 32 бита RDI, RSI, RAX. Запись в них обнуляет старшие 32 бита.</p>
-      <p id="control" class="control"></p>
-    </section>
-    <section class="panel stack-panel">
-      <div class="panel-title"><h2>Стек</h2><span class="hint">Адреса уменьшаются ↓</span></div>
-      <div class="stack-scroll"><table><thead><tr><th>Адрес</th><th>Ячейка</th><th>Значение</th></tr></thead><tbody id="stack"></tbody></table></div>
-      <p class="legend"><span class="key executed"></span> Изменилось <span class="key inactive"></span> Вне активного стека</p>
-    </section>
-  </div>
-  <footer>Адреса условные. Числа — в десятичной записи, адреса — в шестнадцатеричной. «?» означает неизвестное значение. <a href="../../../examples/05-memory/function-call.s" id="assembly-link">Ассемблер</a></footer>
-  <noscript>Для пошагового показа нужен JavaScript. Исходный код и объяснение доступны в лекции.</noscript>
+  <footer>Адреса и ширина ячеек условные · Серые ячейки уже вне активного стека · EDI/ESI/EAX — младшие 32 бита RDI/RSI/RAX · <a id="assembly-link">Ассемблер</a></footer>
+  <pre id="source" hidden></pre>
+  <noscript>Для анимации нужен JavaScript. Исходный код доступен в лекции.</noscript>
 </main>
 </body>
 </html>

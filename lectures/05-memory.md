@@ -16,11 +16,6 @@ title: "Лекция 5. Работа с памятью"
 - Куча, `malloc`/`free` и `new`/`delete`
 - Ошибки доступа к памяти и segmentation fault
 
-## Вывод в примерах: C++23
-
-В этой лекции для вывода используем `<print>` и `std::println` из C++23. В строке формата `{}` обозначает место для значения; `println` добавляет перевод строки, а `print` — нет.
-
-Для локальной сборки нужен `-std=c++23` и стандартная библиотека с поддержкой `<print>`. В ссылках Compiler Explorer эти настройки уже заданы.
 
 ## Работа программ
 
@@ -182,6 +177,8 @@ Storage duration описывает, как долго существует па
 
 ## Область видимости и хранение
 
+`static` у локальной переменной означает, что она инициализируется один раз и сохраняет значение между вызовами функции. Её имя по-прежнему доступно только внутри блока, где она объявлена.
+
 ```{.cpp filename="automatic-and-static.cpp"}
 {{< include ../examples/05-memory/automatic-and-static.cpp >}}
 ```
@@ -198,6 +195,8 @@ Storage duration описывает, как долго существует па
 - Позже изучим средства, которые берут освобождение на себя.
 
 Размер объекта — не главное отличие: даже один `int` может требовать динамического времени жизни.
+
+**Не путать:** куча (heap) как область динамической памяти и куча как структура данных, например двоичная куча для очереди с приоритетом, — разные понятия. Совпадение названий не означает, что динамическая память организована в виде такой структуры.
 
 ## Объект переживает создавшую его функцию
 
@@ -233,6 +232,16 @@ Storage duration описывает, как долго существует па
 - `std::free(nullptr)` ничего не делает.
 - После освобождения указатель нельзя разыменовывать. Присваивание `nullptr` одной переменной не исправляет другие копии указателя.
 
+## free не обнуляет указатель
+
+```{.cpp filename="free-and-nullptr.cpp" code-line-numbers="|12|13|15-16"}
+{{< include ../examples/05-memory/free-and-nullptr.cpp >}}
+```
+
+[![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-05-free-and-nullptr]{aria-label="Open in Compiler Explorer"}
+
+`free` освобождает выделенный блок, но не присваивает переменной `pointer` значение `nullptr` и не гарантирует обнуления байтов блока. После `free` указатель висячий; следующей строкой мы явно присваиваем ему `nullptr`.
+
 ## calloc: массив с нулевыми значениями
 
 ```{.cpp filename="calloc-array.cpp"}
@@ -255,22 +264,33 @@ Storage duration описывает, как долго существует па
 
 ## new и delete
 
+:::: {.columns}
+::: {.column width="45%"}
+
 ```{.cpp filename="new-delete.cpp"}
 {{< include ../examples/05-memory/new-delete.cpp >}}
 ```
 
 [![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-05-new-delete]{aria-label="Open in Compiler Explorer"}
 
-## new: выделение и инициализация
+:::
+::: {.column width="55%"}
 
-- `new int` создаёт `int` без заданного начального значения: читать его до записи нельзя.
-- `new int{}` создаёт `int` со значением `0`.
-- `new int{42}` создаёт `int` со значением `42`.
-- Обычный `new` при неудаче выделения бросает `std::bad_alloc`; исключения разберём позже.
+- `new int` — без начального значения; до чтения нужна запись.
+- `new int{}` — значение `0`.
+- `new int{42}` — значение `42`.
+- `delete` освобождает одиночный объект, `delete[]` — массив.
+- При неудаче выделения обычный `new` бросает `std::bad_alloc`; исключения разберём позже.
+
+:::
+::::
 
 NB: для классов `new` может вызвать конструктор, а `delete` вызывает деструктор. Вернёмся к этому при изучении классов.
 
-## Правильные пары выделения и освобождения
+## new/delete и malloc/free: какой способ выбрать
+
+:::: {.columns}
+::: {.column width="45%"}
 
 | Выделение | Освобождение |
 | --- | --- |
@@ -278,27 +298,55 @@ NB: для классов `new` может вызвать конструктор
 | `new T` | `delete` |
 | `new T[n]` | `delete[]` |
 
-Смешивать пары нельзя. Например, `free` для результата `new` и `delete` для результата `new[]` приводят к неопределённому поведению.
+**Способ освобождения определяется способом выделения.** Смешивание пар приводит к неопределённому поведению.
 
-## Placement new: объект в готовой памяти
+`malloc/free` нужны при работе с C API и существующими библиотеками, чей контракт требует именно эту пару. Переход на C++ не меняет контракт библиотеки.
 
-```{.cpp filename="placement-new.cpp"}
+:::
+::: {.column width="55%"}
+
+```{.cpp filename="c-api-allocation.cpp"}
+{{< include ../examples/05-memory/c-api-allocation.cpp >}}
+```
+
+[![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-05-c-api-allocation]{aria-label="Open in Compiler Explorer"}
+
+`strdup` — C API POSIX (Linux/macOS): создаёт копию строки в памяти, выделенной через `malloc`. Её нужно освободить через `free`, а не `delete[]`.
+
+:::
+::::
+
+NB: `malloc` выделяет память без вызова конструкторов. Для обычных задач C++ позже изучим контейнеры и средства автоматического владения памятью.
+
+::: {.notes}
+
+Контракт функции: [strdup(3)](https://man7.org/linux/man-pages/man3/strdup.3.html). У других C API может быть собственная функция освобождения; следуйте документации библиотеки.
+
+:::
+
+## Placement new: пул частиц в игре
+
+Память для частиц резервируем заранее. Когда появляется новая частица, создаём её в выбранном слоте без отдельного выделения памяти.
+
+```{.cpp filename="placement-new.cpp" code-line-numbers="|10|11-12|17"}
 {{< include ../examples/05-memory/placement-new.cpp >}}
 ```
 
 [![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-05-placement-new]{aria-label="Open in Compiler Explorer"}
 
-`new (storage) int{42}` создаёт объект по указанному адресу без выделения нового блока памяти.
+`new (pool) Particle{50, 60}` создаёт новую частицу на месте прежней. Память слота используется повторно.
 
 ## Placement new: размер, выравнивание и освобождение
 
-- `sizeof(int)` резервирует достаточно байтов для `int`.
-- `alignas(int)` обеспечивает требуемое выравнивание.
-- Буфер должен существовать всё время использования объекта.
-- `delete value` здесь недопустим: буфер не выделялся обычным `new`.
-- Для `int` отдельный вызов деструктора не нужен; хранение буфера закончится при выходе из блока.
+- Буфер вмещает две частицы; `alignas(Particle)` обеспечивает выравнивание.
+- Второй слот начинается через `sizeof(Particle)` байтов после первого.
+- Буфер должен существовать всё время использования частиц.
+- `delete first` и `delete second` недопустимы: слоты принадлежат буферу.
+- У нашей структуры только поля `int`: перед повторным использованием слота отдельный вызов деструктора не требуется.
 
-NB: для классов отдельно разберём завершение жизни объекта и освобождение его памяти.
+В полноценном пуле дополнительно учитывают свободные слоты и проверяют, что место есть. Здесь показан только механизм создания объектов в готовой памяти.
+
+NB: у объектов с ресурсами перед повторным использованием слота может требоваться вызов деструктора. Это разберём вместе с классами.
 
 ## Ошибка памяти не обязана завершать программу
 
@@ -317,6 +365,24 @@ NB: для классов отдельно разберём завершение
 ОС проверяет отображения и права страниц, но обычно не знает границы каждого C++-объекта. Выход за границы массива может остаться внутри доступной страницы.
 
 Не всякое неопределённое поведение приводит к `SIGSEGV`, и не всякая ошибка памяти обнаруживается ОС.
+
+## Запись в память только для чтения
+
+**Намеренное UB.** На типичных Linux/macOS строковый литерал размещается в области без права записи; попытка записи обычно приводит к аварийному завершению.
+
+```{.cpp filename="write-read-only.cpp" code-line-numbers="|3|4|5"}
+{{< include ../examples/05-memory/write-read-only.cpp >}}
+```
+
+[![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-05-write-read-only]{aria-label="Open in Compiler Explorer"}
+
+`const_cast` снимает ограничение типа, но не меняет права страницы и не делает изменение литерала допустимым. `volatile` сохраняет попытку записи в обычной сборке; конкретное проявление UB языком не гарантируется.
+
+::: {.notes}
+
+Пример специально запускается без санитайзеров с `-O0`, чтобы показать реакцию ОС на запись в защищённую страницу. На разных платформах возможны разные сигналы, в том числе SIGSEGV или SIGBUS. Наличие `const` само по себе не означает размещения объекта в памяти только для чтения: например, локальная константа может находиться в стеке.
+
+:::
 
 ## Выход за границы динамического массива
 
@@ -476,8 +542,17 @@ clang++ -std=c++23 -Wall -Wextra -pedantic -O0 -g \
 [godbolt-05-double-free]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ccstdlib%3E%0A%0A//+Intentional+undefined+behavior.+Run+only+with+a+sanitizer.%0Aint+main()+%7B%0A++++void*+memory+%3D+std::malloc(16)%3B%0A++++if+(memory+%3D%3D+nullptr)+%7B%0A++++++++return+1%3B%0A++++%7D%0A++++void*+alias+%3D+memory%3B%0A++++std::free(memory)%3B%0A++++std::free(alias)%3B+//+The+same+allocation+is+freed+twice.%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B+-g+-fsanitize%3Daddress,undefined+-fno-sanitize-recover%3Dall+-fsanitize-address-use-after-scope+-fno-omit-frame-pointer',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/05-memory/double-free.cpp" compiler="clang2310" options="-std=c++23 -O0 -stdlib=libc++ -g -fsanitize=address,undefined -fno-sanitize-recover=all -fsanitize-address-use-after-scope -fno-omit-frame-pointer" -->
 
-[godbolt-05-placement-new]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Cprint%3E%0A%23include+%3Cnew%3E%0A%0Aint+main()+%7B%0A++++alignas(int)+unsigned+char+storage%5Bsizeof(int)%5D%3B%0A++++int*+value+%3D+new+(storage)+int%7B42%7D%3B%0A++++std::println(%22%7B%7D%22,+*value)%3B%0A++++//+No+delete:+storage+is+an+automatic+buffer.%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B',source:1,tree:0),l:'5')),l:'2')),version:4>
+[godbolt-05-placement-new]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Cnew%3E%0A%23include+%3Cprint%3E%0A%0Astruct+Particle+%7B%0A++++int+x%3B%0A++++int+y%3B%0A%7D%3B%0A%0Aint+main()+%7B%0A++++alignas(Particle)+unsigned+char+pool%5B2+*+sizeof(Particle)%5D%3B%0A++++Particle*+first+%3D+new+(pool)+Particle%7B10,+20%7D%3B%0A++++Particle*+second+%3D+new+(pool+%2B+sizeof(Particle))+Particle%7B30,+40%7D%3B%0A++++std::println(%22First:+(%7B%7D,+%7B%7D)%3B+second:+(%7B%7D,+%7B%7D)%22,%0A+++++++++++++++++first-%3Ex,+first-%3Ey,+second-%3Ex,+second-%3Ey)%3B%0A%0A++++//+The+first+particle+is+no+longer+needed:+reuse+its+slot.%0A++++first+%3D+new+(pool)+Particle%7B50,+60%7D%3B%0A++++std::println(%22New+first:+(%7B%7D,+%7B%7D)%22,+first-%3Ex,+first-%3Ey)%3B%0A++++//+No+delete:+both+objects+occupy+the+automatic+buffer+pool.%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/05-memory/placement-new.cpp" compiler="clang2310" options="-std=c++23 -O0 -stdlib=libc++" -->
 
 [godbolt-05-heap-buffer-overflow]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Cprint%3E%0A%0A//+Intentional+undefined+behavior.+Run+only+with+a+sanitizer.%0Aint+main()+%7B%0A++++int*+values+%3D+new+int%5B3%5D%7B10,+20,+30%7D%3B%0A++++int+index+%3D+3%3B%0A++++std::println(%22%7B%7D%22,+values%5Bindex%5D)%3B+//+Past+the+array+boundary.%0A++++delete%5B%5D+values%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B+-g+-fsanitize%3Daddress,undefined+-fno-sanitize-recover%3Dall+-fsanitize-address-use-after-scope+-fno-omit-frame-pointer',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/05-memory/heap-buffer-overflow.cpp" compiler="clang2310" options="-std=c++23 -O0 -stdlib=libc++ -g -fsanitize=address,undefined -fno-sanitize-recover=all -fsanitize-address-use-after-scope -fno-omit-frame-pointer" -->
+
+[godbolt-05-free-and-nullptr]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ccstdlib%3E%0A%23include+%3Cprint%3E%0A%0Aint+main()+%7B%0A++++int*+pointer+%3D+static_cast%3Cint*%3E(std::malloc(sizeof(int)))%3B%0A++++if+(pointer+%3D%3D+nullptr)+%7B%0A++++++++return+1%3B%0A++++%7D%0A++++*pointer+%3D+42%3B%0A++++std::println(%22Before+free:+%7B%7D%22,+*pointer)%3B%0A%0A++++std::free(pointer)%3B+//+Releases+the+block%3B+pointer+is+now+dangling.%0A++++pointer+%3D+nullptr%3B++//+Explicit+assignment,+not+an+effect+of+free.%0A%0A++++std::println(%22pointer+%3D%3D+nullptr:+%7B%7D%22,+pointer+%3D%3D+nullptr)%3B%0A++++std::free(pointer)%3B+//+free(nullptr)+does+nothing.%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B',source:1,tree:0),l:'5')),l:'2')),version:4>
+<!-- godbolt source="../examples/05-memory/free-and-nullptr.cpp" compiler="clang2310" options="-std=c++23 -O0 -stdlib=libc++" -->
+
+[godbolt-05-c-api-allocation]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ccstdlib%3E%0A%23include+%3Cprint%3E%0A%23include+%3Cstring.h%3E%0A%0Aint+main()+%7B%0A++++char*+copy+%3D+::strdup(%22Hello+from+a+C+API%22)%3B%0A++++if+(copy+%3D%3D+nullptr)+%7B%0A++++++++return+1%3B%0A++++%7D%0A++++std::println(%22%7B%7D%22,+copy)%3B%0A++++std::free(copy)%3B+//+strdup+allocates+with+malloc%3B+delete%5B%5D+is+invalid.%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B',source:1,tree:0),l:'5')),l:'2')),version:4>
+<!-- godbolt source="../examples/05-memory/c-api-allocation.cpp" compiler="clang2310" options="-std=c++23 -O0 -stdlib=libc++" -->
+
+[godbolt-05-write-read-only]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'//+Intentional+undefined+behavior:+attempting+to+modify+a+string+literal.%0Aint+main()+%7B%0A++++const+char*+text+%3D+%22Read-only+memory%22%3B%0A++++volatile+char*+writable+%3D+const_cast%3Cchar*%3E(text)%3B%0A++++writable%5B0%5D+%3D+!'r!'%3B+//+Typically+faults+on+Linux/macOS.%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
+<!-- godbolt source="../examples/05-memory/write-read-only.cpp" compiler="clang2310" options="-std=c++23 -O0" -->
