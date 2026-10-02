@@ -71,6 +71,22 @@
   font-size: 0.7em;
 }
 
+/* Repeated section outline: every item is dimmed except the one covered next. */
+.reveal .slides section.agenda li {
+  opacity: 0.35;
+}
+
+.reveal .slides section.agenda li:has(.current) {
+  opacity: 1;
+  font-weight: 700;
+  color: #1E5AA8;
+}
+
+/* Narrow column holding a wide table. */
+.reveal .small-table {
+  font-size: 0.8em;
+}
+
 /* Slides whose single code block is taller than the default 480px cap. */
 .reveal .slides section.tall-code pre code {
   max-height: 600px;
@@ -79,6 +95,10 @@
 .reveal img {
   max-height: 30rem;
   object-fit: contain;
+}
+
+.reveal img.tall-image {
+  max-height: 610px;
 }
 
 .reveal blockquote {
