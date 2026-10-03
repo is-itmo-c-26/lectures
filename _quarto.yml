@@ -68,6 +68,8 @@ website:
               text: "3. Указатели, массивы и строки"
             - href: lectures/04-struct-union.md
               text: "4. Структуры и объединения"
+            - href: lectures/05-memory.md
+              text: "5. Работа с памятью"
 
     - id: articles
       title: "Статьи"
