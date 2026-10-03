@@ -12,16 +12,26 @@ header { display: flex; justify-content: space-between; color: #617781; font-siz
 .register .value { fill: white; font: 18px ui-monospace, monospace; }
 .register .role { fill: #d0e3ec; font-size: 12px; }
 .register.changed rect, .cell.changed rect { stroke: #f20b4e; stroke-width: 3; filter: drop-shadow(0 0 3px #f20b4e55); }
-.cell { transition: opacity .45s; }
+.cell { transition: opacity .8s; }
+.cell-body { transform-box: fill-box; transform-origin: center; transition: transform .8s; }
+.cell.inactive .cell-body { transform: translateY(18px) scaleY(.15); }
+.instant .cell, .instant .cell-body { transition: none; }
+.stack-frame rect { fill: #dcebdc; }
+.stack-frame[data-frame="_Z3addii"] rect { fill: #d1e6f2; }
+.stack-frame text { fill: #28454d; font: bold 12px ui-monospace, monospace; }
 .cell rect { fill: url(#local-fill); stroke: #919793; stroke-width: 1.5; }
+.cell.red-zone rect { stroke-dasharray: 5 3; }
 .cell.saved rect { fill: url(#saved-fill); }
 .cell.absent { opacity: 0; }
-.cell.inactive { opacity: .28; }
+.cell.inactive { opacity: 0; }
 .cell .label { font-size: 12px; fill: #17272e; }
 .cell .value { font: 16px ui-monospace, monospace; fill: #17272e; }
 .cell .address { font: 11px ui-monospace, monospace; fill: #58717c; }
 .cell .bytes { font-size: 10px; fill: #617781; }
 .pointer-line { fill: none; stroke: #34464d; stroke-width: 2.2; }
+#rsp-arrow { stroke: #007f83; stroke-width: 3; }
+#stack-top rect { fill: #007f83; }
+#stack-top text { fill: white; font: bold 13px ui-monospace, monospace; }
 .saved-line { fill: none; stroke: #e91c57; stroke-width: 2; }
 .transfer-line { fill: none; stroke: #e91c57; stroke-width: 2; stroke-dasharray: 5 4; }
 .direction { fill: #71858c; font-size: 14px; }
@@ -38,7 +48,7 @@ footer { font-size: 10px; color: #71858c; margin-top: 8px; } a { color: #006f9c;
 pre { font: 13px/1.4 ui-monospace, monospace; background: #f3f5f6; padding: 12px; overflow: auto; }
 [hidden] { display: none !important; }
 @media (max-width: 650px) { nav { flex-wrap: wrap; } #next-instruction { display: none; } .explanation { min-height: 60px; } #instruction { font-size: 13px; } }
-@media (prefers-reduced-motion: reduce) { .cell { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .cell, .cell-body { transition: none; } }
 
 .outside rect { fill: #f4f7f8; stroke: #8d9696; stroke-width: 1.5; stroke-dasharray: 5 4; }
 .outside text { fill: #526971; font-size: 11px; }

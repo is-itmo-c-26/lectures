@@ -1,6 +1,6 @@
 #include <cstdlib>
 
-// Intentional undefined behavior. Run only with a sanitizer.
+// Intentional undefined behavior.
 int main() {
     void* memory = std::malloc(16);
     if (memory == nullptr) {

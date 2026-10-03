@@ -15,10 +15,22 @@
         if (index >= 0) return origin + index * step + width / 2;
         return address > allSlots.at(-1).address ? 1176 : 20;
     };
-    const centers = { rdi: 120, rsi: 310, rax: 500, rsp: 720, rbp: 940 };
-    const registerNodes = {}, cellNodes = {};
+    const centers = { rdi: 105, rsi: 300, rdx: 495, rax: 690, rsp: 885, rbp: 1080 };
+    const registerNodes = {}, cellNodes = {}, frameNodes = {};
     let position = 0, timer = null, animation = null;
     let endpoints = { rsp: slotX(trace.steps[0].registers.rsp) - 18, rbp: slotX(trace.steps[0].registers.rbp) };
+    const returnStart = trace.steps.findIndex(state => state.executed?.instruction === 'pop rbp') - 1;
+    function frameBounds(state) {
+        return Object.fromEntries(['main', '_Z3addii'].map(frame => {
+            const cells = allSlots.filter(slot => slot.frame === frame);
+            const active = cells.filter(slot => state.slots.some(current => current.address === slot.address && current.active));
+            const right = slotX(cells.at(-1).address) + width / 2;
+            const left = active.length ? slotX(active[0].address) - width / 2 : right;
+            const end = active.length ? slotX(active.at(-1).address) + width / 2 : right;
+            return [frame, {x: left, width: end - left}];
+        }));
+    }
+    let framePositions = frameBounds(trace.steps[0]);
     function node(tag, attrs = {}, parent, text) {
         const el = document.createElementNS(ns, tag);
         for (const [key, value] of Object.entries(attrs)) el.setAttribute(key, value);
@@ -28,19 +40,26 @@
     for (const [key, x] of Object.entries(centers)) {
         const group = node('g', { class: 'register', transform: `translate(${x - 62} ${registerTop})` }, get('registers'));
         node('rect', { width: 124, height: registerHeight, rx: 11 }, group);
-        node('text', { x: 62, y: 25, 'text-anchor': 'middle', class: 'name' }, group, {rdi:'EDI',rsi:'ESI',rax:'EAX',rsp:'RSP',rbp:'RBP'}[key]);
+        node('text', { x: 62, y: 25, 'text-anchor': 'middle', class: 'name' }, group, {rdi:'EDI',rsi:'ESI',rdx:'EDX',rax:'EAX',rsp:'RSP',rbp:'RBP'}[key]);
         const value = node('text', { x: 62, y: 51, 'text-anchor': 'middle', class: 'value' }, group);
-        node('text', { x: 62, y: 73, 'text-anchor': 'middle', class: 'role' }, group, {rdi:'аргумент a',rsi:'аргумент b',rax:'результат',rsp:'вершина стека',rbp:'основание кадра'}[key]);
+        node('text', { x: 62, y: 73, 'text-anchor': 'middle', class: 'role' }, group, {rdi:'аргумент a',rsi:'аргумент b',rdx:'временное значение',rax:'значение / результат',rsp:'вершина стека',rbp:'основание кадра'}[key]);
         registerNodes[key] = {group, value};
+    }
+    for (const frame of ['main', '_Z3addii']) {
+        const group = node('g', {class: 'stack-frame', 'data-frame': frame}, get('frames'));
+        const band = node('rect', {y: 178, height: 17, rx: 4}, group);
+        const label = node('text', {y: 191, 'text-anchor': 'middle'}, group, names[frame]);
+        frameNodes[frame] = {band, label};
     }
     allSlots.forEach(slot => {
         const x = slotX(slot.address) - width / 2;
-        const group = node('g', { class: 'cell absent', transform: `translate(${x} ${cellTop})` }, get('cells'));
-        node('rect', { width, height: 82, rx: 10 }, group);
+        const group = node('g', { class: 'cell absent', 'data-address': hex(slot.address), transform: `translate(${x} ${cellTop})` }, get('cells'));
+        const body = node('g', {class: 'cell-body'}, group);
+        node('rect', { width, height: 82, rx: 10 }, body);
         const label = slot.label === 'Сохранённый RBP' ? ['saved RBP'] : slot.label.startsWith('Адрес возврата') || slot.label.startsWith('Возврат') ? ['return', 'address'] : slot.label.startsWith('Служебный') ? ['служебный', 'слот'] : [slot.label.split(' ')[0]];
-        label.forEach((line, i) => node('text', {x: width/2, y: 19 + i*14, 'text-anchor':'middle',class:'label'},group,line));
-        const value = node('text', { x: width/2, y: 58, 'text-anchor':'middle', class:'value' }, group);
-        node('text', {x: width/2,y:74,'text-anchor':'middle',class:'bytes'},group,`${slot.size} байт · ${names[slot.frame] || 'caller'}`);
+        label.forEach((line, i) => node('text', {x: width/2, y: 19 + i*14, 'text-anchor':'middle',class:'label'},body,line));
+        const value = node('text', { x: width/2, y: 58, 'text-anchor':'middle', class:'value' }, body);
+        node('text', {x: width/2,y:74,'text-anchor':'middle',class:'bytes'},body,`${slot.size} байт · ${names[slot.frame] || 'caller'}`);
         node('text', {x:width/2,y:100,'text-anchor':'middle',class:'address'},group,hex(slot.address));
         cellNodes[slot.address] = {group, value};
     });
@@ -52,9 +71,9 @@
     get('position').max = trace.steps.length - 1;
     get('source').textContent = trace.source;
     get('assembly-link').href = URL.createObjectURL(new Blob([trace.assembly], {type:'text/plain'}));
-    get('assembly-link').download = 'function-call.s';
+    get('assembly-link').download = 'function-call-godbolt.s';
     function pointerPath(key, end) {
-        const x = centers[key], mid = key === 'rsp' ? 139 : 163;
+        const x = centers[key], mid = key === 'rsp' ? 145 : 126;
         const direction = Math.sign(end - x), radius = Math.min(6, Math.abs(end - x) / 2);
         return `M ${x} ${registerBottom} L ${x} ${mid - radius} Q ${x} ${mid} ${x + direction * radius} ${mid} L ${end - direction * radius} ${mid} Q ${end} ${mid} ${end} ${mid + radius} L ${end} ${cellTop}`;
     }
@@ -64,26 +83,32 @@
         const instruction = executed.instruction;
         const memory = instruction.match(/\[rbp - (\d+)\]/);
         const memoryPoint = memory ? [slotX(previous.registers.rbp - Number(memory[1])) + 18, cellTop] : null;
-        const regPoint = key => [centers[{edi:'rdi',esi:'rsi',eax:'rax'}[key] || key] + 18, registerBottom];
+        const regPoint = key => [centers[{edi:'rdi',esi:'rsi',edx:'rdx',eax:'rax'}[key] || key] + 18, registerBottom];
         if (instruction.startsWith('push')) return [regPoint('rbp'), [slotX(state.registers.rsp) + 18,cellTop]];
         if (instruction.startsWith('pop')) return [[slotX(previous.registers.rsp) + 18,cellTop],regPoint('rbp')];
         if (instruction.startsWith('call')) return [[550,5],[slotX(state.registers.rsp) + 18,cellTop]];
         if (instruction === 'ret') return [[slotX(previous.registers.rsp) + 18,cellTop],[550,5]];
         const parts = instruction.replace(/^\w+ /,'').split(', ');
-        if (memoryPoint && parts[0].startsWith('dword') && /^(eax|edi|esi)$/.test(parts[1])) return [regPoint(parts[1]),memoryPoint];
-        if (memoryPoint && /^(eax|edi|esi)$/.test(parts[0])) return [memoryPoint,regPoint(parts[0])];
+        if (memoryPoint && parts[0].startsWith('dword') && /^(eax|edi|esi|edx)$/.test(parts[1])) return [regPoint(parts[1]),memoryPoint];
+        if (memoryPoint && /^(eax|edi|esi|edx)$/.test(parts[0])) return [memoryPoint,regPoint(parts[0])];
+        if (/^(mov|add) (eax|edi|esi|edx), (eax|edi|esi|edx)$/.test(instruction)) return [regPoint(parts[1]),regPoint(parts[0])];
         if (instruction === 'mov rbp, rsp') return [regPoint('rsp'),regPoint('rbp')];
+        if (instruction === 'leave') return executed.part === 1
+            ? [regPoint('rbp'),regPoint('rsp')]
+            : [[slotX(previous.registers.rsp) + 18,cellTop],regPoint('rbp')];
         return null;
     }
     function draw(animate = true) {
         cancelAnimationFrame(animation);
         const state = trace.steps[position];
+        get('scene').classList.toggle('instant', !animate || reduced);
         get('counter').textContent = `${position} / ${trace.steps.length - 1}`;
         get('position').value = position;
         get('previous').disabled = position === 0;
         get('next').disabled = position === trace.steps.length - 1;
-        get('instruction').textContent = state.executed ? `${names[state.executed.function]}: ${state.executed.instruction}` : 'Вход в main';
-        get('next-instruction').textContent = state.function === 'done' ? 'Выполнение завершено' : `Далее: ${trace.functions[state.function][state.pc]}`;
+        const phase = state.executed?.part ? ` · ${state.executed.part}/${state.executed.parts}: ${state.executed.effect}` : '';
+        get('instruction').textContent = state.executed ? `${names[state.executed.function]}: ${state.executed.instruction}${phase}` : 'Вход в main';
+        get('next-instruction').textContent = state.executed?.part === 1 ? 'Далее в leave: pop rbp' : state.function === 'done' ? 'Выполнение завершено' : `Далее: ${trace.functions[state.function][state.pc]}`;
         get('explanation').textContent = state.message;
         get('scene-description').textContent = state.message;
         for (const [key, refs] of Object.entries(registerNodes)) {
@@ -94,29 +119,45 @@
         for (const slot of allSlots) {
             const current = state.slots.find(item => item.address === slot.address);
             const refs = cellNodes[slot.address];
-            const inactive = current && slot.address < state.registers.rsp;
-            refs.group.setAttribute('class', `cell${slot.size === 8 ? ' saved' : ''}${!current ? ' absent' : inactive ? ' inactive' : state.changedSlots.includes(slot.address) ? ' changed' : ''}`);
-            refs.value.textContent = !current || current.value === null ? '??' : typeof current.value === 'string' ? (current.value.startsWith('main:') ? 'main:10' : 'caller') : slot.size === 8 ? hex(current.value) : current.value;
+            const inactive = current && !current.active;
+            refs.group.setAttribute('class', `cell${slot.size === 8 ? ' saved' : ''}${current?.redZone ? ' red-zone' : ''}${!current ? ' absent' : inactive ? ' inactive' : state.changedSlots.includes(slot.address) ? ' changed' : ''}`);
+            refs.value.textContent = !current || current.value === null ? '??' : typeof current.value === 'string' ? (current.value.startsWith('main:') ? 'main ↩' : 'caller') : slot.size === 8 ? hex(current.value) : current.value;
         }
         const saved = state.slots.find(slot => slot.address === state.registers.rbp && slot.label === 'Сохранённый RBP' && slot.address >= state.registers.rsp);
         const outsideAddresses = [state.registers.rsp, state.registers.rbp, saved?.value]
             .filter(address => address !== undefined && !allSlots.some(slot => slot.address === address));
         outsideAddress.textContent = [...new Set(outsideAddresses)].map(hex).join(' · ');
         get('saved-arrow').setAttribute('d', saved ? `M ${slotX(saved.address)} 279 L ${slotX(saved.address)} 307 L ${slotX(saved.value)} 307 L ${slotX(saved.value)} 279` : '');
-        get('frame-caption').textContent = state.function === 'done' ? 'RSP и RBP восстановлены. EAX = 42.' : `Выполняется ${names[state.function]}${saved ? ' · нижняя стрелка: сохранённый RBP вызывающей функции' : ''}`;
+        const redZone = state.slots.some(slot => slot.redZone);
+        const previous = trace.steps[position - 1];
+        get('frame-caption').textContent = state.function === 'done' ? 'Кадры add и main сняты. EAX = 42.' : state.releasedSlots.length
+            ? `Снятие кадра ${names[state.executed.function]} · RSP: ${hex(previous.registers.rsp)} → ${hex(state.registers.rsp)} · скрытые ячейки больше не используются`
+            : `Выполняется ${names[state.function]}${redZone ? ' · пунктир: red zone, доступная add ниже RSP' : ''}${saved ? ' · нижняя стрелка: сохранённый RBP вызывающей функции' : ''}`;
         const start = {...endpoints}, target = {rsp:slotX(state.registers.rsp) - 18,rbp:slotX(state.registers.rbp)};
+        const frameStart = structuredClone(framePositions), frameTarget = frameBounds(state);
         const transfer = animate && !reduced ? flow(state, trace.steps[position - 1]) : null;
         // Leave and enter register cards vertically, including register-to-register moves.
         const controls = transfer?.map(([x, y]) => [x, y === registerBottom ? 155 : y === cellTop ? 155 : 15]);
         get('transfer').setAttribute('d', transfer ? `M ${transfer[0].join(' ')} C ${controls[0].join(' ')} ${controls[1].join(' ')} ${transfer[1].join(' ')}` : '');
         const dot = get('transfer-dot'); dot.setAttribute('visibility', transfer ? 'visible' : 'hidden');
-        const begin = performance.now(), duration = animate && !reduced ? 700 : 0;
+        const begin = performance.now(), duration = animate && !reduced ? 900 : 0;
         function tick(now) {
             const t = duration ? Math.min(1,(now-begin)/duration) : 1;
             const eased = 1 - (1-t)**3;
             for (const key of ['rsp','rbp']) {
                 endpoints[key] = start[key] + (target[key]-start[key])*eased;
                 get(`${key}-arrow`).setAttribute('d',pointerPath(key,endpoints[key]));
+            }
+            get('stack-top').setAttribute('transform', `translate(${endpoints.rsp} 0)`);
+            get('stack-top').setAttribute('data-address', hex(state.registers.rsp));
+            for (const frame of ['main', '_Z3addii']) {
+                const from = frameStart[frame], to = frameTarget[frame];
+                const box = {x: from.x + (to.x - from.x) * eased, width: from.width + (to.width - from.width) * eased};
+                framePositions[frame] = box;
+                frameNodes[frame].band.setAttribute('x', box.x);
+                frameNodes[frame].band.setAttribute('width', box.width);
+                frameNodes[frame].label.setAttribute('x', box.x + box.width / 2);
+                frameNodes[frame].label.setAttribute('opacity', box.width >= 60 ? 1 : 0);
             }
             if (transfer) {
                 for (const [axis, attribute] of ['cx', 'cy'].entries()) {
@@ -142,11 +183,18 @@
     get('previous').addEventListener('click',()=>go(position-1));
     get('reset').addEventListener('click',()=>go(0));
     get('position').addEventListener('input',event=>go(Number(event.target.value)));
+    function play() {
+        get('play').textContent='Ⅱ Пауза';get('play').setAttribute('aria-pressed','true');
+        timer=setInterval(()=>go(position+1,true),2800);
+    }
     get('play').addEventListener('click',()=>{
         if(timer) return pause();
         if(position===trace.steps.length-1) go(0);
-        get('play').textContent='Ⅱ Пауза';get('play').setAttribute('aria-pressed','true');
-        timer=setInterval(()=>go(position+1,true),2800);
+        play();
+    });
+    get('show-return').addEventListener('click',()=>{
+        go(returnStart);
+        play();
     });
     get('source-toggle').addEventListener('click',()=>{
         get('source').hidden=!get('source').hidden;

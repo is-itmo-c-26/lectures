@@ -1,6 +1,6 @@
 #include <print>
 
-// Intentional undefined behavior. Run only with a sanitizer.
+// Intentional undefined behavior.
 int main() {
     int* value = new int{42};
     int* alias = value;

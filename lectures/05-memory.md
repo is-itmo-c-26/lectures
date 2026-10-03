@@ -17,14 +17,27 @@ title: "Лекция 5. Работа с памятью"
 - Ошибки доступа к памяти и segmentation fault
 
 
-## Работа программ
+## Архитектура фон Неймана
 
-- Архитектуры фон Неймана и Гарвардская
-- Виды памяти
-- Процессор
-- Прерывания
+![](../assets/05-memory/von-neumann-architecture.png){height="600" style="display: block; margin-inline: auto; max-height: 600px;" fig-alt="Von Neumann architecture: processor, shared instruction and data memory, input and output."}
+
+## Иерархия памяти
+
+Чем ближе память к ядру процессора, тем обычно меньше её объём и задержка доступа.
+
+| Уровень | Примерный порядок объёма | Где находится |
+| --- | --- | --- |
+| Регистры | Сотни B — единицы KiB | Набор регистров одного ядра |
+| Кеш L1 | Десятки — сотни KiB | Обычно на ядро; команды и данные отдельно |
+| Кеш L2 | Сотни KiB — единицы MiB | На ядро или группу ядер |
+| Кеш L3, если есть | Единицы — сотни MiB | Общий для группы ядер или процессора |
+| RAM | Единицы — сотни GiB | Оперативная память компьютера |
+| SSD | Сотни GiB — единицы TiB | Постоянное хранилище |
 
 ## Процессы и потоки
+
+:::: {.columns}
+::: {.column width="60%"}
 
 - Процессы
   - Независимое адресное пространство
@@ -34,62 +47,106 @@ title: "Лекция 5. Работа с памятью"
   - Собственный стек и контекст выполнения: регистры, позиция выполнения
   - При переключении потоков ОС сохраняет и восстанавливает контекст
 
+:::
+::: {.column width="40%"}
+
+![](../assets/05-memory/multithreaded-process.svg){height="340" fig-alt="Два потока одного процесса поочерёдно выполняются на одном ядре."}
+
+:::
+::::
+
 Собственный стек потока не изолирован от других потоков: при наличии указателя они могут обращаться к этой памяти.
 
-## Виртуальное адресное пространство
+## Виртуальная память и таблицы страниц
 
-- Программа работает со своим пространством виртуальных адресов.
-- Ей не нужно выбирать свободные физические адреса или учитывать размещение других процессов в RAM.
-- Один виртуальный адрес в разных процессах может соответствовать разной физической памяти.
-- ОС управляет отображениями и правами; процессор использует их при обращении к памяти.
+:::: {.columns}
+::: {.column width="54%"}
 
-## Адресное пространство и доступная память
+- Процесс работает со своими **виртуальными адресами**.
+- "Иллюзия" обладанем всей памятью
+- ОС задаёт отображения страниц и права доступа в **page tables**; процессор использует их для перевода адресов в физические.
+- Один адрес в двух процессах может указывать на разные страницы RAM.
+- Общая память и файлы могут отображаться сразу в несколько процессов.
 
-Программист видит собственное адресное пространство, независимо от текущего размещения данных в физической памяти.
+**Размер адресного пространства ≠ объём RAM.** Часть адресов не отображена или защищена; выделение памяти может завершиться неудачей.
 
-Но это не означает, что любой адрес доступен для чтения и записи:
+:::
+::: {.column width="46%"}
 
-- часть диапазонов не отображена или защищена;
-- выделение памяти может завершиться неудачей;
-- загрузка памяти в системе влияет на возможность выделения и скорость работы.
+![](../assets/05-memory/slide-05-image-01.png){height="450" fig-alt="Virtual pages of a process map to physical memory frames."}
 
-## Page table
+:::
+::::
 
-<!-- embedded-images:start -->
-![Изображение 1 со слайда 5](../assets/05-memory/slide-05-image-01.png)
-<!-- embedded-images:end -->
+## Если страницы нет в памяти
 
-- Маппинг виртуального адреса на физический
-- Изоляция процессов
-- Memory-mapped file
-- Обеспечение безопасного режима работы ОС
-- swapping
+**Page fault** — исключение при обращении к странице, которая сейчас недоступна или не допускает запрошенную операцию. ОС выясняет причину:
 
-## Представление программы в памяти
+- **Swap:** страницу выгрузили на диск; ОС возвращает её в RAM.
+- **Отображение файла:** содержимое ещё не загружено; ОС читает нужную часть файла.
+- **Ленивое выделение:** адреса зарезервированы, а физическая память предоставляется при первом обращении.
+- **Недопустимый доступ:** нужного отображения или разрешения нет; на Linux процесс обычно получает `SIGSEGV`.
 
-<!-- embedded-images:start -->
-![Изображение 1 со слайда 6](../assets/05-memory/slide-06-image-01.png)
-<!-- embedded-images:end -->
+Если ОС смогла обеспечить доступ, выполнение продолжается. Сам по себе page fault не означает ошибку программы.
+
+## Адресное пространство: ОС и платформа
+
+![](../assets/05-memory/address-space-platforms.png){height="600" style="display: block; margin-inline: auto; max-height: 600px;" fig-alt="Virtual address spaces: Linux x86 3/1 split, Windows x86 2/2 split, x86-64 and macOS ARM64 schematic layouts."}
 
 ## Адресное пространство процесса Linux: 32-битная схема
 
-<!-- embedded-images:start -->
-![Адресное пространство процесса Linux: 32-битная схема](../assets/05-memory/slide-07-image-01.png)
-<!-- embedded-images:end -->
+![](../assets/05-memory/linux-x86-memory-layout.png){height="600" style="display: block; margin-inline: auto; max-height: 600px;" fig-alt="Example Linux x86 address space: kernel, stack, mappings, heap, bss, data, rodata and text."}
 
-## Сегменты памяти
+## Области памяти на схеме
 
-- Stack
-- Heap
-- Memory Mapping
-- BSS
-- Data
-- Text
-- etc
+:::: {.columns}
+::: {.column width="53%"}
+
+**Сверху вниз, как на предыдущем слайде:**
+
+- **Kernel** — область ядра ОС.
+- **Stack** — стек потока.
+- **File and library mappings** — отображения файлов, библиотек и анонимные отображения.
+- **Heap** — классическая область кучи.
+- **bss** — данные с начальным нулевым значением.
+- **data** — данные с заданными начальными значениями.
+- **rodata** — данные только для чтения, в том числе строковые литералы.
+- **text** — машинный код.
+
+**Unmapped** — промежутки без отображения.
+
+:::
+::: {.column width="47%"}
+
+**От чего зависит реальная раскладка:**
+
+- **ОС и формат файла:** ELF в Linux, Mach-O в macOS, PE в Windows.
+- **Архитектура и ABI:** разрядность адресов, выравнивание и соглашения платформы.
+- **Сборка и запуск:** компоновщик, загрузчик, библиотеки, аллокатор и ASLR.
+
+Стеков и областей динамической памяти может быть несколько. Аллокатор может использовать и heap, и отдельные отображения.
+
+:::
+::::
+
+Секции файла (`text`, `rodata`, `data`, `bss`) и области адресного пространства — разные уровни описания.
+
+
+## Что где лежит: типичная схема Linux / ELF
+
+| Объект | Пример | Область | Типичные права |
+| --- | --- | --- | --- |
+| Машинный код | Тело функции | text | `r-x` |
+| Строковые литералы | `"Hello world"` | rodata | `r--` |
+| Глобальные данные с ненулевым значением | `int counter = 42;` | data | `rw-` |
+| Глобальные данные с начальным нулём | `int total;` | bss | `rw-` |
+| Динамический объект | `new int{42}` | heap / анонимное отображение | `rw-` |
+| Локальный объект, если он в памяти | `int local;` | stack | `rw-` |
+| Библиотеки и отображённые файлы | Результат `mmap` | Отдельные отображения | Зависит от области |
+
+`r` — чтение, `w` — запись, `x` — исполнение. Права задаются страницам; секции файла могут попадать в один сегмент.
 
 ## Адреса объектов и функции
-
-Пример для Linux/macOS: `getpid` и преобразование указателя на функцию в `void*` опираются на POSIX. Программа ждёт Enter, чтобы можно было изучить память процесса.
 
 ```{.cpp filename="memory-addresses.cpp"}
 {{< include ../examples/05-memory/memory-addresses.cpp >}}
@@ -99,11 +156,45 @@ title: "Лекция 5. Работа с памятью"
 
 ## Карта памяти запущенного процесса
 
-<!-- embedded-images:start -->
-![Изображение 1 со слайда 10](../assets/05-memory/slide-10-image-01.png)
-<!-- embedded-images:end -->
+Запустите пример с предыдущего слайда. Пока он ждёт Enter, используйте его **PID** в другом терминале.
+
+:::: {.columns}
+::: {.column width="49%"}
+
+| ОС | Команда для карты памяти |
+| --- | --- |
+| Linux | `cat /proc/31707/maps` |
+| macOS | `vmmap -interleaved 31707` |
+| Windows | `vmmap.exe -p 31707` |
+
+Windows: утилита [Sysinternals VMMap](https://learn.microsoft.com/en-us/sysinternals/downloads/vmmap) открывает карту в окне.
+
+**Фрагмент карты того же запуска на Mac:**
+
+```{.text filename="memory-map-macos.txt"}
+{{< include ../examples/05-memory/memory-map-macos.txt >}}
+```
+
+:::
+::: {.column width="51%"}
+
+**Вывод программы на этом Mac (ARM64):**
+
+```{.text filename="memory-addresses-output.txt"}
+{{< include ../examples/05-memory/memory-addresses-output.txt >}}
+```
+
+Сопоставьте адреса с диапазонами: функция → `__TEXT`, глобальные → `__DATA`, динамический объект → `MALLOC_TINY`, локальный → `Stack`.
+
+:::
+::::
+
+`r` — чтение, `w` — запись, `x` — исполнение. Конец диапазона не включён. При новом запуске PID и адреса изменятся.
 
 ## Стек вызовов: передача аргументов и результат
+
+:::: {.columns}
+::: {.column width="40%"}
 
 ```{.cpp filename="function-call.cpp"}
 {{< include ../examples/05-memory/function-call.cpp >}}
@@ -111,20 +202,36 @@ title: "Лекция 5. Работа с памятью"
 
 [![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-05-function-call]{aria-label="Open in Compiler Explorer"}
 
-## [Compiler Explorer (Godbolt)](https://godbolt.org/)
+**x86-64, System V ABI.**
+Аргументы: `EDI`, `ESI`.<br>Результат: `EAX`.
 
-<!-- embedded-images:start -->
-![Изображение 1 со слайда 12](../assets/05-memory/slide-12-image-01.png)
-<!-- embedded-images:end -->
+В этом листинге `add` использует **red zone** — до 128 байт ниже `RSP` — и не выделяет локальную область через `sub rsp`.
 
-## Регистры и стек: x86-64 System V
+:::
+::: {.column width="60%"}
 
-- `EDI`, `ESI` — первые два аргумента типа `int`.
-- `EAX` — возвращаемое значение типа `int`.
-- `RSP` — вершина стека; `RBP` — основание кадра в нашем примере.
-- `call` кладёт адрес возврата в стек; `ret` извлекает его и передаёт управление обратно.
+```{.asm filename="function-call-godbolt.s" code-line-numbers="|2-3|4-10|11-12|14-23|24-27"}
+{{< include ../examples/05-memory/function-call-godbolt.s >}}
+```
 
-Это соглашение для выбранной платформы, а не универсальное правило C++. Схема ниже соответствует Clang без оптимизации, с указателем кадра и отключённой red zone.
+:::
+::::
+
+## Регистры x86-64: названия и роли
+
+**Регистр** — небольшое хранилище внутри процессора. `R…` обозначает 64-битный регистр, `E…` — его младшие 32 бита: например, `EAX` — часть `RAX`.
+
+| Регистр | Название | Роль в нашем листинге |
+| --- | --- | --- |
+| `RDI` / `EDI` | Destination Index | Первый аргумент `a = 40` |
+| `RSI` / `ESI` | Source Index | Второй аргумент `b = 2` |
+| `RDX` / `EDX` | Data | Временное значение: `b` в main, `a` в add |
+| `RAX` / `EAX` | Accumulator | Операнд сложения и результат `42` |
+| `RSP` | Stack Pointer | Адрес текущей вершины стека |
+| `RBP` | Base Pointer | Опорный адрес кадра функции |
+| `RIP` | Instruction Pointer | Адрес следующей исполняемой инструкции |
+
+Названия исторические; назначение зависит от инструкции и **ABI** — соглашений платформы. Здесь используется **System V**: первые два целочисленных аргумента — в `EDI`/`ESI`, результат `int` — в `EAX`.
 
 ## Вызов функции по шагам
 
@@ -134,32 +241,6 @@ title: "Лекция 5. Работа с памятью"
 
 ::: {.content-visible unless-format="revealjs"}
 [Открыть схему отдельно](../assets/05-memory/stack-demo/index.html){target="_blank"}
-:::
-
-## Что произошло при вызове add
-
-1. `main` записала `40` и `2` в `EDI` и `ESI`.
-2. `call` сохранила адрес возврата, затем `add` создала свой кадр.
-3. `add` вычислила сумму и оставила `42` в `EAX`.
-4. Локальная область `add` освобождена, прежний `RBP` восстановлен.
-5. `ret` вернула управление; `main` записала результат в `answer`.
-
-В конце `main` возвращает `answer`: у этого примера код завершения **42**, вывода в терминал нет.
-
-## Как воспроизвести схему
-
-Ассемблер получен из того же `function-call.cpp`. Адреса в схеме условные; инструкции и размеры ячеек взяты из конкретной сборки.
-
-```bash
-python3 scripts/generate-memory-trace.py
-```
-
-Генератор вызывает Clang для `x86_64-unknown-linux-gnu` с `-O0`, `-fno-omit-frame-pointer`, `-mno-red-zone` и сохраняет `function-call.s` рядом с исходником. Если компилятор изменит раскладку, генератор попросит проверить подписи.
-
-::: {.notes}
-
-[Описание ABI x86-64 System V](https://gitlab.com/x86-psABIs/x86-64-ABI). Исходный разбор 32-битного стека в предыдущей версии лекции: [Journey to the Stack](https://manybutfinite.com/post/journey-to-the-stack/).
-
 :::
 
 ## Длительность хранения — storage duration
@@ -185,8 +266,6 @@ Storage duration описывает, как долго существует па
 
 [![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-05-automatic-and-static]{aria-label="Open in Compiler Explorer"}
 
-Результат: сначала `1 1`, затем `1 2`. Имя `static_count` видно только внутри функции, но память и значение сохраняются между вызовами.
-
 ## Heap (Куча)
 
 - Динамический объект может пережить выход из функции, которая его создала.
@@ -210,10 +289,14 @@ Storage duration описывает, как долго существует па
 
 ## Функции работы с памятью из `<cstdlib>`
 
-- malloc
-- free
-- calloc
-- realloc
+| Функция | Что делает |
+| --- | --- |
+| `malloc(size)` | Выделяет `size` байт без инициализации содержимого |
+| `calloc(count, size)` | Выделяет `count × size` байт и обнуляет их |
+| `realloc(pointer, size)` | Меняет размер блока; может переместить его |
+| `free(pointer)` | Освобождает блок; `free(nullptr)` ничего не делает |
+
+Для ненулевого запрошенного размера ошибка выделения означает `nullptr`. Если `realloc` завершился неудачей, старый блок остаётся выделенным: его указатель нельзя терять.
 
 ## malloc: выделение и освобождение
 
@@ -242,7 +325,7 @@ Storage duration описывает, как долго существует па
 
 `free` освобождает выделенный блок, но не присваивает переменной `pointer` значение `nullptr` и не гарантирует обнуления байтов блока. После `free` указатель висячий; следующей строкой мы явно присваиваем ему `nullptr`.
 
-## calloc: массив с нулевыми значениями
+## calloc
 
 ```{.cpp filename="calloc-array.cpp"}
 {{< include ../examples/05-memory/calloc-array.cpp >}}
@@ -289,9 +372,6 @@ NB: для классов `new` может вызвать конструктор
 
 ## new/delete и malloc/free: какой способ выбрать
 
-:::: {.columns}
-::: {.column width="45%"}
-
 | Выделение | Освобождение |
 | --- | --- |
 | `malloc`, `calloc`, `realloc` | `free` |
@@ -300,33 +380,15 @@ NB: для классов `new` может вызвать конструктор
 
 **Способ освобождения определяется способом выделения.** Смешивание пар приводит к неопределённому поведению.
 
-`malloc/free` нужны при работе с C API и существующими библиотеками, чей контракт требует именно эту пару. Переход на C++ не меняет контракт библиотеки.
+- `malloc` подходит, если нужен **просто блок памяти заданного размера**, без вызова конструкторов.
+- `new T` выделяет память и создаёт объект типа `T`.
+- При работе с C API способ освобождения задаёт контракт библиотеки.
 
-:::
-::: {.column width="55%"}
+Для обычных задач C++ позже изучим контейнеры и средства автоматического владения памятью.
 
-```{.cpp filename="c-api-allocation.cpp"}
-{{< include ../examples/05-memory/c-api-allocation.cpp >}}
-```
+## Placement new
 
-[![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-05-c-api-allocation]{aria-label="Open in Compiler Explorer"}
-
-`strdup` — C API POSIX (Linux/macOS): создаёт копию строки в памяти, выделенной через `malloc`. Её нужно освободить через `free`, а не `delete[]`.
-
-:::
-::::
-
-NB: `malloc` выделяет память без вызова конструкторов. Для обычных задач C++ позже изучим контейнеры и средства автоматического владения памятью.
-
-::: {.notes}
-
-Контракт функции: [strdup(3)](https://man7.org/linux/man-pages/man3/strdup.3.html). У других C API может быть собственная функция освобождения; следуйте документации библиотеки.
-
-:::
-
-## Placement new: пул частиц в игре
-
-Память для частиц резервируем заранее. Когда появляется новая частица, создаём её в выбранном слоте без отдельного выделения памяти.
+Память для точек резервируем заранее. Когда появляется новая точка, создаём её в выбранном слоте без отдельного выделения памяти.
 
 ```{.cpp filename="placement-new.cpp" code-line-numbers="|10|11-12|17"}
 {{< include ../examples/05-memory/placement-new.cpp >}}
@@ -334,13 +396,13 @@ NB: `malloc` выделяет память без вызова конструк�
 
 [![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-05-placement-new]{aria-label="Open in Compiler Explorer"}
 
-`new (pool) Particle{50, 60}` создаёт новую частицу на месте прежней. Память слота используется повторно.
+`new (pool) Point{50, 60}` создаёт новую точку на месте прежней. Память слота используется повторно.
 
 ## Placement new: размер, выравнивание и освобождение
 
-- Буфер вмещает две частицы; `alignas(Particle)` обеспечивает выравнивание.
-- Второй слот начинается через `sizeof(Particle)` байтов после первого.
-- Буфер должен существовать всё время использования частиц.
+- Буфер вмещает две точки; `alignas(Point)` обеспечивает выравнивание.
+- Второй слот начинается через `sizeof(Point)` байтов после первого.
+- Буфер должен существовать всё время использования точек.
 - `delete first` и `delete second` недопустимы: слоты принадлежат буферу.
 - У нашей структуры только поля `int`: перед повторным использованием слота отдельный вызов деструктора не требуется.
 
@@ -378,15 +440,11 @@ NB: у объектов с ресурсами перед повторным ис
 
 `const_cast` снимает ограничение типа, но не меняет права страницы и не делает изменение литерала допустимым. `volatile` сохраняет попытку записи в обычной сборке; конкретное проявление UB языком не гарантируется.
 
-::: {.notes}
-
-Пример специально запускается без санитайзеров с `-O0`, чтобы показать реакцию ОС на запись в защищённую страницу. На разных платформах возможны разные сигналы, в том числе SIGSEGV или SIGBUS. Наличие `const` само по себе не означает размещения объекта в памяти только для чтения: например, локальная константа может находиться в стеке.
-
-:::
+Изменяемый `char text[]` из лекции 3 хранит отдельную копию символов; запись в такой массив допустима.
 
 ## Выход за границы динамического массива
 
-**Намеренное UB. Запускать только с санитайзером.**
+**Намеренное неопределённое поведение.**
 
 ```{.cpp filename="heap-buffer-overflow.cpp"}
 {{< include ../examples/05-memory/heap-buffer-overflow.cpp >}}
@@ -398,7 +456,7 @@ NB: у объектов с ресурсами перед повторным ис
 
 ## Обращение после освобождения
 
-**Намеренное UB. Запускать только с санитайзером.**
+**Намеренное неопределённое поведение.**
 
 ```{.cpp filename="use-after-free.cpp"}
 {{< include ../examples/05-memory/use-after-free.cpp >}}
@@ -410,7 +468,7 @@ NB: у объектов с ресурсами перед повторным ис
 
 ## Повторное освобождение
 
-**Намеренное UB. Запускать только с санитайзером.**
+**Намеренное неопределённое поведение.**
 
 ```{.cpp filename="double-free.cpp"}
 {{< include ../examples/05-memory/double-free.cpp >}}
@@ -422,7 +480,7 @@ NB: у объектов с ресурсами перед повторным ис
 
 ## Указатель на объект после выхода из блока
 
-**Намеренное UB. Запускать только с санитайзером.**
+**Намеренное неопределённое поведение.**
 
 ```{.cpp filename="use-after-scope.cpp"}
 {{< include ../examples/05-memory/use-after-scope.cpp >}}
@@ -434,7 +492,7 @@ NB: у объектов с ресурсами перед повторным ис
 
 ## Разыменование nullptr
 
-**Намеренное UB. Запускать только с санитайзером.**
+**Намеренное неопределённое поведение.**
 
 ```{.cpp filename="null-dereference.cpp"}
 {{< include ../examples/05-memory/null-dereference.cpp >}}
@@ -444,7 +502,12 @@ NB: у объектов с ресурсами перед повторным ис
 
 `nullptr` не указывает на объект. UndefinedBehaviorSanitizer сообщает о чтении через нулевой указатель; возможное падение — следствие, а не определённый языком результат.
 
-## Как увидеть ошибку: санитайзеры
+## Санитайзеры: проверки во время выполнения
+
+**Санитайзер** — инструмент, который добавляет проверки в программу при сборке и сообщает об ошибках во время её выполнения.
+
+- **AddressSanitizer (ASan):** выходы за границы, обращение после освобождения, повторное освобождение.
+- **UndefinedBehaviorSanitizer (UBSan):** некоторые виды UB, например разыменование `nullptr`.
 
 Из корня репозитория, на примере обращения после освобождения:
 
@@ -456,15 +519,9 @@ clang++ -std=c++23 -Wall -Wextra -pedantic -O0 -g \
 /tmp/memory-error
 ```
 
-Для остальных примеров замените имя исходного файла. Каждый запускается отдельно: санитайзер останавливает программу при обнаружении ошибки.
+**Отчёт:** вид ошибки (`heap-use-after-free`), строка и стек вызовов; для освобождённого блока — места выделения и освобождения.
 
-## Что показывает санитайзер
-
-- Вид ошибки: например, `heap-use-after-free`.
-- Место ошибочного обращения и стек вызовов.
-- Для освобождённого блока — где его выделили и освободили.
-
-Санитайзер проверяет выполненный путь программы. Успешный запуск не доказывает отсутствие всех ошибок. AddressSanitizer также не является универсальной проверкой неинициализированных значений.
+Проверяется только выполненный путь. Успешный запуск не доказывает отсутствие ошибок.
 
 ## Утечка памяти — другая ошибка
 
@@ -484,21 +541,11 @@ clang++ -std=c++23 -Wall -Wextra -pedantic -O0 -g \
 
 [![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-05-large-stack-array]{aria-label="Open in Compiler Explorer"}
 
-## Изменяемый массив и строковый литерал
-
-```{.cpp filename="mutable-string.cpp"}
-{{< include ../examples/05-memory/mutable-string.cpp >}}
-```
-
-[![](../assets/compiler-explorer.svg){.godbolt-link-image width="32"}][godbolt-05-mutable-string]{aria-label="Open in Compiler Explorer"}
-
-Массив `text` можно изменять. Закомментированная запись через `literal` не компилируется. Попытка обойти `const` и изменить строковый литерал приводит к неопределённому поведению.
-
 [godbolt-05-new-delete]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'int+main()+%7B%0A++++int*+value+%3D+new+int%3B%0A++++delete+value%3B%0A%0A++++int*+array+%3D+new+int%5B10%5D%3B%0A++++delete%5B%5D+array%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/05-memory/new-delete.cpp" compiler="clang2310" options="-std=c++23 -O0 -stdlib=libc++" -->
 
-[godbolt-05-function-call]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'int+add(int+a,+int+b)+%7B%0A++++int+result+%3D+a+%2B+b%3B%0A++++return+result%3B%0A%7D%0A%0Aint+main()+%7B%0A++++int+a+%3D+40%3B%0A++++int+b+%3D+2%3B%0A++++int+answer+%3D+add(a,+b)%3B%0A++++return+answer%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-m64+-fno-omit-frame-pointer+-fno-stack-protector+-fno-asynchronous-unwind-tables+-mno-red-zone',source:1,tree:0),l:'5')),l:'2')),version:4>
-<!-- godbolt source="../examples/05-memory/function-call.cpp" compiler="clang2310" options="-std=c++23 -O0 -m64 -fno-omit-frame-pointer -fno-stack-protector -fno-asynchronous-unwind-tables -mno-red-zone" -->
+[godbolt-05-function-call]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'int+add(int+a,+int+b)+%7B%0A++++int+result+%3D+a+%2B+b%3B%0A++++return+result%3B%0A%7D%0A%0Aint+main()+%7B%0A++++int+a+%3D+40%3B%0A++++int+b+%3D+2%3B%0A++++int+answer+%3D+add(a,+b)%3B%0A++++return+answer%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-m64+-fno-omit-frame-pointer+-fno-stack-protector+-fno-asynchronous-unwind-tables',source:1,tree:0),l:'5')),l:'2')),version:4>
+<!-- godbolt source="../examples/05-memory/function-call.cpp" compiler="clang2310" options="-std=c++23 -O0 -m64 -fno-omit-frame-pointer -fno-stack-protector -fno-asynchronous-unwind-tables" -->
 
 [godbolt-05-malloc-array]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Cprint%3E%0A%23include+%3Ccstdlib%3E%0A%0Aint+main()+%7B%0A++++int*+values+%3D+static_cast%3Cint*%3E(std::malloc(4+*+sizeof(int)))%3B%0A++++if+(values+%3D%3D+nullptr)+%7B%0A++++++++return+1%3B%0A++++%7D%0A%0A++++for+(int+index+%3D+0%3B+index+%3C+4%3B+%2B%2Bindex)+%7B%0A++++++++values%5Bindex%5D+%3D+index+*+index%3B%0A++++++++std::println(%22values%5B%7B%7D%5D+%3D+%7B%7D%22,+index,+values%5Bindex%5D)%3B%0A++++%7D%0A++++std::free(values)%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/05-memory/malloc-array.cpp" compiler="clang2310" options="-std=c++23 -O0 -stdlib=libc++" -->
@@ -509,50 +556,38 @@ clang++ -std=c++23 -Wall -Wextra -pedantic -O0 -g \
 [godbolt-05-pointer-and-object]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Cprint%3E%0A%23include+%3Ccstdlib%3E%0A%0Aint+main()+%7B%0A++++int+local+%3D+0%3B%0A++++int*+pointer+%3D+static_cast%3Cint*%3E(std::malloc(sizeof(int)))%3B%0A++++if+(pointer+%3D%3D+nullptr)+%7B%0A++++++++return+1%3B%0A++++%7D%0A++++*pointer+%3D+42%3B%0A%0A++++std::println(%22local:+size%3D%7B%7D,+address%3D%7B%7D%22,+sizeof(local),+static_cast%3Cvoid*%3E(%26local))%3B%0A++++std::println(%22pointer:+size%3D%7B%7D,+address%3D%7B%7D%22,+sizeof(pointer),+static_cast%3Cvoid*%3E(%26pointer))%3B%0A++++std::println(%22*pointer:+size%3D%7B%7D,+address%3D%7B%7D%22,+sizeof(*pointer),+static_cast%3Cvoid*%3E(pointer))%3B%0A++++std::println(%22value%3D%7B%7D%22,+*pointer)%3B%0A++++std::free(pointer)%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/05-memory/pointer-and-object.cpp" compiler="clang2310" options="-std=c++23 -O0 -stdlib=libc++" -->
 
-[godbolt-05-mutable-string]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Cprint%3E%0A%0Aint+main()+%7B%0A++++char+text%5B%5D+%3D+%22Hello+world%22%3B%0A++++text%5B1%5D+%3D+!'E!'%3B%0A++++std::println(%22%7B%7D%22,+text)%3B%0A%0A++++const+char*+literal+%3D+%22Hello+world%22%3B%0A++++//+literal%5B1%5D+%3D+!'E!'%3B+//+Compilation+error:+the+character+is+const.%0A++++std::println(%22%7B%7D%22,+literal)%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B',source:1,tree:0),l:'5')),l:'2')),version:4>
-<!-- godbolt source="../examples/05-memory/mutable-string.cpp" compiler="clang2310" options="-std=c++23 -O0 -stdlib=libc++" -->
-
-::: {.notes}
-
-Справочные материалы: [storage duration](https://eel.is/c++draft/basic.stc), [placement new](https://eel.is/c++draft/new.delete.placement), [AddressSanitizer](https://clang.llvm.org/docs/AddressSanitizer.html).
-
-:::
-
 [godbolt-05-dynamic-lifetime]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Cprint%3E%0A%0Aint*+make_value()+%7B%0A++++int*+value+%3D+new+int%7B42%7D%3B%0A++++return+value%3B%0A%7D%0A%0Aint+main()+%7B%0A++++int*+value+%3D+make_value()%3B%0A++++std::println(%22%7B%7D%22,+*value)%3B%0A++++delete+value%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/05-memory/dynamic-lifetime.cpp" compiler="clang2310" options="-std=c++23 -O0 -stdlib=libc++" -->
 
 [godbolt-05-large-stack-array]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ccstdint%3E%0A%23include+%3Cprint%3E%0A%0A//+Dangerous+example:+this+array+may+exceed+the+thread!'s+stack+limit.%0Aint+main()+%7B%0A++++volatile+std::uint64_t+values%5B1048576%5D%3B%0A++++values%5B10%5D+%3D+1%3B%0A++++std::println(%22%7B%7D%22,+static_cast%3Cunsigned+long+long%3E(values%5B10%5D))%3B%0A%7D%0A'),l:'5'),(h:compiler,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/05-memory/large-stack-array.cpp" compiler="clang2310" options="-std=c++23 -O0 -stdlib=libc++" mode="compiler" -->
 
-[godbolt-05-use-after-scope]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Cprint%3E%0A%0A//+Intentional+undefined+behavior.+Run+only+with+a+sanitizer.%0Aint+main()+%7B%0A++++int*+pointer+%3D+nullptr%3B%0A++++%7B%0A++++++++int+local+%3D+42%3B%0A++++++++pointer+%3D+%26local%3B%0A++++%7D%0A++++std::println(%22%7B%7D%22,+*pointer)%3B+//+local!'s+lifetime+has+ended.%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B+-g+-fsanitize%3Daddress,undefined+-fno-sanitize-recover%3Dall+-fsanitize-address-use-after-scope+-fno-omit-frame-pointer',source:1,tree:0),l:'5')),l:'2')),version:4>
+[godbolt-05-use-after-scope]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Cprint%3E%0A%0A//+Intentional+undefined+behavior.%0Aint+main()+%7B%0A++++int*+pointer+%3D+nullptr%3B%0A++++%7B%0A++++++++int+local+%3D+42%3B%0A++++++++pointer+%3D+%26local%3B%0A++++%7D%0A++++std::println(%22%7B%7D%22,+*pointer)%3B+//+local!'s+lifetime+has+ended.%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B+-g+-fsanitize%3Daddress,undefined+-fno-sanitize-recover%3Dall+-fsanitize-address-use-after-scope+-fno-omit-frame-pointer',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/05-memory/use-after-scope.cpp" compiler="clang2310" options="-std=c++23 -O0 -stdlib=libc++ -g -fsanitize=address,undefined -fno-sanitize-recover=all -fsanitize-address-use-after-scope -fno-omit-frame-pointer" -->
 
-[godbolt-05-null-dereference]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Cprint%3E%0A%0A//+Intentional+undefined+behavior.+Run+only+with+a+sanitizer.%0Aint+main()+%7B%0A++++int*+pointer+%3D+nullptr%3B%0A++++std::println(%22%7B%7D%22,+*pointer)%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B+-g+-fsanitize%3Daddress,undefined+-fno-sanitize-recover%3Dall+-fsanitize-address-use-after-scope+-fno-omit-frame-pointer',source:1,tree:0),l:'5')),l:'2')),version:4>
+[godbolt-05-null-dereference]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Cprint%3E%0A%0A//+Intentional+undefined+behavior.%0Aint+main()+%7B%0A++++int*+pointer+%3D+nullptr%3B%0A++++std::println(%22%7B%7D%22,+*pointer)%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B+-g+-fsanitize%3Daddress,undefined+-fno-sanitize-recover%3Dall+-fsanitize-address-use-after-scope+-fno-omit-frame-pointer',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/05-memory/null-dereference.cpp" compiler="clang2310" options="-std=c++23 -O0 -stdlib=libc++ -g -fsanitize=address,undefined -fno-sanitize-recover=all -fsanitize-address-use-after-scope -fno-omit-frame-pointer" -->
 
 [godbolt-05-automatic-and-static]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Cprint%3E%0A%0Avoid+visit()+%7B%0A++++int+automatic_count+%3D+0%3B%0A++++static+int+static_count+%3D+0%3B%0A++++%2B%2Bautomatic_count%3B%0A++++%2B%2Bstatic_count%3B%0A++++std::println(%22%7B%7D+%7B%7D%22,+automatic_count,+static_count)%3B%0A%7D%0A%0Aint+main()+%7B%0A++++visit()%3B%0A++++visit()%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/05-memory/automatic-and-static.cpp" compiler="clang2310" options="-std=c++23 -O0 -stdlib=libc++" -->
 
-[godbolt-05-use-after-free]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Cprint%3E%0A%0A//+Intentional+undefined+behavior.+Run+only+with+a+sanitizer.%0Aint+main()+%7B%0A++++int*+value+%3D+new+int%7B42%7D%3B%0A++++int*+alias+%3D+value%3B%0A++++delete+value%3B%0A++++value+%3D+nullptr%3B%0A++++std::println(%22%7B%7D%22,+*alias)%3B+//+The+object+no+longer+exists.%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B+-g+-fsanitize%3Daddress,undefined+-fno-sanitize-recover%3Dall+-fsanitize-address-use-after-scope+-fno-omit-frame-pointer',source:1,tree:0),l:'5')),l:'2')),version:4>
+[godbolt-05-use-after-free]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Cprint%3E%0A%0A//+Intentional+undefined+behavior.%0Aint+main()+%7B%0A++++int*+value+%3D+new+int%7B42%7D%3B%0A++++int*+alias+%3D+value%3B%0A++++delete+value%3B%0A++++value+%3D+nullptr%3B%0A++++std::println(%22%7B%7D%22,+*alias)%3B+//+The+object+no+longer+exists.%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B+-g+-fsanitize%3Daddress,undefined+-fno-sanitize-recover%3Dall+-fsanitize-address-use-after-scope+-fno-omit-frame-pointer',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/05-memory/use-after-free.cpp" compiler="clang2310" options="-std=c++23 -O0 -stdlib=libc++ -g -fsanitize=address,undefined -fno-sanitize-recover=all -fsanitize-address-use-after-scope -fno-omit-frame-pointer" -->
 
-[godbolt-05-memory-addresses]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ccstdio%3E%0A%23include+%3Cprint%3E%0A%23include+%3Cunistd.h%3E%0A%0Aconst+double+pi+%3D+3.141592653589793%3B%0Aint+initialized_global+%3D+42%3B%0Aint+zero_initialized_global%3B%0A%0Avoid+some_function()+%7B%7D%0A%0Aint+main()+%7B%0A++++int+local+%3D+0%3B%0A++++const+char*+text+%3D+%22Hello+world%22%3B%0A%0A++++std::println(%22Process+ID:+%7B%7D%22,+static_cast%3Clong%3E(getpid()))%3B%0A++++std::println(%22Constant:+%7B%7D%22,+static_cast%3Cconst+void*%3E(%26pi))%3B%0A++++std::println(%22Initialized+global:+%7B%7D%22,+static_cast%3Cvoid*%3E(%26initialized_global))%3B%0A++++std::println(%22Zero-initialized+global:+%7B%7D%22,+static_cast%3Cvoid*%3E(%26zero_initialized_global))%3B%0A++++std::println(%22String+literal:+%7B%7D%22,+static_cast%3Cconst+void*%3E(text))%3B%0A++++std::println(%22Function:+%7B%7D%22,+reinterpret_cast%3Cvoid*%3E(%26some_function))%3B%0A++++std::println(%22Local+variable:+%7B%7D%22,+static_cast%3Cvoid*%3E(%26local))%3B%0A++++std::println(%22Press+Enter+to+exit.%22)%3B%0A++++std::getchar()%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B',source:1,tree:0),l:'5')),l:'2')),version:4>
+[godbolt-05-memory-addresses]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ccstdio%3E%0A%23include+%3Cprint%3E%0A%23include+%3Cunistd.h%3E+//+POSIX+(Linux/macOS):+getpid,+not+standard+C%2B%2B.%0A%0Aconst+double+pi+%3D+3.141592653589793%3B%0Aint+initialized_global+%3D+42%3B%0Aint+zero_initialized_global%3B%0A%0Avoid+some_function()+%7B%7D%0A%0Aint+main()+%7B%0A++++int+local+%3D+0%3B%0A++++const+char*+text+%3D+%22Hello+world%22%3B%0A++++int*+dynamic+%3D+new+int%7B42%7D%3B%0A%0A++++std::println(%22Process+ID:+%7B%7D%22,+static_cast%3Clong%3E(getpid()))%3B%0A++++std::println(%22Constant:+%7B%7D%22,+static_cast%3Cconst+void*%3E(%26pi))%3B%0A++++std::println(%22Initialized+global:+%7B%7D%22,+static_cast%3Cvoid*%3E(%26initialized_global))%3B%0A++++std::println(%22Zero-initialized+global:+%7B%7D%22,+static_cast%3Cvoid*%3E(%26zero_initialized_global))%3B%0A++++std::println(%22String+literal:+%7B%7D%22,+static_cast%3Cconst+void*%3E(text))%3B%0A++++//+POSIX+supports+converting+a+function+pointer+to+void*.%0A++++std::println(%22Function:+%7B%7D%22,+reinterpret_cast%3Cvoid*%3E(%26some_function))%3B%0A++++std::println(%22Local+variable:+%7B%7D%22,+static_cast%3Cvoid*%3E(%26local))%3B%0A++++std::println(%22Dynamic+object:+%7B%7D%22,+static_cast%3Cvoid*%3E(dynamic))%3B%0A++++std::println(%22Press+Enter+to+exit.%22)%3B%0A++++std::getchar()%3B%0A++++delete+dynamic%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/05-memory/memory-addresses.cpp" compiler="clang2310" options="-std=c++23 -O0 -stdlib=libc++" -->
 
-[godbolt-05-double-free]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ccstdlib%3E%0A%0A//+Intentional+undefined+behavior.+Run+only+with+a+sanitizer.%0Aint+main()+%7B%0A++++void*+memory+%3D+std::malloc(16)%3B%0A++++if+(memory+%3D%3D+nullptr)+%7B%0A++++++++return+1%3B%0A++++%7D%0A++++void*+alias+%3D+memory%3B%0A++++std::free(memory)%3B%0A++++std::free(alias)%3B+//+The+same+allocation+is+freed+twice.%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B+-g+-fsanitize%3Daddress,undefined+-fno-sanitize-recover%3Dall+-fsanitize-address-use-after-scope+-fno-omit-frame-pointer',source:1,tree:0),l:'5')),l:'2')),version:4>
+[godbolt-05-double-free]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ccstdlib%3E%0A%0A//+Intentional+undefined+behavior.%0Aint+main()+%7B%0A++++void*+memory+%3D+std::malloc(16)%3B%0A++++if+(memory+%3D%3D+nullptr)+%7B%0A++++++++return+1%3B%0A++++%7D%0A++++void*+alias+%3D+memory%3B%0A++++std::free(memory)%3B%0A++++std::free(alias)%3B+//+The+same+allocation+is+freed+twice.%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B+-g+-fsanitize%3Daddress,undefined+-fno-sanitize-recover%3Dall+-fsanitize-address-use-after-scope+-fno-omit-frame-pointer',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/05-memory/double-free.cpp" compiler="clang2310" options="-std=c++23 -O0 -stdlib=libc++ -g -fsanitize=address,undefined -fno-sanitize-recover=all -fsanitize-address-use-after-scope -fno-omit-frame-pointer" -->
 
-[godbolt-05-placement-new]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Cnew%3E%0A%23include+%3Cprint%3E%0A%0Astruct+Particle+%7B%0A++++int+x%3B%0A++++int+y%3B%0A%7D%3B%0A%0Aint+main()+%7B%0A++++alignas(Particle)+unsigned+char+pool%5B2+*+sizeof(Particle)%5D%3B%0A++++Particle*+first+%3D+new+(pool)+Particle%7B10,+20%7D%3B%0A++++Particle*+second+%3D+new+(pool+%2B+sizeof(Particle))+Particle%7B30,+40%7D%3B%0A++++std::println(%22First:+(%7B%7D,+%7B%7D)%3B+second:+(%7B%7D,+%7B%7D)%22,%0A+++++++++++++++++first-%3Ex,+first-%3Ey,+second-%3Ex,+second-%3Ey)%3B%0A%0A++++//+The+first+particle+is+no+longer+needed:+reuse+its+slot.%0A++++first+%3D+new+(pool)+Particle%7B50,+60%7D%3B%0A++++std::println(%22New+first:+(%7B%7D,+%7B%7D)%22,+first-%3Ex,+first-%3Ey)%3B%0A++++//+No+delete:+both+objects+occupy+the+automatic+buffer+pool.%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B',source:1,tree:0),l:'5')),l:'2')),version:4>
+[godbolt-05-placement-new]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Cnew%3E%0A%23include+%3Cprint%3E%0A%0Astruct+Point+%7B%0A++++int+x%3B%0A++++int+y%3B%0A%7D%3B%0A%0Aint+main()+%7B%0A++++alignas(Point)+unsigned+char+pool%5B2+*+sizeof(Point)%5D%3B%0A++++Point*+first+%3D+new+(pool)+Point%7B10,+20%7D%3B%0A++++Point*+second+%3D+new+(pool+%2B+sizeof(Point))+Point%7B30,+40%7D%3B%0A++++std::println(%22First:+(%7B%7D,+%7B%7D)%3B+second:+(%7B%7D,+%7B%7D)%22,%0A+++++++++++++++++first-%3Ex,+first-%3Ey,+second-%3Ex,+second-%3Ey)%3B%0A%0A++++//+The+first+point+is+no+longer+needed:+reuse+its+slot.%0A++++first+%3D+new+(pool)+Point%7B50,+60%7D%3B%0A++++std::println(%22New+first:+(%7B%7D,+%7B%7D)%22,+first-%3Ex,+first-%3Ey)%3B%0A++++//+No+delete:+both+objects+occupy+the+automatic+buffer+pool.%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/05-memory/placement-new.cpp" compiler="clang2310" options="-std=c++23 -O0 -stdlib=libc++" -->
 
-[godbolt-05-heap-buffer-overflow]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Cprint%3E%0A%0A//+Intentional+undefined+behavior.+Run+only+with+a+sanitizer.%0Aint+main()+%7B%0A++++int*+values+%3D+new+int%5B3%5D%7B10,+20,+30%7D%3B%0A++++int+index+%3D+3%3B%0A++++std::println(%22%7B%7D%22,+values%5Bindex%5D)%3B+//+Past+the+array+boundary.%0A++++delete%5B%5D+values%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B+-g+-fsanitize%3Daddress,undefined+-fno-sanitize-recover%3Dall+-fsanitize-address-use-after-scope+-fno-omit-frame-pointer',source:1,tree:0),l:'5')),l:'2')),version:4>
+[godbolt-05-heap-buffer-overflow]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Cprint%3E%0A%0A//+Intentional+undefined+behavior.%0Aint+main()+%7B%0A++++int*+values+%3D+new+int%5B3%5D%7B10,+20,+30%7D%3B%0A++++int+index+%3D+3%3B%0A++++std::println(%22%7B%7D%22,+values%5Bindex%5D)%3B+//+Past+the+array+boundary.%0A++++delete%5B%5D+values%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B+-g+-fsanitize%3Daddress,undefined+-fno-sanitize-recover%3Dall+-fsanitize-address-use-after-scope+-fno-omit-frame-pointer',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/05-memory/heap-buffer-overflow.cpp" compiler="clang2310" options="-std=c++23 -O0 -stdlib=libc++ -g -fsanitize=address,undefined -fno-sanitize-recover=all -fsanitize-address-use-after-scope -fno-omit-frame-pointer" -->
 
 [godbolt-05-free-and-nullptr]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ccstdlib%3E%0A%23include+%3Cprint%3E%0A%0Aint+main()+%7B%0A++++int*+pointer+%3D+static_cast%3Cint*%3E(std::malloc(sizeof(int)))%3B%0A++++if+(pointer+%3D%3D+nullptr)+%7B%0A++++++++return+1%3B%0A++++%7D%0A++++*pointer+%3D+42%3B%0A++++std::println(%22Before+free:+%7B%7D%22,+*pointer)%3B%0A%0A++++std::free(pointer)%3B+//+Releases+the+block%3B+pointer+is+now+dangling.%0A++++pointer+%3D+nullptr%3B++//+Explicit+assignment,+not+an+effect+of+free.%0A%0A++++std::println(%22pointer+%3D%3D+nullptr:+%7B%7D%22,+pointer+%3D%3D+nullptr)%3B%0A++++std::free(pointer)%3B+//+free(nullptr)+does+nothing.%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/05-memory/free-and-nullptr.cpp" compiler="clang2310" options="-std=c++23 -O0 -stdlib=libc++" -->
-
-[godbolt-05-c-api-allocation]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ccstdlib%3E%0A%23include+%3Cprint%3E%0A%23include+%3Cstring.h%3E%0A%0Aint+main()+%7B%0A++++char*+copy+%3D+::strdup(%22Hello+from+a+C+API%22)%3B%0A++++if+(copy+%3D%3D+nullptr)+%7B%0A++++++++return+1%3B%0A++++%7D%0A++++std::println(%22%7B%7D%22,+copy)%3B%0A++++std::free(copy)%3B+//+strdup+allocates+with+malloc%3B+delete%5B%5D+is+invalid.%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0+-stdlib%3Dlibc%2B%2B',source:1,tree:0),l:'5')),l:'2')),version:4>
-<!-- godbolt source="../examples/05-memory/c-api-allocation.cpp" compiler="clang2310" options="-std=c++23 -O0 -stdlib=libc++" -->
 
 [godbolt-05-write-read-only]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'//+Intentional+undefined+behavior:+attempting+to+modify+a+string+literal.%0Aint+main()+%7B%0A++++const+char*+text+%3D+%22Read-only+memory%22%3B%0A++++volatile+char*+writable+%3D+const_cast%3Cchar*%3E(text)%3B%0A++++writable%5B0%5D+%3D+!'r!'%3B+//+Typically+faults+on+Linux/macOS.%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B23+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/05-memory/write-read-only.cpp" compiler="clang2310" options="-std=c++23 -O0" -->

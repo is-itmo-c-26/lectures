@@ -1,6 +1,6 @@
 #include <print>
 
-// Intentional undefined behavior. Run only with a sanitizer.
+// Intentional undefined behavior.
 int main() {
     int* pointer = nullptr;
     {

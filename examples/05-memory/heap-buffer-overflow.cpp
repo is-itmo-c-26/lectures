@@ -1,6 +1,6 @@
 #include <print>
 
-// Intentional undefined behavior. Run only with a sanitizer.
+// Intentional undefined behavior.
 int main() {
     int* values = new int[3]{10, 20, 30};
     int index = 3;
