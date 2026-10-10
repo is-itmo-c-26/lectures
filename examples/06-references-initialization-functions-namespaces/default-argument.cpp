@@ -1,16 +1,10 @@
 #include <iostream>
-#include <vector>
 
-void print_vector(const std::vector<int>& data, char delimiter = ',') {
-    for (int value : data) {
-        std::cout << value << delimiter;
-    }
-    std::cout << '\n';
+void print_pair(int first, int second = 0) {
+    std::cout << first << ' ' << second << '\n';
 }
 
 int main() {
-    std::vector<int> values{1, 2, 3, 4, 5};
-    print_vector(values);
-
-    return 0;
+    print_pair(10);     // 10 0
+    print_pair(10, 20); // 10 20
 }

@@ -1,13 +1,14 @@
 #include <iostream>
 
 namespace {
-void print_message() {
-    std::cout << "Unnamed namespace function\n";
+    int counter = 0;
 }
-}  // namespace
+
+void increment() {
+    ++counter;
+}
 
 int main() {
-    print_message();
-
-    return 0;
+    increment();
+    std::cout << counter << '\n'; // 1
 }

@@ -1,11 +1,13 @@
-int test(int value) {
-    return value;
-}
+#include <iostream>
 
-float test(float value) {
-    return value;
+void print(int value) {
+    std::cout << "int: " << value << '\n';
+}
+void print(double value) {
+    std::cout << "double: " << value << '\n';
 }
 
 int main() {
-    return test(10.2F) == 10.2F ? 0 : 1;
+    print(20);   // int
+    print(20.1); // double
 }
