@@ -1,0 +1,11 @@
+# Примеры, которые намеренно не проходят компиляцию без предупреждений
+# или clang-tidy. Формат: путь от корня репозитория, затем причина.
+# Такие файлы scripts/check-examples.sh пропускает при компиляции и в tidy,
+# но по-прежнему проверяет длину строк.
+examples/01-types-operators/bad-code-style.cpp            плохой стиль для критики на слайде
+examples/01-types-operators/uninitialized-local.cpp       чтение неинициализированной переменной
+examples/02-expressions-control-flow-functions/dangling-else.cpp     else без фигурных скобок
+examples/02-expressions-control-flow-functions/while-equivalent.cpp  псевдокод, не программа
+examples/03-pointers-arrays/dangling-pointer.cpp          возврат адреса локальной переменной
+examples/03-pointers-arrays/nullptr-overload.cpp          намеренно неоднозначный вызов с NULL
+examples/03-pointers-arrays/signal-declaration.cpp        имя signal из стандартной библиотеки
