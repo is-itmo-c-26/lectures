@@ -1,16 +1,16 @@
 #include <cstddef>
 #include <iostream>
 
-void func(int*) {
-    std::cout << "func(int*)\n";
+void Func(int*) {
+    std::cout << "Func(int*)\n";
 }
 
-void func(int) {
-    std::cout << "func(int)\n";
+void Func(int) {
+    std::cout << "Func(int)\n";
 }
 
 int main() {
-    func(nullptr);  // Выбирает func(int*).
-    func(0);        // Выбирает func(int).
-    func(NULL);     // Намеренная ошибка в Clang: неоднозначный вызов.
+    Func(nullptr);  // Выбирает Func(int*).
+    Func(0);        // Выбирает Func(int).
+    Func(NULL);     // Намеренная ошибка в Clang: неоднозначный вызов.
 }
