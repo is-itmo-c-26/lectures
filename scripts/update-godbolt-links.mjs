@@ -3,7 +3,11 @@
 import {readdir, readFile, writeFile} from 'node:fs/promises';
 import {dirname, join, resolve} from 'node:path';
 
-const requestedFiles = process.argv.slice(2);
+// С флагом --check скрипт ничего не записывает: если хотя бы одна ссылка
+// устарела, он сообщает об этом и завершается с кодом 1. Так CI проверяет,
+// что ссылки в лекциях соответствуют исходникам примеров.
+const checkOnly = process.argv.includes('--check');
+const requestedFiles = process.argv.slice(2).filter(argument => argument !== '--check');
 const markdownFiles = requestedFiles.length > 0
     ? requestedFiles
     : (await readdir('lectures'))
@@ -174,8 +178,13 @@ for (const markdownFile of markdownFiles) {
     const updated = placeGodboltButtonsAfterCode(linksUpdated, definitions, markdownFile);
 
     if (updated !== markdown) {
-        await writeFile(markdownPath, updated);
-        console.log(`Updated ${replacements} Godbolt link(s) in ${markdownFile}`);
+        if (checkOnly) {
+            console.log(`Godbolt links are stale in ${markdownFile}: run node scripts/update-godbolt-links.mjs`);
+            process.exitCode = 1;
+        } else {
+            await writeFile(markdownPath, updated);
+            console.log(`Updated ${replacements} Godbolt link(s) in ${markdownFile}`);
+        }
     } else {
         console.log(`Godbolt links are current in ${markdownFile}`);
     }
