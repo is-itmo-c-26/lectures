@@ -276,6 +276,7 @@
   grid-row: var(--r1) / var(--r2);
   grid-column: var(--c1) / span var(--cs);
   min-width: 0;
+  container-type: inline-size;
   margin: 2px 2px;
   padding: 0.3rem 0.45rem 0.35rem 0.5rem;
   border-radius: 0.55rem;
@@ -321,25 +322,38 @@
   overflow-wrap: anywhere;
 }
 
-/* Карточки, делящие колонку дня с другими, получают мелкую верхнюю строку;
-   при трёх и более рядом они ещё уменьшаются и прячут время: оно и так
-   читается по шкале часов слева. */
-.sched-slot--tight .sched-slot__top {
-  font-size: 0.6rem;
+/* Карточка — container, поэтому правила ниже смотрят на её собственную
+   ширину, а не на число пар рядом: так они срабатывают одинаково и когда
+   колонок дня четыре, и когда их больше. Сама карточка свой же container
+   запрашивать не может, поэтому размеры задаются её детям. */
+@container (max-width: 150px) {
+  .sched-slot__top {
+    font-size: 0.6rem;
+  }
 }
 
-.sched-slot--narrow {
-  margin-inline: 1px;
-  padding-inline: 0.3rem 0.25rem;
-  font-size: 0.68rem;
+/* На самых узких карточках ужимается и подпись типа занятия. */
+@container (max-width: 90px) {
+  .sched-slot__kind {
+    font-size: 0.54rem;
+    letter-spacing: 0;
+  }
 }
 
-.sched-slot--narrow .sched-slot__teacher {
-  letter-spacing: -0.01em;
-}
+/* Когда места совсем мало, время уходит: оно читается по шкале часов слева. */
+@container (max-width: 115px) {
+  .sched-slot__time {
+    display: none;
+  }
 
-.sched-slot--narrow .sched-slot__time {
-  display: none;
+  .sched-slot__teacher,
+  .sched-slot__group {
+    font-size: 0.68rem;
+  }
+
+  .sched-slot__teacher {
+    letter-spacing: -0.01em;
+  }
 }
 
 .sched.is-filtering .sched-slot.is-dim {
