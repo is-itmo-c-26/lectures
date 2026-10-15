@@ -529,6 +529,17 @@ title: "Лекция 3. Указатели, массивы и строки"
 
 :::
 
+::: {.content-visible unless-format="revealjs"}
+
+::: {.callout-note title="Видео по теме"}
+- [Семинар 2024-09-26: указатели](https://www.youtube.com/watch?v=UYP_0aqWmCw)
+- [Семинар 2025-09-29: работа с аргументами командной строки и буферизированное чтение](https://www.youtube.com/watch?v=jS87kcM0d7U)
+
+Все записи собраны на странице [Видео](../videos/index.md).
+:::
+
+:::
+
 [godbolt-03-dangling-pointer]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0Aint*+Make()+%7B%0A++++int+local+%3D+42%3B%0A++++return+%26local%3B++//+%D0%9E%D1%88%D0%B8%D0%B1%D0%BA%D0%B0:+%D0%B2%D0%BE%D0%B7%D0%B2%D1%80%D0%B0%D1%89%D0%B0%D0%B5%D0%BC+%D0%B0%D0%B4%D1%80%D0%B5%D1%81+%D0%BB%D0%BE%D0%BA%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9+%D0%BF%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%BD%D0%BE%D0%B9.%0A%7D%0A%0Aint+main()+%7B%0A++++int*+pointer+%3D+Make()%3B%0A++++std::cout+%3C%3C+*pointer+%3C%3C+!'%5Cn!'%3B++//+%D0%9D%D0%B5%D0%BE%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D1%91%D0%BD%D0%BD%D0%BE%D0%B5+%D0%BF%D0%BE%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5.+%D0%9D%D0%B5+%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0%D1%82%D1%8C.%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0+-Werror%3Dreturn-stack-address',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/03-pointers-arrays/dangling-pointer.cpp" compiler="clang2310" options="-std=c++20 -O0 -Werror=return-stack-address" -->
 
