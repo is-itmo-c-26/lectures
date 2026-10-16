@@ -71,6 +71,11 @@
   font-size: 0.7em;
 }
 
+/* Short question slides whose code must be readable from the back row. */
+.reveal .slides section.large-code pre {
+  font-size: 1em;
+}
+
 /* Repeated section outline: every item is dimmed except the one covered next. */
 .reveal .slides section.agenda li {
   opacity: 0.35;
