@@ -1,4 +1,3 @@
-// Intentionally does not compile: only the return type differs.
 int convert(int value) {
     return value;
 }

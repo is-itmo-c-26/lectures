@@ -1,7 +1,11 @@
 #include <iostream>
-#include <string>
 
 int main() {
-    const std::string& text = std::string("hello");
-    std::cout << text << '\n';
-} // The temporary string lives until the end of this block.
+    int x = 10;
+    int& a = x;
+    const int& b = x;
+    const int& c = 42;
+    // int& d = 42;
+
+    std::cout << a << ' ' << b << ' ' << c << '\n';
+}

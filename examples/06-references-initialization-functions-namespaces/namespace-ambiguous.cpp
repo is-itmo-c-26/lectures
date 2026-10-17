@@ -1,4 +1,3 @@
-// Intentionally does not compile: unqualified call is ambiguous.
 namespace screen {
     void print() {}
 }

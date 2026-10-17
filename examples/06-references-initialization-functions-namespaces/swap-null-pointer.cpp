@@ -1,4 +1,3 @@
-// Dangerous example: dereferencing nullptr is undefined behavior.
 void swap_values(int* left, int* right) {
     int temporary = *left;
     *left = *right;

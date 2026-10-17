@@ -6,5 +6,5 @@ void print(int value) {
 
 int main() {
     double value = 20.1;
-    print(value); // Converts double to int; prints 20.
+    print(value);
 }

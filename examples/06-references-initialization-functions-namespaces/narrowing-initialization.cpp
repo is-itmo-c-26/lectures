@@ -1,4 +1,3 @@
-// Intentionally does not compile: narrowing in list-initialization.
 #include <iostream>
 
 int main() {

@@ -3,6 +3,7 @@
 ## Lectures and articles
 
 - A lecture lives in `lectures/NN-name.md` and is rendered twice: as a website page and as a Reveal.js deck. Keep writing lectures as sequences of `##` slides.
+- Do not add speaker notes to any lecture or lecture template: no `::: {.notes}` blocks, HTML speaker notes, or equivalent hidden presenter-only content. Put essential explanations in the visible slide content; omit teaching prompts and presentation instructions.
 - An article lives in `articles/NN-name.md` and is rendered only as a website page. Use articles for practical notes — environment setup, tooling, recipes — that nobody presents from a stage. The slides profile excludes `articles/*.md`; keep it that way.
 - Give every article a `title`, a one-sentence `description` and an `author` list in the front matter. Each author entry carries `name` and, when there is one, a `url` to reach them.
 - Store article images under `assets/articles/<article-name>/` and article code under `examples/articles/<article-name>/`, where `<article-name>` matches the article filename without the `.md` extension. Reference them from the article with `../assets/...` and `../examples/...`, because Quarto resolves these paths relative to the document.
@@ -43,7 +44,7 @@
 - Format examples consistently: four-space indentation, opening braces on the same line, and no unused declarations or parameters.
 - Prefer `int main()` unless command-line arguments are actually used.
 - Examples intended to compile must pass Clang with `-std=c++20 -Wall -Wextra -pedantic` without warnings.
-- If an example intentionally does not compile or intentionally demonstrates undefined or dangerous behavior, label that fact clearly on the slide or in speaker notes and do not present it as a runnable example.
+- If an example intentionally does not compile or intentionally demonstrates undefined or dangerous behavior, explain that fact clearly in the visible slide content and do not present it as a runnable example. Use a concrete explanation of the error or behavior rather than a generic label such as "Опасный пример".
 - After changing an external example:
   1. compile it with Clang using the course flags;
   2. run it when it has meaningful runtime behavior;

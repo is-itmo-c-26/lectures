@@ -37,6 +37,10 @@
   line-height: 1.08;
 }
 
+.reveal .slides section > h2:empty {
+  display: none;
+}
+
 /* Two spans (masked placeholder + real title) stacked in the same cell so
    the fade-out/fade-in fragment pair crossfades in place of the heading. */
 .reveal .slides section.mystery-heading > h2 {
