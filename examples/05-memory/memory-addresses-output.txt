@@ -1,0 +1,9 @@
+Process ID: 31707
+Constant: 0x1008b8a18
+Initialized global: 0x1008c4000
+Zero-initialized global: 0x1008c4004
+String literal: 0x1008bbc96
+Function: 0x10089c670
+Local variable: 0x16f561bf8
+Dynamic object: 0x100f69bb0
+Press Enter to exit.

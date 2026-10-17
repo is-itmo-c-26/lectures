@@ -103,7 +103,7 @@ function quoteRison(value) {
         .replaceAll('%20', '+');
 }
 
-function makeGodboltUrl(source, compiler, options, mode = 'executor') {
+function makeGodboltUrl(source, compiler, options, mode = "executor") {
     const content = [
         {
             type: 'row',

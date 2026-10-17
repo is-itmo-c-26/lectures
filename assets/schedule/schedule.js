@@ -124,8 +124,6 @@
       group.forEach(function (s) {
         s.col = s.lane * width + 1;
         s.span = width;
-        s.tight = laneEnds.length >= 2;
-        s.narrow = laneEnds.length >= 3;
       });
     });
   }
@@ -140,8 +138,7 @@
   }
 
   function renderSlot(s) {
-    var node = el("div", "sched-slot sched-slot--" + s.type +
-      (s.tight ? " sched-slot--tight" : "") + (s.narrow ? " sched-slot--narrow" : ""));
+    var node = el("div", "sched-slot sched-slot--" + s.type);
     node.style.setProperty("--r1", (s.startMin - dayStart) / STEP + 1);
     node.style.setProperty("--r2", (s.endMin - dayStart) / STEP + 1);
     node.style.setProperty("--c1", s.col);
