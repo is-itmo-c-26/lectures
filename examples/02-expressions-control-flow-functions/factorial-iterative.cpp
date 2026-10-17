@@ -1,9 +1,10 @@
+#include <cstdint>
 #include <iostream>
 
-unsigned long long factorial(unsigned int number) {
-    unsigned long long result = 1;
+std::uint64_t Factorial(int number) {
+    std::uint64_t result = 1;
 
-    for (unsigned int factor = 2; factor <= number; ++factor) {
+    for (int factor = 2; factor <= number; ++factor) {
         result *= factor;
     }
 
@@ -11,7 +12,7 @@ unsigned long long factorial(unsigned int number) {
 }
 
 int main() {
-    std::cout << factorial(5) << '\n';
+    std::cout << Factorial(5) << '\n';
 
     return 0;
 }
