@@ -175,10 +175,6 @@ for (initialization; condition; step) {
 
 Внешний блок сохраняет область видимости. При наличии [`continue`][cppref-continue] нужно выполнять `step` и перед ним.
 
-::: {.notes}
-Оба фрагмента — схемы, а не самостоятельные компилируемые программы: initialization, condition, step и statement обозначают части исходного цикла. При пустом условии for в while используется true. Правило о выполнении step перед continue относится только к continue этого цикла, а не вложенных циклов.
-:::
-
 ## [`continue`][cppref-continue] в цикле [`for`][cppref-for]
 
 ```{.cpp filename="for-continue.cpp" code-line-numbers="|4|5-7|8"}

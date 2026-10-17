@@ -128,8 +128,9 @@ function makeGodboltUrl(source, compiler, options, mode = "executor") {
                         libs: [],
                         options,
                         lang: 'c++',
-                        compilationPanelShown: true,
-                        compilerOutShown: true,
+                        ...(mode === 'compiler'
+                            ? {id: 1, filters: {binary: false, binaryObject: false, execute: false}}
+                            : {compilationPanelShown: true, compilerOutShown: true}),
                     },
                 },
             ],
@@ -153,6 +154,7 @@ async function readExample(sourcePath, stack = new Set()) {
     });
 }
 
+// Use mode="compiler" for declarations and examples meant to be inspected without running.
 const definitionPattern = /^(\[godbolt-[^\]]+\]:)\s+<[^>]*>[ \t]*(?:\r?\n)?<!--\s+godbolt\s+source="([^"]+)"\s+compiler="([^"]+)"\s+options="([^"]*)"(?:\s+mode="(compiler|executor)")?\s+-->$/gm;
 
 for (const markdownFile of markdownFiles) {
@@ -166,7 +168,8 @@ for (const markdownFile of markdownFiles) {
         const url = makeGodboltUrl(source, compiler, options, mode);
         definitions.push({reference: label.slice(1, -2), sourcePath});
         replacements += 1;
-        return `${label} <${url}>\n<!-- godbolt source="${sourcePath}" compiler="${compiler}" options="${options}"${mode ? ` mode="${mode}"` : ''} -->`;
+        const modeAttribute = mode === undefined ? '' : ` mode="${mode}"`;
+        return `${label} <${url}>\n<!-- godbolt source="${sourcePath}" compiler="${compiler}" options="${options}"${modeAttribute} -->`;
     });
 
     if (replacements === 0) continue;

@@ -16,6 +16,7 @@ sidebar: false
 4. [Указатели, массивы и строки](lectures/03-pointers-arrays.md)
 5. [Структуры и объединения](lectures/04-struct-union.md)
 6. [Работа с памятью](lectures/05-memory.md)
+7. [Ссылки, инициализация, функции и пространства имён](lectures/06-references-initialization-functions-namespaces.md)
 
 ## Статьи
 
