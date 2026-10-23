@@ -76,6 +76,25 @@
   font-size: 1em;
 }
 
+/* Symbol type letters in nm output and in the legend below it. */
+.reveal .nm-undefined,
+.reveal .nm-text {
+  padding: 0 0.2em;
+  border-radius: 3px;
+  font-family: "Source Code Pro", monospace;
+  font-weight: 700;
+}
+
+.reveal .nm-undefined {
+  background: #FCE3B6;
+  color: #8A4B00;
+}
+
+.reveal .nm-text {
+  background: #D6E4F5;
+  color: #1E5AA8;
+}
+
 /* Repeated section outline: every item is dimmed except the one covered next. */
 .reveal .slides section.agenda li {
   opacity: 0.35;
