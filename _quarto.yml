@@ -72,6 +72,8 @@ website:
               text: "5. Работа с памятью"
             - href: lectures/06-references-initialization-functions-namespaces.md
               text: "6. Ссылки, инициализация, функции и пространства имён"
+            - href: lectures/07-compiler-preprocessor.md
+              text: "7. Компилятор и препроцессор"
 
 
     - id: articles
