@@ -1,0 +1,10 @@
+#include <iostream>
+
+#define MAXIMUM(x, y) ((x) > (y) ? (x) : (y))
+
+int main() {
+    // Выбираем большее значение.
+    std::cout << MAXIMUM(10, 20) << '\n';
+
+    return 0;
+}

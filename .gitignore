@@ -3,6 +3,7 @@
 /slides/
 .DS_Store
 /.vscode/
+/code/**/build/
 
 
 **/*.quarto_ipynb

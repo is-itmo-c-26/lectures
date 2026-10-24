@@ -1,0 +1,10 @@
+# 2 "macro-max.cpp" 2
+
+
+
+int main() {
+
+    std::cout << ((10) > (20) ? (10) : (20)) << '\n';
+
+    return 0;
+}

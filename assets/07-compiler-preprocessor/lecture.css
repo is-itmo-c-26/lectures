@@ -1,0 +1,23 @@
+/* Symbol kinds in the lecture's nm output, shared by the page and slide deck. */
+.nm-undefined,
+.nm-text {
+  padding: 0 0.2em;
+  border-radius: 3px;
+  font-family: monospace;
+  font-weight: 700;
+}
+
+.nm-undefined {
+  background: #fce3b6;
+  color: #8a4b00;
+}
+
+.nm-text {
+  background: #d6e4f5;
+  color: #1e5aa8;
+}
+
+.nm-output {
+  text-align: left;
+  overflow-x: auto;
+}
