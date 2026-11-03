@@ -28,7 +28,7 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Render website
-        run: quarto render
+        run: quarto render --to html
 
       - name: Render Reveal.js presentations
         run: quarto render --profile slides --to revealjs

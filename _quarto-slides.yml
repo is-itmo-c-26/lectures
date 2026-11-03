@@ -7,6 +7,7 @@ project:
     - "!schedule.md"
     - "!articles/*.md"
     - "!videos/*.md"
+    - "!livecoding/*.md"
     - "!README.md"
     - "!AGENTS.md"
     - "!template.md"
