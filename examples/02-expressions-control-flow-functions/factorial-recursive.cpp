@@ -1,15 +1,16 @@
+#include <cstdint>
 #include <iostream>
 
-unsigned long long factorial(unsigned int number) {
+std::uint64_t Factorial(int number) {
     if (number == 0) {
         return 1;
     }
 
-    return number * factorial(number - 1);
+    return number * Factorial(number - 1);
 }
 
 int main() {
-    std::cout << factorial(5) << '\n';
+    std::cout << Factorial(5) << '\n';
 
     return 0;
 }
