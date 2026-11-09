@@ -143,19 +143,24 @@ function makeGodboltUrl(source, compiler, options, mode = "executor") {
     return `https://godbolt.org/#${hash}`;
 }
 
-// Inline local headers so shared slide definitions remain runnable on Godbolt.
-async function readExample(sourcePath, stack = new Set()) {
+// Combine translation units and inline each #pragma once header only once.
+async function readExample(sourcePath, stack = new Set(), includedHeaders = new Set()) {
+    const source = await readFile(sourcePath, 'utf8');
+    if (/^#pragma once[ \t]*$/m.test(source)) {
+        if (includedHeaders.has(sourcePath)) return '';
+        includedHeaders.add(sourcePath);
+    }
     if (stack.has(sourcePath)) throw new Error(`Circular include: ${sourcePath}`);
     const nextStack = new Set(stack).add(sourcePath);
-    const source = await readFile(sourcePath, 'utf8');
-    return replaceAsync(source, /^#include "([^"\n]+)"[ \t]*$/gm, async (_, header) => {
-        const included = await readExample(resolve(dirname(sourcePath), header), nextStack);
-        return included.replace(/^#pragma once[ \t]*\r?\n/gm, '').trimEnd();
+    const withoutPragma = source.replace(/^#pragma once[ \t]*\r?\n/gm, '');
+    return replaceAsync(withoutPragma, /^#include "([^"\n]+)"[ \t]*$/gm, async (_, header) => {
+        const included = await readExample(resolve(dirname(sourcePath), header), nextStack, includedHeaders);
+        return included.trimEnd();
     });
 }
 
 // Use mode="compiler" for declarations and examples meant to be inspected without running.
-const definitionPattern = /^(\[godbolt-[^\]]+\]:)\s+<[^>]*>[ \t]*(?:\r?\n)?<!--\s+godbolt\s+source="([^"]+)"\s+compiler="([^"]+)"\s+options="([^"]*)"(?:\s+mode="(compiler|executor)")?\s+-->$/gm;
+const definitionPattern = /^(\[godbolt-[^\]]+\]:)\s+<[^>]*>[ \t]*(?:\r?\n)?<!--\s+godbolt\s+source="([^"]+)"\s+compiler="([^"]+)"\s+options="([^"]*)"(?:\s+extra-sources="([^"]+)")?(?:\s+mode="(compiler|executor)")?\s+-->$/gm;
 
 for (const markdownFile of markdownFiles) {
     const markdownPath = resolve(markdownFile);
@@ -163,13 +168,20 @@ for (const markdownFile of markdownFiles) {
     const definitions = [];
     let replacements = 0;
 
-    const linksUpdated = await replaceAsync(markdown, definitionPattern, async (match, label, sourcePath, compiler, options, mode) => {
-        const source = await readExample(resolve(dirname(markdownPath), sourcePath));
+    const linksUpdated = await replaceAsync(markdown, definitionPattern, async (match, label, sourcePath, compiler, options, extraSources, mode) => {
+        const sourcePaths = [sourcePath, ...(extraSources?.trim().split(/\s+/) ?? [])];
+        const includedHeaders = new Set();
+        const parts = [];
+        for (const path of sourcePaths) {
+            parts.push(await readExample(resolve(dirname(markdownPath), path), new Set(), includedHeaders));
+        }
+        const source = parts.join('\n');
         const url = makeGodboltUrl(source, compiler, options, mode);
         definitions.push({reference: label.slice(1, -2), sourcePath});
         replacements += 1;
         const modeAttribute = mode === undefined ? '' : ` mode="${mode}"`;
-        return `${label} <${url}>\n<!-- godbolt source="${sourcePath}" compiler="${compiler}" options="${options}"${modeAttribute} -->`;
+        const extraSourcesAttribute = extraSources === undefined ? '' : ` extra-sources="${extraSources}"`;
+        return `${label} <${url}>\n<!-- godbolt source="${sourcePath}" compiler="${compiler}" options="${options}"${extraSourcesAttribute}${modeAttribute} -->`;
     });
 
     if (replacements === 0) continue;
@@ -226,12 +238,14 @@ function placeGodboltButtonsAfterCode(markdown, definitions, markdownFile) {
 
 async function replaceAsync(text, pattern, replacer) {
     const matches = [...text.matchAll(pattern)];
-    let result = text;
+    let result = '';
+    let offset = 0;
 
-    for (const match of matches.reverse()) {
+    for (const match of matches) {
         const replacement = await replacer(...match);
-        result = result.slice(0, match.index) + replacement + result.slice(match.index + match[0].length);
+        result += text.slice(offset, match.index) + replacement;
+        offset = match.index + match[0].length;
     }
 
-    return result;
+    return result + text.slice(offset);
 }

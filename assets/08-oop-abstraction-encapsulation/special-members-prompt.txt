@@ -1,0 +1,19 @@
+Use case: scientific-educational.
+Asset type: a crisp wide raster table for a university C++ lecture, landscape 16:9, ideally 3840x2160.
+Edit target / reference: the supplied original Howard Hinnant special-members table. Remake it with a cleaner, more polished modern design. Preserve the technical content accurately. No huge title: the slide already has a title. The table should fill almost all of the image with narrow margins. No perspective, photography, decorative illustrations, shadows, gradients or watermark.
+Use a dark navy background, thin precise grid lines, bright blue column and row headers, white large legible sans-serif typography. Match the original's useful color coding: dark blue for defaulted, teal for not declared, brighter blue for user declared, neutral gray for deleted, dark amber for deprecated defaulted cells. Alignment and spacing must be immaculate. The image must remain readable when displayed about 1100 pixels wide. Wrap two-word labels over two lines as needed.
+Exactly 7 columns: one row-label column plus 6 function columns. Exactly 9 table rows: one header plus 8 data rows. No merged body cells, no missing or extra cells.
+Header left to right:
+"User declares" | "Default constructor" | "Destructor" | "Copy constructor" | "Copy assignment" | "Move constructor" | "Move assignment"
+Exact table body, each line is a row and | separates cells:
+"Nothing" | "defaulted" | "defaulted" | "defaulted" | "defaulted" | "defaulted" | "defaulted"
+"T(int)" | "not declared" | "defaulted" | "defaulted" | "defaulted" | "defaulted" | "defaulted"
+"Default constructor" | "user declared" | "defaulted" | "defaulted" | "defaulted" | "defaulted" | "defaulted"
+"Destructor" | "defaulted" | "user declared" | "defaulted*" | "defaulted*" | "not declared" | "not declared"
+"Copy constructor" | "not declared" | "defaulted" | "user declared" | "defaulted*" | "not declared" | "not declared"
+"Copy assignment" | "defaulted" | "defaulted" | "defaulted*" | "user declared" | "not declared" | "not declared"
+"Move constructor" | "not declared" | "defaulted" | "deleted" | "deleted" | "user declared" | "not declared"
+"Move assignment" | "defaulted" | "defaulted" | "deleted" | "deleted" | "not declared" | "user declared"
+Only the four cells containing "defaulted*" should be dark amber and show the asterisk. They are: Destructor/Copy constructor, Destructor/Copy assignment, Copy constructor/Copy assignment, Copy assignment/Copy constructor. The four "deleted" cells must be gray, not teal.
+Below the grid in a compact but readable footer, render exactly: "* Deprecated implicit definition. Members and bases can cause additional deletions."
+Use correct spelling in every repeated label. Preserve the exact row and column order.
