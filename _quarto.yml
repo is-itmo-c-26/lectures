@@ -78,6 +78,8 @@ website:
               text: "6. Ссылки, инициализация, функции и пространства имён"
             - href: lectures/07-compiler-preprocessor.md
               text: "7. Компилятор и препроцессор"
+            - href: lectures/08-oop-abstraction-encapsulation.md
+              text: "8. Абстракция и инкапсуляция"
 
 
     - id: articles
