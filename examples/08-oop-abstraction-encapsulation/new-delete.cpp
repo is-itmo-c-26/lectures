@@ -1,7 +1,10 @@
-#include "print-rational.hpp"
+#include "trace.hpp"
+#include <cstdlib>
 
 int main() {
-    Rational* number = new Rational{1, 2};
-    print_rational(*number);
-    delete number;
+    Trace* object = new Trace{"object"};
+    delete object;
+
+    void* memory = std::malloc(sizeof(Trace));
+    std::free(memory);
 }

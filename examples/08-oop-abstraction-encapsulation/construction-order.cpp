@@ -3,7 +3,8 @@
 
 int main() {
     GeoPoint first;
-    const Rational latitude{1, 2}, longitude{3, 4};
+    const Rational latitude{1, 2};
+    const Rational longitude{3, 4};
     GeoPoint second{latitude, longitude};
     GeoPoint third{second};
     GeoPoint fourth{std::move(second)};
