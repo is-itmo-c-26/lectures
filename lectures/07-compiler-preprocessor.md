@@ -17,6 +17,7 @@ title: "Лекция 7. Компилятор и препроцессор"
 - Компилятор и объектные файлы
 - Компоновщик/линковщик и ошибки компоновки
 - Linkage и storage duration
+- Что будет? 10 задач
 
 ## 1. Программы состоят из файлов
 
@@ -427,6 +428,12 @@ $ nm math.o | c++filt
 Вывод снят на macOS: там к именам добавляется ещё одно подчёркивание — `_main`, `__Z3Addii`. На Linux будут `main` и `_Z3Addii`.
 :::
 
+::: {.content-visible when-format="revealjs"}
+
+## Лекция 8. Линковка {.lecture-cover .center data-state="hide-slide-number"}
+
+:::
+
 ## 6. Компоновщик/линковщик
 
 - Объединяет объектные файлы и библиотеки в исполняемый файл или библиотеку
@@ -606,6 +613,375 @@ int shared = 239;  // единственное определение
 - `extern` — объявление имени с external linkage
 - `thread_local` — thread storage duration
 - `mutable` — разрешает менять поле `const`-объекта
+
+## 8. Что будет?
+
+:::: {.columns}
+
+::: {.column width="58%"}
+
+Десять программ. Для каждой выберите один ответ:
+
+- ошибка препроцессора
+- ошибка компиляции
+- ошибка линковки
+- программа соберётся, но в ней неопределённое поведение (UB)
+- ошибки нет
+
+Ответы — на последнем слайде.
+
+:::
+
+::: {.column width="42%"}
+
+::: {style="text-align: center;"}
+
+[![](../assets/07-compiler-preprocessor/quiz-qr.png){fig-alt="QR-код викторины по лекции" width="380px"}](https://shorturl.at/qA5tX)
+
+**Викторина**
+
+<https://shorturl.at/qA5tX>
+
+:::
+
+:::
+
+::::
+
+## Задача 1
+
+:::: {.columns}
+
+::: {.column width="44%"}
+
+```{.cpp filename="a.hpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/01-recursive-include/a.hpp >}}
+```
+
+```{.cpp filename="b.hpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/01-recursive-include/b.hpp >}}
+```
+
+:::
+
+::: {.column width="56%"}
+
+```{.cpp filename="main.cpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/01-recursive-include/main.cpp >}}
+```
+
+:::
+
+::::
+
+```
+$ clang++ main.cpp
+```
+
+Что будет: ошибка препроцессора, компиляции или линковки, UB — или ошибки нет?
+
+::: {.notes}
+Файлы для живой сборки: `examples/07-compiler-preprocessor/quiz/01-recursive-include`.
+:::
+
+## Задача 2
+
+```{.cpp filename="main.cpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/02-macro-semicolon/main.cpp >}}
+```
+
+```
+$ clang++ main.cpp
+```
+
+Что будет: ошибка препроцессора, компиляции или линковки, UB — или ошибки нет?
+
+::: {.notes}
+Файлы для живой сборки: `examples/07-compiler-preprocessor/quiz/02-macro-semicolon`.
+:::
+
+## Задача 3
+
+:::: {.columns}
+
+::: {.column width="44%"}
+
+```{.cpp filename="square.hpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/03-static-function-in-header/square.hpp >}}
+```
+
+```{.cpp filename="area.cpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/03-static-function-in-header/area.cpp >}}
+```
+
+:::
+
+::: {.column width="56%"}
+
+```{.cpp filename="main.cpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/03-static-function-in-header/main.cpp >}}
+```
+
+:::
+
+::::
+
+```
+$ clang++ main.cpp area.cpp
+```
+
+Что будет: ошибка препроцессора, компиляции или линковки, UB — или ошибки нет?
+
+::: {.notes}
+Файлы для живой сборки: `examples/07-compiler-preprocessor/quiz/03-static-function-in-header`.
+:::
+
+## Задача 4
+
+:::: {.columns}
+
+::: {.column width="44%"}
+
+```{.cpp filename="stats.hpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/04-signature-mismatch/stats.hpp >}}
+```
+
+```{.cpp filename="stats.cpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/04-signature-mismatch/stats.cpp >}}
+```
+
+:::
+
+::: {.column width="56%"}
+
+```{.cpp filename="main.cpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/04-signature-mismatch/main.cpp >}}
+```
+
+:::
+
+::::
+
+```
+$ clang++ main.cpp stats.cpp
+```
+
+Что будет: ошибка препроцессора, компиляции или линковки, UB — или ошибки нет?
+
+::: {.notes}
+Файлы для живой сборки: `examples/07-compiler-preprocessor/quiz/04-signature-mismatch`.
+:::
+
+## Задача 5
+
+:::: {.columns}
+
+::: {.column width="44%"}
+
+```{.cpp filename="math.hpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/05-angle-brackets/math.hpp >}}
+```
+
+```{.cpp filename="math.cpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/05-angle-brackets/math.cpp >}}
+```
+
+:::
+
+::: {.column width="56%"}
+
+```{.cpp filename="main.cpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/05-angle-brackets/main.cpp >}}
+```
+
+:::
+
+::::
+
+```
+$ clang++ main.cpp math.cpp
+```
+
+Что будет: ошибка препроцессора, компиляции или линковки, UB — или ошибки нет?
+
+::: {.notes}
+Файлы для живой сборки: `examples/07-compiler-preprocessor/quiz/05-angle-brackets`.
+:::
+
+## Задача 6
+
+:::: {.columns}
+
+::: {.column width="44%"}
+
+```{.cpp filename="math.hpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/06-repeated-declarations/math.hpp >}}
+```
+
+```{.cpp filename="math.cpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/06-repeated-declarations/math.cpp >}}
+```
+
+:::
+
+::: {.column width="56%"}
+
+```{.cpp filename="main.cpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/06-repeated-declarations/main.cpp >}}
+```
+
+:::
+
+::::
+
+```
+$ clang++ main.cpp math.cpp
+```
+
+Что будет: ошибка препроцессора, компиляции или линковки, UB — или ошибки нет?
+
+::: {.notes}
+Файлы для живой сборки: `examples/07-compiler-preprocessor/quiz/06-repeated-declarations`.
+:::
+
+## Задача 7
+
+```{.cpp filename="main.cpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/07-macro-unsequenced/main.cpp >}}
+```
+
+```
+$ clang++ main.cpp
+```
+
+Что будет: ошибка препроцессора, компиляции или линковки, UB — или ошибки нет?
+
+::: {.notes}
+Файлы для живой сборки: `examples/07-compiler-preprocessor/quiz/07-macro-unsequenced`.
+:::
+
+## Задача 8
+
+:::: {.columns}
+
+::: {.column width="44%"}
+
+```{.cpp filename="square.hpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/08-function-in-header/square.hpp >}}
+```
+
+```{.cpp filename="area.cpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/08-function-in-header/area.cpp >}}
+```
+
+:::
+
+::: {.column width="56%"}
+
+```{.cpp filename="main.cpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/08-function-in-header/main.cpp >}}
+```
+
+:::
+
+::::
+
+```
+$ clang++ main.cpp area.cpp
+```
+
+Что будет: ошибка препроцессора, компиляции или линковки, UB — или ошибки нет?
+
+::: {.notes}
+Файлы для живой сборки: `examples/07-compiler-preprocessor/quiz/08-function-in-header`.
+:::
+
+## Задача 9
+
+:::: {.columns}
+
+::: {.column width="44%"}
+
+```{.cpp filename="math.cpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/09-undeclared-function/math.cpp >}}
+```
+
+:::
+
+::: {.column width="56%"}
+
+```{.cpp filename="main.cpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/09-undeclared-function/main.cpp >}}
+```
+
+:::
+
+::::
+
+```
+$ clang++ main.cpp math.cpp
+```
+
+Что будет: ошибка препроцессора, компиляции или линковки, UB — или ошибки нет?
+
+::: {.notes}
+Файлы для живой сборки: `examples/07-compiler-preprocessor/quiz/09-undeclared-function`.
+:::
+
+## Задача 10
+
+:::: {.columns}
+
+::: {.column width="44%"}
+
+```{.cpp filename="value.cpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/10-return-type-mismatch/value.cpp >}}
+```
+
+:::
+
+::: {.column width="56%"}
+
+```{.cpp filename="main.cpp"}
+{{< include ../examples/07-compiler-preprocessor/quiz/10-return-type-mismatch/main.cpp >}}
+```
+
+:::
+
+::::
+
+```
+$ clang++ main.cpp value.cpp
+```
+
+Что будет: ошибка препроцессора, компиляции или линковки, UB — или ошибки нет?
+
+::: {.notes}
+Файлы для живой сборки: `examples/07-compiler-preprocessor/quiz/10-return-type-mismatch`.
+:::
+
+## Ответы
+
+::: {.small-table}
+
+| № | Ответ | Что происходит |
+|--|---------|-----------------------|
+| 1 | ошибка препроцессора | `#include nested too deeply`: заголовки подключают друг друга без стражей |
+| 2 | ошибка компиляции | `unexpected ';' before ']'`: макрос подставил `100;` |
+| 3 | ошибки нет | печатает `25`: у `static`-функции internal linkage, у каждого `.cpp` своя копия |
+| 4 | ошибка линковки | `Undefined symbols: "Average(int, int)"`: определена перегрузка для `double` |
+| 5 | ошибка препроцессора | `'math.hpp' file not found`: `<…>` ищет только в системных каталогах |
+| 6 | ошибки нет | печатает `5`: объявлений может быть сколько угодно, `#pragma once` убирает второе включение |
+| 7 | UB | `((i++) * (i++))`: `i` меняется дважды без заданного порядка; clang лишь предупреждает |
+| 8 | ошибка линковки | `duplicate symbol '__Z6Squarei'`: определение из заголовка попало в два `.cpp` |
+| 9 | ошибка компиляции | `use of undeclared identifier 'Add'`: в `main.cpp` нет объявления `Add` |
+| 10 | UB | собирается: возвращаемый тип не входит в имя `_Z5Valuev`; `main` читает `int` вместо `double` |
+
+:::
+
+::: {.notes}
+Сообщения сняты clang 18 на macOS. На Linux ошибки линковки звучат как `undefined reference to …` и `multiple definition of …`. В задаче 7 clang выдаёт `multiple unsequenced modifications to 'i'` и печатает 12, но результат не гарантирован. В задаче 10 программа на маке печатает 1 — это случайное содержимое регистра.
+:::
 
 [godbolt-07-macro-max]: <https://godbolt.org/#g:!((g:!((h:codeEditor,i:(j:1,lang:c%2B%2B,options:(compileOnChange:'0'),source:'%23include+%3Ciostream%3E%0A%0A%23define+MAXIMUM(x,+y)+((x)+%3E+(y)+%3F+(x)+:+(y))%0A%0Aint+main()+%7B%0A++++std::cout+%3C%3C+MAXIMUM(10,+20)+%3C%3C+!'%5Cn!'%3B%0A%0A++++return+0%3B%0A%7D%0A'),l:'5'),(h:executor,i:(compilationPanelShown:'0',compiler:clang2310,compilerOutShown:'0',lang:c%2B%2B,libs:!(),options:'-std%3Dc%2B%2B20+-O0',source:1,tree:0),l:'5')),l:'2')),version:4>
 <!-- godbolt source="../examples/07-compiler-preprocessor/macro-max.cpp" compiler="clang2310" options="-std=c++20 -O0" -->

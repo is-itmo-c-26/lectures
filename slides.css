@@ -95,6 +95,30 @@
   color: #1E5AA8;
 }
 
+/* Mid-deck cover where the next recorded lecture starts; mirrors the title slide. */
+.reveal .slides section.lecture-cover > h2:first-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: 0;
+  font-size: 2em;
+  text-align: center;
+}
+
+.hide-slide-number .reveal .slide-number,
+.reveal.hide-slide-number .slide-number {
+  display: none !important;
+}
+
+/* Code comments stay hidden (but keep their space) until the slide's fragment appears. */
+.reveal .slides section.comments-with-fragment pre code span.co {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.reveal .slides section.comments-with-fragment:has(.fragment.visible) pre code span.co {
+  opacity: 1;
+}
+
 /* Repeated section outline: every item is dimmed except the one covered next. */
 .reveal .slides section.agenda li {
   opacity: 0.35;

@@ -87,7 +87,7 @@ char grade = 'A';         // определение
 
 ## [Определение без инициализатора][cppref-default-initialization]
 
-```{.cpp filename="uninitialized-local.cpp" code-line-numbers="|4|6"}
+```{.cpp filename="uninitialized-local.cpp"}
 {{< include ../examples/01-types-operators/uninitialized-local.cpp >}}
 ```
 
@@ -127,7 +127,7 @@ unsigned long file_size = 4'000'000UL;
 
 ## Арифметика [`unsigned`][cppref-types-standard-integer-types]
 
-```{.cpp filename="unsigned-arithmetic.cpp" code-line-numbers="|4|5-6|8-10"}
+```{.cpp filename="unsigned-arithmetic.cpp"}
 {{< include ../examples/01-types-operators/unsigned-arithmetic.cpp >}}
 ```
 
@@ -394,7 +394,7 @@ bool is_positive = value > 0;
 
 ## [`enum`][cppref-enum] & [`enum class`][cppref-enum]
 
-```{.cpp filename="enum-kinds.cpp" code-line-numbers="|1|2|5-6"}
+```{.cpp filename="enum-kinds.cpp"}
 {{< include ../examples/01-types-operators/enum-kinds.cpp >}}
 ```
 
@@ -427,7 +427,7 @@ bool is_positive = value > 0;
 - Смешивание знаковых и беззнаковых типов требует особой осторожности
 - Явное преобразование пока записываем в [C-style форме][cppref-explicit-cast]: `(тип)выражение`
 
-```{.cpp filename="type-conversions.cpp" code-line-numbers="|4-5|7-8"}
+```{.cpp filename="type-conversions.cpp"}
 {{< include ../examples/01-types-operators/type-conversions.cpp >}}
 ```
 

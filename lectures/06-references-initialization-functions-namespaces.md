@@ -408,7 +408,7 @@ int main() {
 
 ## Вложенные пространства и псевдонимы
 
-```{.cpp filename="nested-namespace.cpp" code-line-numbers="|3-9|12|14-15"}
+```{.cpp filename="nested-namespace.cpp"}
 {{< include ../examples/06-references-initialization-functions-namespaces/nested-namespace.cpp >}}
 ```
 

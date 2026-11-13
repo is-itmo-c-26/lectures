@@ -329,7 +329,7 @@ vmmap $(pgrep -nf segments-addresses)            # macOS
 
 ## Что генерирует компилятор {.compact-code .tall-code}
 
-```{.nasm filename="stack-add-x86-64.asm" code-line-numbers="|15-17|2-3|4-7|8-9|18"}
+```{.nasm filename="stack-add-x86-64.asm"}
 {{< include ../examples/05-memory/stack-add-x86-64.asm >}}
 ```
 
