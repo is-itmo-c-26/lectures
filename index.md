@@ -19,6 +19,7 @@ sidebar: false
 7. [Ссылки, инициализация, функции и пространства имён](lectures/06-references-initialization-functions-namespaces.md)
 8. [Компилятор и препроцессор](lectures/07-compiler-preprocessor.md)
 9. [Абстракция и инкапсуляция](lectures/08-oop-abstraction-encapsulation.md)
+10. [Перегрузка операторов](lectures/09-operator-overloading.md)
 
 ## Статьи
 

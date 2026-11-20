@@ -80,6 +80,8 @@ website:
               text: "7. Компилятор и препроцессор"
             - href: lectures/08-oop-abstraction-encapsulation.md
               text: "8. Абстракция и инкапсуляция"
+            - href: lectures/09-operator-overloading.md
+              text: "9. Перегрузка операторов"
 
 
     - id: articles
